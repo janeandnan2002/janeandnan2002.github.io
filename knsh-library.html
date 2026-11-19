@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>東衛教學星球｜康軒115教材資料庫</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="knsh-115-data.js"></script>
+  <style>
+    body { background: #eff6ff; background-image: radial-gradient(circle at 8% 8%, rgba(253,224,71,.35) 0 120px, transparent 121px), radial-gradient(circle at 92% 10%, rgba(244,114,182,.18) 0 150px, transparent 151px); }
+  </style>
+</head>
+<body class="min-h-screen text-slate-700">
+  <a href="index.html#top" class="fixed bottom-5 right-5 z-50 rounded-full bg-blue-600 px-5 py-4 text-lg font-black text-white shadow-xl shadow-blue-200 hover:bg-blue-500">回首頁 ↑</a>
+  <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:py-10">
+    <header class="rounded-3xl border-4 border-blue-300 bg-white p-6 shadow-xl shadow-blue-100 sm:p-8">
+      <div class="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p class="font-black text-emerald-600">東衛教學星球｜教材資料庫</p>
+          <h1 class="mt-1 text-4xl font-black text-blue-800">康軒115 上學期教材索引</h1>
+          <p class="mt-3 max-w-3xl leading-7 text-slate-600">已整理國語文、數學、社會、自然、閩南語、綜合活動、健康與體育等 1～6 年級上下學期的教師手冊逐課／逐單元索引。原始 PDF、課本、習作與題庫仍保留在 Google Drive，網站提供精確對應與教師手冊摘錄。</p>
+        </div>
+        <a id="sourceFolderLink" target="_blank" rel="noopener" class="rounded-2xl bg-emerald-500 px-5 py-3 font-black text-white shadow hover:bg-emerald-400">開啟康軒教材總資料夾</a>
+      </div>
+      <div class="mt-5 grid gap-3 sm:grid-cols-2 md:grid-cols-5">
+        <label class="rounded-2xl bg-blue-50 p-4 font-black text-blue-900">科目<select id="subjectFilter" class="mt-2 w-full rounded-xl border-2 border-blue-200 bg-white px-3 py-2"></select></label>
+        <label class="rounded-2xl bg-yellow-50 p-4 font-black text-yellow-900">年級<select id="gradeFilter" class="mt-2 w-full rounded-xl border-2 border-yellow-200 bg-white px-3 py-2"></select></label>
+        <label class="rounded-2xl bg-sky-50 p-4 font-black text-sky-900">學期<select id="semesterFilter" class="mt-2 w-full rounded-xl border-2 border-sky-200 bg-white px-3 py-2"><option value="全部學期">全部學期</option><option value="上學期">上學期</option><option value="下學期">下學期</option></select></label>
+        <label class="rounded-2xl bg-pink-50 p-4 font-black text-pink-900">搜尋教材<input id="searchFilter" class="mt-2 w-full rounded-xl border-2 border-pink-200 bg-white px-3 py-2" placeholder="輸入課名、單元或檔名"></label>
+        <div class="rounded-2xl bg-emerald-50 p-4 font-black text-emerald-900"><span class="block">目前索引</span><span id="countLabel" class="mt-2 block text-2xl"></span></div>
+      </div>
+      <p class="mt-4 rounded-2xl bg-amber-50 px-4 py-3 text-sm font-bold leading-6 text-amber-900">教材檔案沒有複製到網站，避免公開網站承載大量原始教材；按下科目資料夾即可在雲端開啟完整檔案。課堂包產生器、搶答挑戰、配對翻牌與教學大富翁均同步使用此真實索引。</p>
+    </header>
+
+    <section class="mt-8 rounded-3xl border-4 border-emerald-300 bg-white p-5 shadow-xl shadow-emerald-100 sm:p-7">
+      <div id="recordGrid" class="grid gap-5 md:grid-cols-2 xl:grid-cols-3"></div>
+      <p id="emptyState" class="hidden rounded-2xl bg-slate-50 p-8 text-center font-black text-slate-500">找不到符合條件的教材。</p>
+    </section>
+  </main>
+  <script>
+    const data = window.DONGWEI_KNSH_115;
+    const records = data?.records || [];
+    const $ = id => document.getElementById(id);
+    const esc = value => { const node = document.createElement('div'); node.textContent = value ?? ''; return node.innerHTML; };
+    $('sourceFolderLink').href = data?.sourceFolderUrl || '#';
+    const subjects = ['全部科目', ...new Set(records.map(item => item.subject))];
+    const grades = ['全部年級', ...new Set(records.map(item => `${item.grade} 年級`))].sort((a, b) => a === '全部年級' ? -1 : b === '全部年級' ? 1 : a.localeCompare(b, 'zh-Hant'));
+    $('subjectFilter').innerHTML = subjects.map(item => `<option>${esc(item)}</option>`).join('');
+    $('gradeFilter').innerHTML = grades.map(item => `<option>${esc(item)}</option>`).join('');
+    function render() {
+      const subject = $('subjectFilter').value;
+      const grade = $('gradeFilter').value.replace(' 年級', '');
+      const semester = $('semesterFilter').value;
+      const search = $('searchFilter').value.trim().toLowerCase();
+      const filtered = records.filter(item => {
+        const haystack = [item.title, item.unit, item.sourceFile, ...(item.focus || []), ...(item.materials || []).map(material => material.name)].join(' ').toLowerCase();
+        const matchSubj = (subject === '全部科目' || item.subject === subject);
+        const matchGrade = (!grade || grade === '全部年級' || String(item.grade) === String(grade));
+        const matchSem = (semester === '全部學期' || item.semester === semester);
+        const matchSearch = (!search || haystack.includes(search));
+        return matchSubj && matchGrade && matchSem && matchSearch;
+      });
+      $('countLabel').textContent = `${filtered.length} 個單元`;
+      $('emptyState').classList.toggle('hidden', filtered.length > 0);
+      $('recordGrid').innerHTML = filtered.map(item => `<article class="rounded-3xl border-2 border-blue-100 bg-gradient-to-br from-white to-blue-50 p-5 shadow-sm">
+        <div class="flex items-center justify-between gap-2">
+          <span class="rounded-full bg-blue-100 px-3 py-1 text-sm font-black text-blue-800">${esc(item.subject)}｜${esc(item.grade)} 年級${esc(item.semester ? ' ' + item.semester : '')}</span>
+          <span class="text-sm font-black text-slate-500">${esc(item.unit)}</span>
+        </div>
+        <h2 class="mt-4 text-2xl font-black text-blue-900">${esc(item.title)}</h2>
+        <p class="mt-2 text-sm font-bold text-slate-500">教師手冊：${esc(item.sourceFile)}</p>
+        <div class="mt-4 rounded-2xl bg-white p-4"><p class="font-black text-emerald-700">實際教冊重點</p><ul class="mt-2 list-disc space-y-1 pl-5 text-sm leading-6">${(item.focus || []).slice(0, 3).map(text => `<li>${esc(text)}</li>`).join('')}</ul></div>
+        <details class="mt-3 rounded-2xl bg-white p-4"><summary class="cursor-pointer font-black text-blue-800">本單元可用教材（${item.materials?.length || 0} 件索引）</summary><ul class="mt-2 space-y-1 text-xs leading-5">${(item.materials || []).map(material => `<li><span class="font-black text-emerald-700">${esc(material.type)}</span>｜${esc(material.name)}</li>`).join('')}</ul></details>
+        <a href="${esc(item.folderUrl)}" target="_blank" rel="noopener" class="mt-4 inline-flex rounded-xl bg-blue-600 px-4 py-2 font-black text-white hover:bg-blue-500">開啟 ${esc(item.subject)} 雲端資料夾</a>
+      </article>`).join('');
+    }
+    ['subjectFilter', 'gradeFilter', 'semesterFilter', 'searchFilter'].forEach(id => $(id).addEventListener(id === 'searchFilter' ? 'input' : 'change', render));
+    render();
+  </script>
+</body>
+</html>

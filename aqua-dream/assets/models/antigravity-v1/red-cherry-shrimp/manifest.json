@@ -1,0 +1,115 @@
+{
+  "assetId": "antigravity-v1-red-cherry-shrimp",
+  "chineseName": "極火蝦",
+  "scientificName": "Neocaridina davidi",
+  "category": "cleaner",
+  "water": "fresh",
+  "modelStatus": "prototype_v2_lifelike_static_for_review",
+  "version": "2.0.0-static",
+  "format": "glTF 2.0 Binary (GLB)",
+  "designSpecifications": {
+    "bodyConstruction": "單一連續流線曲面有機軀幹 (Single Continuous Organic Hull)，非球體/圓柱拼湊",
+    "somiteArticulation": "真實十足目 (Decapoda) 疊層甲殼；第2腹節具備向下覆蓋第1及第3節之圓弧側甲 (Pleuron)",
+    "dorsalHump": "第3腹節頂點形成自然圓滑背拱曲線，尾部向下優美收束",
+    "chitinPBR": "深寶石紅半透明幾何甲殼 (Translucent Wine-Red PBR)，柔和次表面散射，零金屬度，無鏡面塑膠過度反光",
+    "appendages": "纖細長鬚 (Antenna 2) 自然向後弧形舒展；3對行走步足關節清晰且尖端精確著地 (Y=0.00)"
+  },
+  "files": {
+    "modelLOD0": {
+      "file": "model-lod0.glb",
+      "bytes": 1012988,
+      "triangles": 15264,
+      "vertices": 7742,
+      "description": "高精度寫實靜態模型（近景、特寫、水族箱融合觀察）"
+    },
+    "modelLOD1": {
+      "file": "model-lod1.glb",
+      "bytes": 793132,
+      "triangles": 6868,
+      "vertices": 3520,
+      "description": "遠景最佳化模型，維持相同流線輪廓與材質"
+    },
+    "source": {
+      "file": "red-cherry-shrimp.blend",
+      "bytes": 1962120,
+      "description": "Blender 4.0.2 完整工程原始檔，包含幾何體、細分曲面與 PBR 節點網路"
+    },
+    "previews": {
+      "front": "preview-front.png",
+      "side": "preview-side.png",
+      "back": "preview-back.png",
+      "top": "preview-top.png",
+      "aquariumScene": "in-aquarium-scene.png",
+      "aquariumCloseup": "in-aquarium-closeup.png",
+      "turntable": "turntable.mp4"
+    }
+  },
+  "dimensions": {
+    "boundingBox": {
+      "min": [-0.500, -0.001, -0.120],
+      "max": [0.350, 0.169, 0.120]
+    },
+    "size": {
+      "length_X": 0.850,
+      "height_Y": 0.170,
+      "width_Z": 0.240
+    },
+    "groundContact": {
+      "plane": "Y = 0.000",
+      "contactPoints": "三對步足 (Pereiopods 3, 4, 5) 尖端精確著地於 Y=0.000，無埋砂亦無半空懸浮"
+    },
+    "scale": {
+      "biologicalAdultCm": "2.5 ~ 3.0 cm",
+      "recommendedGameScale": 1.0,
+      "coordinateOrientation": {
+        "forward": "+X (頭部與額角朝向)",
+        "up": "+Y (背甲向上)",
+        "width": "Z (左右體寬對稱)",
+        "rootTransform": {
+          "position": [0, 0, 0],
+          "rotation": [0, 0, 0],
+          "scale": [1, 1, 1]
+        }
+      }
+    }
+  },
+  "materials": [
+    {
+      "name": "M_Neocaridina_Chitin_PBR",
+      "type": "pbrMetallicRoughness",
+      "baseColorTexture": "T_Neocaridina_BaseColor (1024x1024 嵌入 GLB)",
+      "roughness": 0.38,
+      "metallic": 0.0,
+      "ior": 1.38,
+      "subsurfaceWeight": 0.25,
+      "subsurfaceColor": [0.85, 0.18, 0.12],
+      "transmission": 0.25,
+      "alphaMode": "BLEND",
+      "doubleSided": true
+    },
+    {
+      "name": "M_ShrimpEye",
+      "type": "pbrMetallicRoughness",
+      "baseColor": [0.015, 0.012, 0.018, 1.0],
+      "roughness": 0.05,
+      "metallic": 0.0
+    }
+  ],
+  "compatibility": {
+    "threejsLoader": "GLTFLoader",
+    "dracoCompression": false,
+    "meshoptCompression": false,
+    "ktx2Compression": false,
+    "notes": "相容標準 Three.js GLTFLoader，無需任何額外解碼套件"
+  },
+  "provenance": {
+    "author": "Antigravity 3D Creature Pipeline",
+    "license": "CC0 1.0 Universal (Public Domain)",
+    "biologicalReference": {
+      "scientificName": "Neocaridina davidi (Bouvier, 1904)",
+      "commonName": "Red Cherry Shrimp / 極火蝦",
+      "referenceImage": "aqua-dream/public/assets/art/cleaners_3d/02_super_red_shrimp.jpg"
+    },
+    "tools": ["Blender 4.0.2", "Three.js r160", "FFmpeg"]
+  }
+}

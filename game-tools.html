@@ -1,0 +1,1695 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>東衛教學星球｜教學遊戲庫</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="teacher-settings.js"></script>
+  <script src="knsh-115-data.js"></script>
+  <style>
+    body {
+      background-color: #eff6ff;
+      background-image:
+        radial-gradient(circle at 12% 10%, rgba(253, 224, 71, .42) 0 110px, transparent 111px),
+        radial-gradient(circle at 88% 8%, rgba(244, 114, 182, .18) 0 145px, transparent 146px),
+        radial-gradient(circle at 80% 92%, rgba(52, 211, 153, .18) 0 150px, transparent 151px);
+    }
+    .card-in { animation: cardIn .35s ease-out both; }
+    .templateButton[aria-pressed="true"] {
+      outline: 4px solid #facc15;
+      transform: translateY(-3px);
+      box-shadow: 0 14px 28px rgba(30, 64, 175, .16);
+    }
+    .templateButton:focus-visible {
+      outline: 4px solid #facc15;
+      outline-offset: 3px;
+    }
+    .template-hidden { display: none; }
+    #templateLab:fullscreen {
+      overflow-y: auto;
+      background: #eef2ff;
+      padding: 1.5rem;
+    }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-700">
+  <a href="index.html#top" aria-label="回到東衛教學星球首頁" class="fixed bottom-5 right-5 z-50 rounded-full bg-blue-600 px-5 py-4 text-lg font-black text-white shadow-xl shadow-blue-200 transition hover:-translate-y-1 hover:bg-blue-500 focus:outline-none focus:ring-4 focus:ring-yellow-300">回首頁 ↑</a>
+  <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:py-10">
+    <header class="mb-6 rounded-3xl border-4 border-emerald-300 bg-white p-5 shadow-xl shadow-emerald-100 sm:p-7">
+      <div class="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p class="text-sm font-bold text-emerald-600">東衛教學星球</p>
+          <h1 class="mt-1 text-4xl font-black text-blue-800">教學遊戲庫</h1>
+          <p class="mt-2 text-sm font-medium text-slate-500">先選名單與課程來源，遊戲會自動帶入目前課程的語詞、句型、概念或題目。</p>
+        </div>
+        <a href="index.html#gameBank" class="rounded-2xl bg-slate-200 px-4 py-2 font-black text-slate-700 hover:bg-slate-300">回首頁</a>
+      </div>
+
+      <div class="mt-5 grid gap-4 lg:grid-cols-[0.75fr_1.25fr]">
+        <label class="rounded-2xl bg-yellow-50 p-4 font-black text-yellow-900">
+          選擇名單
+          <select id="rosterSelect" class="mt-2 w-full rounded-xl border-2 border-yellow-300 bg-white px-4 py-3 font-black text-blue-800 outline-none">
+            <option value="grade1">1 年級（17 人）</option>
+            <option value="grade2">2 年級（12 人）</option>
+            <option value="grade3">3 年級（13 人）</option>
+            <option value="grade4">4 年級（11 人）</option>
+            <option value="grade5">5 年級（20 人）</option>
+            <option value="grade6">6 年級（10 人）</option>
+            <option value="all">全校 1～6 年級（83 人）</option>
+          </select>
+          <p id="rosterStatus" class="mt-2 text-sm text-yellow-700">尚未載入</p>
+        </label>
+        <div class="rounded-2xl bg-blue-50 p-4">
+          <p class="font-black text-blue-800">快速前往</p>
+          <div class="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+            <a href="#wheel" class="rounded-2xl bg-yellow-400 px-4 py-3 text-center font-black text-yellow-950">幸運轉盤</a>
+            <a href="/quick-practice" class="rounded-2xl bg-emerald-800 px-4 py-3 text-center font-black text-white">快速練習</a>
+            <a href="#quiz" class="rounded-2xl bg-blue-600 px-4 py-3 text-center font-black text-white">搶答挑戰</a>
+            <a href="#activityLab" class="rounded-2xl bg-orange-500 px-4 py-3 text-center font-black text-white">課程任務遊戲</a>
+            <a href="#templateLab" class="rounded-2xl bg-indigo-500 px-4 py-3 text-center font-black text-white">互動範本</a>
+            <a href="#match" class="rounded-2xl bg-pink-500 px-4 py-3 text-center font-black text-white">配對翻牌</a>
+            <a href="#pe" class="rounded-2xl bg-emerald-500 px-4 py-3 text-center font-black text-white">體育闖關</a>
+            <a href="teaching-monopoly.html" class="rounded-2xl bg-amber-700 px-4 py-3 text-center font-black text-white">教學大富翁</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section id="wheel" class="card-in rounded-3xl border-4 border-yellow-300 bg-white p-5 shadow-xl shadow-yellow-100 sm:p-7">
+      <h2 class="text-3xl font-black text-yellow-800">幸運轉盤</h2>
+      <p class="mt-2 text-sm font-medium text-slate-500">固定抽目前選擇的學生名單。</p>
+      <div class="mt-5 grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
+        <div class="flex flex-col items-center">
+          <div id="wheelDisc" class="relative flex h-64 w-64 items-center justify-center rounded-full border-8 border-yellow-300 bg-[conic-gradient(#facc15,#60a5fa,#f472b6,#34d399,#fb923c,#a78bfa,#facc15)] shadow-xl transition-transform duration-1000">
+            <div class="absolute -right-3 top-1/2 h-0 w-0 -translate-y-1/2 border-y-[14px] border-l-[24px] border-y-transparent border-l-red-500"></div>
+            <div class="flex h-32 w-32 items-center justify-center rounded-full bg-white text-center text-2xl font-black text-yellow-700 shadow-inner">轉<br>起來</div>
+          </div>
+          <button id="spinButton" class="mt-5 rounded-2xl bg-yellow-400 px-8 py-4 text-xl font-black text-yellow-950 shadow hover:bg-yellow-300">開始轉盤</button>
+        </div>
+        <div class="rounded-3xl bg-yellow-50 p-5">
+          <p id="wheelSource" class="rounded-2xl bg-white p-4 font-black text-emerald-700 shadow-sm">目前名單：0 位學生</p>
+          <div class="mt-4 rounded-3xl bg-white p-5 text-center shadow-sm">
+            <p class="text-sm font-black text-slate-500">抽選結果</p>
+            <p id="wheelResult" class="mt-3 text-4xl font-black text-yellow-700">尚未抽選</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="quiz" class="card-in mt-8 rounded-3xl border-4 border-blue-300 bg-white p-5 shadow-xl shadow-blue-100 sm:p-7">
+      <h2 class="text-3xl font-black text-blue-800">搶答挑戰</h2>
+      <p class="mt-2 text-sm font-medium text-slate-500">每行一題，可用「題目｜答案」。小組答對可加分。</p>
+      <div class="mt-5 rounded-3xl border-2 border-sky-200 bg-sky-50 p-4">
+        <div class="flex flex-wrap items-end gap-3">
+          <label class="min-w-48 font-black text-sky-900">
+            科目
+            <select id="courseSubjectSelect" class="mt-2 w-full rounded-xl border-2 border-sky-200 bg-white px-3 py-3 font-black">
+              <option value="all">全部課程</option>
+            </select>
+          </label>
+          <label class="min-w-64 flex-1 font-black text-sky-900">
+            課程／課次
+            <select id="socialUnitSelect" class="mt-2 w-full rounded-xl border-2 border-sky-200 bg-white px-3 py-3 font-black">
+            </select>
+          </label>
+          <label class="w-36 font-black text-sky-900">
+            題數
+            <select id="socialQuestionCount" class="mt-2 w-full rounded-xl border-2 border-sky-200 bg-white px-3 py-3 font-black">
+              <option>3</option><option selected>5</option><option>8</option><option>10</option>
+            </select>
+          </label>
+          <button id="buildSocialQuizButton" class="rounded-2xl bg-sky-500 px-5 py-3 font-black text-white shadow hover:bg-sky-400">產生課程練習題</button>
+        </div>
+        <p id="socialQuizStatus" class="mt-3 text-sm font-bold text-sky-700">已讀取網站課程資料。選擇科目與課次後按產生，會寫入下方題庫。</p>
+      </div>
+      <div class="mt-5 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+        <div>
+          <details class="rounded-2xl border-2 border-blue-100 bg-blue-50/60 p-3">
+            <summary class="cursor-pointer font-black text-blue-800">題庫內容（老師編輯用，學生作答時可收起）</summary>
+            <textarea id="quizInput" rows="6" class="mt-3 w-full rounded-2xl border-2 border-blue-200 bg-white p-4 font-bold outline-none" placeholder="例如：地圖四要素有哪些？｜圖名、方向標、比例尺、圖例"></textarea>
+          </details>
+          <div class="mt-3 flex flex-wrap gap-2">
+            <button id="nextQuizButton" class="rounded-2xl bg-blue-600 px-5 py-3 font-black text-white shadow hover:bg-blue-500">抽下一題</button>
+            <button id="showAnswerButton" class="rounded-2xl bg-slate-200 px-5 py-3 font-black text-slate-700 hover:bg-slate-300">顯示答案</button>
+            <button id="resetQuizButton" class="rounded-2xl bg-white px-5 py-3 font-black text-blue-700 shadow hover:bg-blue-100">重設分數</button>
+          </div>
+          <div class="mt-4 rounded-3xl bg-white p-6 shadow-sm">
+            <p class="text-sm font-black text-blue-600">目前題目</p>
+            <p id="quizQuestion" class="mt-3 min-h-40 rounded-3xl bg-blue-50 p-6 text-4xl font-black leading-normal text-blue-900 sm:text-5xl">請先抽題</p>
+            <p id="quizAnswer" class="mt-4 hidden rounded-3xl bg-yellow-100 p-5 text-2xl font-black leading-relaxed text-yellow-900"></p>
+          </div>
+        </div>
+        <div id="teamBoard" class="grid grid-cols-2 gap-3"></div>
+      </div>
+    </section>
+
+    <section id="templateLab" class="card-in mt-8 rounded-3xl border-4 border-indigo-300 bg-white p-5 shadow-xl shadow-indigo-100 sm:p-7">
+      <div class="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p class="text-sm font-black text-indigo-500">同一份教材，多種課堂玩法</p>
+          <h2 class="mt-1 text-3xl font-black text-indigo-800">遊戲範本牆</h2>
+          <p class="mt-2 max-w-3xl text-sm font-medium leading-6 text-slate-500">選好科目與課次後，可直接切換測驗、配對、排序、記憶卡或輪盤。題目只取自目前教材單元。</p>
+        </div>
+        <p id="templateUnitStatus" class="rounded-2xl bg-indigo-50 px-4 py-2 font-black text-indigo-700">尚未載入單元</p>
+      </div>
+      <div class="mt-5 rounded-3xl bg-indigo-50 p-4">
+        <div class="grid gap-3 lg:grid-cols-[1fr_auto] lg:items-end">
+          <div>
+            <p class="text-sm font-black text-indigo-600">本課推薦玩法</p>
+            <div id="recommendedTemplateList" class="mt-2 flex flex-wrap gap-2"></div>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <label class="font-black text-indigo-900">玩法分類
+              <select id="templateCategorySelect" class="ml-2 rounded-xl border-2 border-indigo-200 bg-white px-3 py-2 font-black">
+                <option value="all">全部</option>
+                <option value="quick">暖身快答</option>
+                <option value="pair">配對理解</option>
+                <option value="language">語文組織</option>
+                <option value="reasoning">分類推理</option>
+              </select>
+            </label>
+            <label class="font-black text-indigo-900">題數
+              <select id="templateQuestionCount" class="ml-2 rounded-xl border-2 border-indigo-200 bg-white px-3 py-2 font-black">
+                <option value="3">3</option><option value="5" selected>5</option><option value="8">8</option>
+              </select>
+            </label>
+            <label class="font-black text-indigo-900">計時
+              <select id="templateTimerSelect" class="ml-2 rounded-xl border-2 border-indigo-200 bg-white px-3 py-2 font-black">
+                <option value="0">不限時</option><option value="30">30 秒</option><option value="60">60 秒</option><option value="90">90 秒</option>
+              </select>
+            </label>
+          </div>
+        </div>
+        <div class="mt-3 flex flex-wrap gap-2">
+          <button id="randomTemplateButton" type="button" class="rounded-2xl bg-indigo-600 px-4 py-2 font-black text-white shadow hover:bg-indigo-500">幫我選玩法</button>
+          <button id="restartTemplateButton" type="button" class="rounded-2xl bg-white px-4 py-2 font-black text-indigo-700 shadow-sm hover:bg-indigo-100">重新出題</button>
+          <button id="fullscreenTemplateButton" type="button" class="rounded-2xl bg-slate-800 px-4 py-2 font-black text-white shadow hover:bg-slate-700">全螢幕投影</button>
+          <p class="rounded-2xl bg-white px-4 py-2 font-black text-slate-700 shadow-sm">得分 <span id="templateScore">0</span>／<span id="templateAttempts">0</span></p>
+          <p class="rounded-2xl bg-white px-4 py-2 font-black text-slate-700 shadow-sm">時間 <span id="templateTimer">不限時</span></p>
+        </div>
+      </div>
+      <div class="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
+        <button type="button" aria-pressed="false" data-template="test" data-category="quick reasoning" class="templateButton min-h-32 rounded-3xl bg-sky-50 p-4 text-left shadow-sm transition hover:-translate-y-1 hover:bg-sky-100"><span class="rounded-full bg-sky-200 px-3 py-1 text-xs font-black text-sky-900">測</span><b class="mt-3 block text-sky-800">選擇題測驗</b><p class="mt-2 text-sm">逐題選答案，完成後統計得分。</p></button>
+        <button type="button" aria-pressed="false" data-template="matchdrop" data-category="pair reasoning" class="templateButton min-h-32 rounded-3xl bg-cyan-50 p-4 text-left shadow-sm transition hover:-translate-y-1 hover:bg-cyan-100"><span class="rounded-full bg-cyan-200 px-3 py-1 text-xs font-black text-cyan-900">配</span><b class="mt-3 block text-cyan-800">匹配遊戲</b><p class="mt-2 text-sm">把關鍵字配到正確說明。</p></button>
+        <button type="button" aria-pressed="false" data-template="flash" data-category="quick pair" class="templateButton min-h-32 rounded-3xl bg-amber-50 p-4 text-left shadow-sm transition hover:-translate-y-1 hover:bg-amber-100"><span class="rounded-full bg-amber-200 px-3 py-1 text-xs font-black text-amber-900">卡</span><b class="mt-3 block text-amber-800">快閃記憶卡</b><p class="mt-2 text-sm">先想答案，再翻卡自我檢查。</p></button>
+        <button type="button" aria-pressed="false" data-template="spell" data-category="language" class="templateButton min-h-32 rounded-3xl bg-lime-50 p-4 text-left shadow-sm transition hover:-translate-y-1 hover:bg-lime-100"><span class="rounded-full bg-lime-200 px-3 py-1 text-xs font-black text-lime-900">字</span><b class="mt-3 block text-lime-800">拼字遊戲</b><p class="mt-2 text-sm">重組本課語詞或概念詞。</p></button>
+        <button type="button" aria-pressed="false" data-template="cards" data-category="quick" class="templateButton min-h-32 rounded-3xl bg-yellow-50 p-4 text-left shadow-sm transition hover:-translate-y-1 hover:bg-yellow-100"><span class="rounded-full bg-yellow-200 px-3 py-1 text-xs font-black text-yellow-900">抽</span><b class="mt-3 block text-yellow-800">隨機卡</b><p class="mt-2 text-sm">抽概念、題目或口說任務。</p></button>
+        <button type="button" aria-pressed="false" data-template="coursewheel" data-category="quick" class="templateButton min-h-32 rounded-3xl bg-fuchsia-50 p-4 text-left shadow-sm transition hover:-translate-y-1 hover:bg-fuchsia-100"><span class="rounded-full bg-fuchsia-200 px-3 py-1 text-xs font-black text-fuchsia-900">轉</span><b class="mt-3 block text-fuchsia-800">課程輪盤</b><p class="mt-2 text-sm">隨機轉出本課題目或概念。</p></button>
+        <button type="button" aria-pressed="false" data-template="judge" data-category="quick reasoning" class="templateButton min-h-32 rounded-3xl bg-blue-50 p-4 text-left shadow-sm transition hover:-translate-y-1 hover:bg-blue-100"><span class="rounded-full bg-blue-200 px-3 py-1 text-xs font-black text-blue-900">判</span><b class="mt-3 block text-blue-800">是非快打</b><p class="mt-2 text-sm">判斷概念與說明是否正確。</p></button>
+        <button type="button" aria-pressed="false" data-template="sort" data-category="reasoning" class="templateButton min-h-32 rounded-3xl bg-emerald-50 p-4 text-left shadow-sm transition hover:-translate-y-1 hover:bg-emerald-100"><span class="rounded-full bg-emerald-200 px-3 py-1 text-xs font-black text-emerald-900">分</span><b class="mt-3 block text-emerald-800">分類遊戲</b><p class="mt-2 text-sm">判斷概念、題目與說明。</p></button>
+        <button type="button" aria-pressed="false" data-template="missing" data-category="language pair" class="templateButton min-h-32 rounded-3xl bg-orange-50 p-4 text-left shadow-sm transition hover:-translate-y-1 hover:bg-orange-100"><span class="rounded-full bg-orange-200 px-3 py-1 text-xs font-black text-orange-900">填</span><b class="mt-3 block text-orange-800">缺詞填空</b><p class="mt-2 text-sm">依說明找出被遮住的關鍵詞。</p></button>
+        <button type="button" aria-pressed="false" data-template="sentence" data-category="language pair" class="templateButton min-h-32 rounded-3xl bg-red-50 p-4 text-left shadow-sm transition hover:-translate-y-1 hover:bg-red-100"><span class="rounded-full bg-red-200 px-3 py-1 text-xs font-black text-red-900">句</span><b class="mt-3 block text-red-800">完成句子</b><p class="mt-2 text-sm">選詞完成本課概念句。</p></button>
+        <button type="button" aria-pressed="false" data-template="order" data-category="language reasoning" class="templateButton min-h-32 rounded-3xl bg-violet-50 p-4 text-left shadow-sm transition hover:-translate-y-1 hover:bg-violet-100"><span class="rounded-full bg-violet-200 px-3 py-1 text-xs font-black text-violet-900">排</span><b class="mt-3 block text-violet-800">句子排列</b><p class="mt-2 text-sm">點選詞卡排出完整句子。</p></button>
+        <button type="button" aria-pressed="false" data-template="find" data-category="pair" class="templateButton min-h-32 rounded-3xl bg-pink-50 p-4 text-left shadow-sm transition hover:-translate-y-1 hover:bg-pink-100"><span class="rounded-full bg-pink-200 px-3 py-1 text-xs font-black text-pink-900">找</span><b class="mt-3 block text-pink-800">找匹配</b><p class="mt-2 text-sm">點概念，再找對應說明。</p></button>
+        <button type="button" aria-pressed="false" data-template="openbox" data-category="quick" class="templateButton min-h-32 rounded-3xl bg-slate-50 p-4 text-left shadow-sm transition hover:-translate-y-1 hover:bg-slate-100"><span class="rounded-full bg-slate-200 px-3 py-1 text-xs font-black text-slate-900">箱</span><b class="mt-3 block text-slate-800">開箱遊戲</b><p class="mt-2 text-sm">逐一開箱，顯示任務與答案。</p></button>
+        <button type="button" aria-pressed="false" data-template="group" data-category="reasoning" class="templateButton min-h-32 rounded-3xl bg-teal-50 p-4 text-left shadow-sm transition hover:-translate-y-1 hover:bg-teal-100"><span class="rounded-full bg-teal-200 px-3 py-1 text-xs font-black text-teal-900">組</span><b class="mt-3 block text-teal-800">按組排序</b><p class="mt-2 text-sm">將項目放入正確類別。</p></button>
+      </div>
+      <div id="templateBoard" class="mt-5 rounded-3xl bg-indigo-50 p-5"></div>
+    </section>
+
+    <section id="activityLab" class="card-in mt-8 rounded-3xl border-4 border-orange-300 bg-white p-5 shadow-xl shadow-orange-100 sm:p-7">
+      <div class="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p class="text-sm font-black text-orange-600">依目前課程直接操作</p>
+          <h2 class="mt-1 text-3xl font-black text-orange-800">課程任務遊戲</h2>
+          <p class="mt-2 max-w-3xl text-sm font-medium leading-6 text-slate-600">不是只有活動名稱：老師按下開始後，學生會依序完成「找重點、配對說明、說出理由」三關，系統會檢查前兩關並記錄完成分數。</p>
+        </div>
+        <p id="activityUnitStatus" class="rounded-2xl bg-orange-50 px-4 py-2 font-black text-orange-700">尚未載入課程</p>
+      </div>
+      <div id="activityBoard" class="mt-5 rounded-3xl bg-orange-50 p-5">
+        <div class="rounded-2xl bg-white p-5 shadow-sm">
+          <h3 class="text-2xl font-black text-orange-900">準備開始</h3>
+          <p class="mt-2 leading-7 text-slate-700">請先確認上方的科目與課程，按下「開始課程任務」後，畫面會帶入這一課的真實題目與概念。</p>
+          <button id="startActivityButton" type="button" class="mt-4 rounded-2xl bg-orange-500 px-5 py-3 font-black text-white shadow hover:bg-orange-400">開始課程任務</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="match" class="card-in mt-8 rounded-3xl border-4 border-pink-300 bg-white p-5 shadow-xl shadow-pink-100 sm:p-7">
+      <h2 class="text-3xl font-black text-pink-800">配對翻牌</h2>
+      <p class="mt-2 text-sm font-medium text-slate-500">會依上方選到的課程產出相對應的語詞、句型或概念配對，最多取 8 組。</p>
+      <div class="mt-5 grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
+        <div>
+          <div class="mb-3 rounded-2xl bg-pink-50 p-4">
+            <p class="text-sm font-black text-slate-500">目前配對來源</p>
+            <p id="matchUnitStatus" class="mt-1 font-black text-pink-800">尚未載入課程資料</p>
+          </div>
+          <label for="pairInput" class="mb-2 block font-black text-pink-900">本課配對題庫</label>
+          <p class="mb-2 text-sm font-bold text-slate-500">每行一組：左邊放「概念／語詞」，右邊放「解釋／例子」。系統會從目前課程隨機抽題。</p>
+          <textarea id="pairInput" rows="8" class="w-full rounded-2xl border-2 border-pink-200 bg-pink-50/50 p-4 font-bold outline-none"></textarea>
+          <div class="mt-3 flex flex-wrap gap-2">
+            <button id="buildSocialMatchButton" class="rounded-2xl bg-rose-500 px-5 py-3 font-black text-white shadow hover:bg-rose-400">帶入本課配對</button>
+            <button id="startMatchButton" class="rounded-2xl bg-pink-500 px-5 py-3 font-black text-white shadow hover:bg-pink-400">開始翻牌</button>
+            <button id="resetMatchButton" class="rounded-2xl bg-white px-5 py-3 font-black text-pink-700 shadow hover:bg-pink-100">重洗</button>
+          </div>
+          <div class="mt-4 grid gap-2 sm:grid-cols-2">
+            <p id="matchStatus" class="rounded-2xl bg-white p-3 font-black text-pink-700 shadow-sm">尚未開始</p>
+            <p id="matchScore" class="rounded-2xl bg-pink-50 p-3 font-black text-pink-700 shadow-sm">完成 0 組｜嘗試 0 次</p>
+          </div>
+        </div>
+        <div id="matchBoard" class="grid grid-cols-2 gap-3 sm:grid-cols-4"></div>
+      </div>
+    </section>
+
+    <section id="pe" class="card-in mt-8 rounded-3xl border-4 border-emerald-300 bg-white p-5 shadow-xl shadow-emerald-100 sm:p-7">
+      <h2 class="text-3xl font-black text-emerald-800">體育闖關</h2>
+      <p class="mt-2 text-sm font-medium text-slate-500">用目前選擇的學生名單分組，輪站完成動作任務。</p>
+      <div class="mt-5 grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
+        <div>
+          <label class="block font-black text-emerald-900">闖關組數
+            <select id="peGroupCount" class="mt-2 w-full rounded-xl border-2 border-emerald-200 bg-white px-3 py-3 font-black">
+              <option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option>
+            </select>
+          </label>
+          <textarea id="stationInput" rows="8" class="mt-3 w-full rounded-2xl border-2 border-emerald-200 bg-emerald-50/50 p-4 font-bold outline-none"></textarea>
+          <div class="mt-3 flex flex-wrap gap-2">
+            <button id="startPeButton" class="rounded-2xl bg-emerald-500 px-5 py-3 font-black text-white shadow hover:bg-emerald-400">建立闖關</button>
+            <button id="rotatePeButton" class="rounded-2xl bg-blue-500 px-5 py-3 font-black text-white shadow hover:bg-blue-400">下一輪換站</button>
+          </div>
+        </div>
+        <div>
+          <p id="peStatus" class="rounded-2xl bg-white p-3 font-black text-emerald-700 shadow-sm">尚未建立闖關</p>
+          <div id="stationBoard" class="mt-3 space-y-3"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="course-data.js"></script>
+  <script src="penghu-minnan-data.js"></script>
+  <script src="information-course-data.js"></script>
+  <script>
+    const rosters = {
+      grade1: ['廖咚翔', '呂權恩', '許睿麟', '蔡宸昊', '陳品仲', '蘇益宸', '李子平', '戴宥沂', '溫詠辰', '薛浩宇', '許允熙', '張巧巧', '謝可欣', '王歆妍', '熊晨蒙', '丁嘉慧', '呂韻如', '袁子喬', '歐昕芸', '林品菲'],
+      grade2: ['成劭哲', '林禹和', '薛浩介', '陳俊睿', '呂胤安', '尤瑞騰', '呂銄洋', '洪博彥', '陳星宇', '吳家樂', '陳浤鈞', '顏子淯', '顏子喨', '薛詠仁', '呂品賢', '蔡沛玟', '呂侑甯'],
+      grade3: ['林柏暟', '吳恩佑', '戴佑庭', '王天助', '呂佑恩', '莊又睿', '呂芝均', '葉芯瑜', '陳語芯', '蕭禹馨', '陳禹彤', '徐尉綸'],
+      grade4: ['陳品佑', '葉冠宏', '林酉居', '呂宇恩', '許軒禾', '許允睿', '尹辰元', '呂雨璇', '胡詠晳', '翁若媞', '莊雅淳', '邵恩', '陳浚棛'],
+      grade5: ['洪杰廷', '呂曜廷', '許淳智', '羅宇揚', '呂貞邑', '蔡沛晴', '洪咏箖', '盧品妍', '蔡馨郁', '林柏諺', '戴玟妡'],
+      grade6: ['洪定群', '尹辰熙', '鄭易新', '尤瑞禮', '薛宸光', '洪丞佑', '呂政諭', '呂胤宏', '許靚蕾', '葉奕希', '賴聖棠', '呂雅欣', '涂芯妍', '薛名姝', '呂佳琪', '許書嫚', '呂若歆', '吳若薰', '戴安婕', '林子喬']
+    };
+    rosters.all = Object.keys(rosters).flatMap(key => rosters[key]);
+    if (window.TeacherProfile) window.TeacherProfile.applyRosters(rosters);
+    const labels = { grade1: '1 年級', grade2: '2 年級', grade3: '3 年級', grade4: '4 年級', grade5: '5 年級', grade6: '6 年級', all: '全校' };
+    const defaultQuiz = ['今天的學習重點是什麼？｜依課程內容回答', '請說出一個和澎湖生活有關的例子｜能合理連結即可', '小組合作時要注意什麼？｜分工、傾聽、輪流發表', '請用一句話整理本課內容｜能說出重點即可'];
+    const defaultStations = ['暖身站：開合跳 20 下＋動態伸展', '技巧站：依今天主題練習 3 回合', '合作站：兩人一組完成接力任務', '挑戰站：小組完成指定秒數或次數', '補水站：休息、補水、檢查安全'];
+    const socialUnits = {
+      's4a-1-1': {
+        title: '4 上 1-1 家鄉在哪裡',
+        concepts: ['家鄉的位置與特色', '不同種類地圖的用途', '地圖四要素：圖名、方向標、比例尺、圖例', '電子地圖的搜尋、縮放與模式切換'],
+        pairs: ['地圖四要素=圖名、方向標、比例尺、圖例', '交通路線圖=查詢交通路線與移動方式', '行政區圖=認識縣市與行政區位置', '觀光導覽圖=查找景點與旅遊資訊', '地形圖=觀察地表高低起伏', '電子地圖=搜尋、縮放與切換模式'],
+        questions: [
+          ['地圖四要素包含哪些？', '圖名、方向標、比例尺、圖例。'],
+          ['不同種類的地圖為什麼會顯示不同資訊？', '因為地圖用途不同，例如交通路線圖、行政區圖、觀光導覽圖會強調不同資料。'],
+          ['電子地圖可以怎樣幫助我們認識家鄉？', '可以搜尋位置、縮放範圍、切換不同模式，觀察家鄉位置與特色。'],
+          ['如果要查去某地的路線，適合使用哪一種地圖？', '交通路線圖或電子地圖。'],
+          ['圖例的功能是什麼？', '說明地圖上符號代表的意思。'],
+          ['比例尺可以幫助我們知道什麼？', '可以知道地圖距離和實際距離的關係。']
+        ]
+      },
+      's4a-1-2': {
+        title: '4 上 1-2 家鄉的地形',
+        concepts: ['地形是地表高低起伏的型態', '平原、盆地、台地、丘陵、山地', '地形會影響居民活動與生活方式', '居民活動也會改變地表景觀'],
+        pairs: ['地形=地表高低起伏的型態', '平原=地勢較平坦的地形', '盆地=四周較高、中間較低的地形', '台地=頂部較平坦、邊緣較陡的地形', '丘陵=高度較低、起伏和緩的地形', '山地=高度較高、起伏較大的地形', '居民活動=會受到地形影響，也可能改變景觀'],
+        questions: [
+          ['地形是什麼？', '地表高低起伏的型態。'],
+          ['請說出三種常見地形。', '平原、盆地、台地、丘陵、山地任三種。'],
+          ['地形較平坦的地方可能形成哪些景觀？', '聚落、道路、農田或較密集的人類活動。'],
+          ['丘陵或山地的居民活動可能受到哪些限制？', '交通、耕作、建築與活動空間可能受坡度或高度影響。'],
+          ['地形如何影響居民生活？', '會影響交通、產業、聚落分布與生活方式。'],
+          ['居民活動可能如何改變地表景觀？', '興建道路、房屋、農田或設施會改變地表樣貌。']
+        ]
+      },
+      's4a-1-3': {
+        title: '4 上 1-3 氣候、水資源與生活',
+        concepts: ['氣候是一地長時間的天氣平均狀況', '氣候影響建築、作物與休閒活動', '河川、湖泊、地下水、海洋都是水資源', '保護水資源是居民與政府共同責任'],
+        pairs: ['氣候=一地長時間天氣的平均狀況', '天氣=短時間的大氣狀況', '水資源=河川、湖泊、地下水、海洋等', '氣候影響生活=建築、作物、穿著、休閒活動會受影響', '保護水資源=居民與政府共同責任', '珍惜水資源=節約用水、不任意汙染'],
+        questions: [
+          ['氣候和天氣有什麼不同？', '天氣是短時間狀況，氣候是一地長時間天氣的平均情形。'],
+          ['氣候可能影響居民生活的哪些方面？', '建築、作物、穿著、休閒活動等。'],
+          ['請說出兩種水資源。', '河川、湖泊、地下水、海洋等任兩種。'],
+          ['水資源對居民生活有哪些用途？', '飲用、灌溉、清潔、產業或休閒等。'],
+          ['為什麼保護水資源是大家的責任？', '因為生活需要水，汙染或浪費會影響大家。'],
+          ['我們可以怎麼珍惜水資源？', '節約用水、不任意汙染、保護水域環境。']
+        ]
+      },
+      's4a-2-1': {
+        title: '4 上 2-1 傳統住屋與生活',
+        concepts: ['原住民族傳統住屋受自然環境影響', '漢人傳統住屋常就地取材', '一條龍、單伸手、三合院', '傳統住屋的轉變、維護與保存'],
+        pairs: ['原住民族傳統住屋=受自然環境與族群生活影響', '漢人傳統住屋=常就地取材建造', '一條龍=漢人傳統住屋形式之一', '單伸手=漢人傳統住屋形式之一', '三合院=漢人傳統住屋形式之一', '保存傳統住屋=保留先民生活記憶與地方文化'],
+        questions: [
+          ['自然環境如何影響傳統住屋？', '會影響建材、形式與建築方式，例如就地取材或適應氣候。'],
+          ['請說出一種原住民族傳統住屋。', '石板屋、地下屋、泰雅族傳統住屋等。'],
+          ['漢人傳統住屋常見形式有哪些？', '一條龍、單伸手、三合院。'],
+          ['三合院的居住形式有什麼特色？', '房舍圍合出空間，常和家族共同生活、活動有關。'],
+          ['為什麼要維護與保存傳統住屋？', '可以保存先民生活記憶與地方文化特色。'],
+          ['就地取材是什麼意思？', '利用當地容易取得的材料來建造。']
+        ]
+      },
+      's4a-2-2': {
+        title: '4 上 2-2 器物與生活',
+        concepts: ['生活器物與自然環境有關', '早期器物反映居民生活需求', '科技與材料改變器物樣貌', '珍惜資源與尊重多元文化'],
+        pairs: ['生活器物=和自然環境、生活需求有關', '傳統器物=反映早期居民生活方式', '器物材料=常和當地自然環境有關', '科技進步=改變器物功能、材料與樣貌', '現代器物=可能和傳統器物功能相似但形式不同', '尊重多元文化=理解不同族群的器物與生活智慧'],
+        questions: [
+          ['傳統器物如何反映居民的生活？', '器物的材料和用途會呈現居民需求、產業與生活方式。'],
+          ['器物材料和自然環境有什麼關係？', '居民常使用當地容易取得的材料製作器物。'],
+          ['科技進步如何改變生活器物？', '新材料與新技術讓器物更方便、功能更多或外型改變。'],
+          ['請舉一個傳統器物與現代器物功能相似的例子。', '依學生舉例判斷，能說出功能相似即可。'],
+          ['為什麼認識不同族群器物很重要？', '可以理解不同生活方式並尊重多元文化。'],
+          ['器物改變可能和哪些因素有關？', '自然環境、生活需求、科技、材料與生活方式。']
+        ]
+      },
+      's4a-3-1': {
+        title: '4 上 3-1 信仰與生活',
+        concepts: ['原住民族傳統信仰中的神靈與祖靈', '漢人廟宇與神明對生活的影響', '廟前廣場可作為休閒聚會空間', '尊重不同信仰並促進社會祥和'],
+        pairs: ['原住民族傳統信仰=神靈與祖靈在生活中扮演重要角色', '漢人廟宇=祭拜神明與居民聚會的地方', '廟前廣場=休閒、聚會、活動空間', '信仰功能=心靈寄託、凝聚情感、促進互助', '尊重信仰差異=不嘲笑、不干擾、願意理解', '社會祥和=不同信仰互相尊重'],
+        questions: [
+          ['信仰為什麼會影響居民生活？', '信仰會影響心靈寄託、祭典活動、聚會與生活習慣。'],
+          ['廟宇除了祭拜還有哪些功能？', '休閒聚會、舉辦活動、行善助人或社區交流。'],
+          ['原住民族傳統信仰可能和什麼有關？', '神靈、祖靈、自然環境與族群生活。'],
+          ['我們應該如何尊重不同信仰？', '不嘲笑、不干擾，願意理解並尊重差異。'],
+          ['廟前廣場可能有哪些活動？', '休閒、聚會、祭典、表演或社區活動。'],
+          ['信仰活動如何促進社會祥和？', '讓居民凝聚情感、互相幫助並學習尊重。']
+        ]
+      },
+      's4a-3-2': {
+        title: '4 上 3-2 老街與生活',
+        concepts: ['老街形成與居民生活有關', '老街可保留先民生活記憶', '老街會隨社會與經濟發展轉變', '現代街道呈現多元文化風貌'],
+        pairs: ['老街形成=和廟宇、人潮、交通、店鋪、居民生活有關', '老街=保留先民生活記憶與地方文化', '老街轉變=受社會與經濟發展影響', '現代街道=呈現多元文化風貌', '老街導覽=介紹建築、商店、歷史與生活故事', '探訪禮節=注意安全、愛護環境、不打擾居民'],
+        questions: [
+          ['老街的形成常和哪些因素有關？', '廟宇、人潮、交通、店鋪、攤販與居民生活。'],
+          ['老街為什麼會轉變？', '受到社會與經濟發展、人潮、商店型態與生活方式改變影響。'],
+          ['老街可以保留什麼？', '先民生活記憶、建築特色與地方文化。'],
+          ['探訪老街時要注意哪些安全與禮節？', '注意交通、遵守規定、不打擾居民、愛護環境。'],
+          ['現代街道可能呈現哪些多元文化？', '不同族群、商店、飲食與活動特色。'],
+          ['如果你是導覽員，會介紹老街的哪些特色？', '建築、商店、歷史、文化、生活故事等。']
+        ]
+      },
+      's4a-4-1': {
+        title: '4 上 4-1 生活的作息',
+        concepts: ['傳統生活作息常配合自然變化', '漢人與原住民族有不同作息依據', '現代作息受科技、陽曆、星期制影響', '可依個人需求規畫生活作息'],
+        pairs: ['傳統生活作息=常配合日出日落與季節變化', '自然變化=影響早期生活與工作安排', '現代作息=受科技、陽曆與星期制影響', '星期制=幫助安排上課、工作與休假', '作息規畫=依個人需求安排學習、休息與活動', '尊重不同作息=理解族群與生活背景差異'],
+        questions: [
+          ['傳統生活作息如何受到自然環境影響？', '常配合日出日落、季節與自然變化安排活動。'],
+          ['現代作息和傳統作息有什麼不同？', '現代作息常受科技、陽曆、星期制與工作上課時間影響。'],
+          ['為什麼不同族群可能有不同作息安排？', '生活環境、產業、文化與信仰不同。'],
+          ['如何安排健康且合適的生活作息？', '兼顧上課、休息、運動、睡眠與個人需求。'],
+          ['星期制對現代生活有什麼影響？', '幫助安排上課、工作、休假與活動。'],
+          ['為什麼要尊重不同族群的作息？', '因為不同生活方式有其文化與環境背景。']
+        ]
+      },
+      's4a-4-2': {
+        title: '4 上 4-2 傳統的節慶',
+        concepts: ['原住民族祭典配合環境、季節與信仰', '漢人節慶包含除夕、春節、元宵、清明、端午、中元、中秋', '節慶凝聚家族向心力並豐富生活', '尊重不同族群祭典與節慶'],
+        pairs: ['原住民族祭典=配合環境、季節與信仰', '漢人傳統節慶=除夕、春節、元宵、清明、端午、中元、中秋', '節慶功能=凝聚家族向心力並豐富生活', '祭典目的=感謝、祈福、播種、收穫或族群凝聚', '尊重節慶差異=欣賞不同族群文化', '家鄉節慶介紹=說明時間、活動、意義與地方特色'],
+        questions: [
+          ['原住民族祭典常見目的有哪些？', '感謝、祈福、播種、收穫、招魚或族群凝聚等。'],
+          ['請說出三個漢人傳統節慶。', '除夕、春節、元宵、清明、端午、中元、中秋任三個。'],
+          ['節慶如何凝聚家族向心力？', '家人團聚、共同準備活動或一起祭祖慶祝。'],
+          ['為什麼要尊重不同族群的祭典與節慶？', '因為不同節慶代表各族群文化與生活意義。'],
+          ['祭典可能和季節有什麼關係？', '可能配合播種、收穫、漁獵或自然環境變化。'],
+          ['家鄉節慶可以怎麼介紹？', '說明時間、活動、意義、食物或地方特色。']
+        ]
+      },
+      's4a-4-3': {
+        title: '4 上 4-3 現代的節日',
+        concepts: ['人生不同階段有不同節日與角色責任', '各行各業有代表節日並值得尊重', '國家重要節日幫助了解國家發展歷史', '外來文化與國際議題節日反映多元文化'],
+        pairs: ['現代節日=和人生階段、職業、國家、外來文化或國際議題有關', '人生階段節日=提醒不同身分與責任', '職業節日=認識各行各業專業與貢獻', '國家重要節日=了解國家發展歷史與共同記憶', '外來文化節日=反映文化交流與多元文化', '國際議題節日=提醒用行動關心世界議題'],
+        questions: [
+          ['現代節日和傳統節慶有什麼不同？', '現代節日可能和人生階段、職業、國家事件、外來文化或國際議題有關。'],
+          ['為什麼各行各業都值得尊敬？', '每種職業都有專業與責任，對社會有貢獻。'],
+          ['請說出一個職業節日。', '教師節、警察節、勞動節等。'],
+          ['國際議題節日可以如何落實在生活中？', '例如世界地球日可節能減塑，世界閱讀日可安排閱讀行動。'],
+          ['國家重要節日有什麼功能？', '幫助我們了解國家發展歷史與共同記憶。'],
+          ['外來文化節日反映什麼現象？', '反映文化交流與多元文化。']
+        ]
+      }
+    };
+    const infoUnits = {
+      'info-custom': {
+        subject: '資訊',
+        title: '資訊課自訂題庫',
+        concepts: ['資訊安全', '鍵盤滑鼠操作', '資料整理', '搜尋與判斷資料'],
+        pairs: ['資訊安全=保護個人資料，不隨意公開帳號密碼', '鍵盤滑鼠操作=能正確輸入、點選、拖曳與儲存', '資料整理=把檔案或資料依主題分類', '搜尋與判斷資料=找資料時要看來源、日期與可信度'],
+        questions: [
+          ['上網時為什麼不能公開自己的帳號密碼？', '因為帳號密碼屬於個人資料，公開後可能被他人盜用。'],
+          ['搜尋資料時，可以怎麼判斷資料是否可信？', '可以看來源、日期、作者或是否有其他資料互相支持。'],
+          ['把檔案依主題分類有什麼好處？', '比較容易找到資料，也能減少重複或遺失。']
+        ]
+      }
+    };
+    const courseUnits = {};
+    const subjectLabels = { all: '全部課程', social: '社會', minnan: '閩南語', comprehensive: '綜合活動', info: '資訊', '國語文': '國語文', '數學': '數學', '自然': '自然' };
+    const $ = id => document.getElementById(id);
+    let wheelRotation = 0;
+    let scores = [0, 0, 0, 0];
+    let answer = '';
+    let flipped = [];
+    let matched = new Set();
+    let matchAttempts = 0;
+    let matchTotal = 0;
+    let peGroups = [];
+    let peStations = [];
+    let peRound = 0;
+    let activeTemplate = '';
+    let templateTimerId = null;
+    let templateSecondsLeft = 0;
+    let templateScore = 0;
+    let templateAttempts = 0;
+    let courseWheelRotation = 0;
+    let currentCourseWheelPool = [];
+
+    const templateCatalog = {
+      test: { label: '選擇題測驗' },
+      matchdrop: { label: '匹配遊戲' },
+      flash: { label: '快閃記憶卡' },
+      spell: { label: '拼字遊戲' },
+      cards: { label: '隨機卡' },
+      coursewheel: { label: '課程輪盤' },
+      judge: { label: '是非快打' },
+      sort: { label: '分類遊戲' },
+      missing: { label: '缺詞填空' },
+      sentence: { label: '完成句子' },
+      order: { label: '句子排列' },
+      find: { label: '找匹配' },
+      openbox: { label: '開箱遊戲' },
+      group: { label: '按組排序' }
+    };
+
+    const subjectTemplateRecommendations = {
+      '國語文': ['flash', 'spell', 'sentence', 'order'],
+      minnan: ['flash', 'spell', 'sentence', 'cards'],
+      '閩南語': ['flash', 'spell', 'sentence', 'cards'],
+      '數學': ['test', 'matchdrop', 'order', 'group'],
+      '自然': ['matchdrop', 'judge', 'sort', 'openbox'],
+      social: ['matchdrop', 'judge', 'find', 'openbox'],
+      '社會': ['matchdrop', 'judge', 'find', 'openbox'],
+      comprehensive: ['cards', 'sort', 'openbox', 'group'],
+      '綜合活動': ['cards', 'sort', 'openbox', 'group'],
+      info: ['test', 'order', 'matchdrop', 'group'],
+      '資訊': ['test', 'order', 'matchdrop', 'group'],
+      '健康與體育': ['cards', 'judge', 'openbox', 'coursewheel'],
+      '體育': ['cards', 'judge', 'openbox', 'coursewheel']
+    };
+
+    function names() { return rosters[$('rosterSelect').value] || []; }
+    function shuffle(items) {
+      const result = [...items];
+      for (let i = result.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [result[i], result[j]] = [result[j], result[i]];
+      }
+      return result;
+    }
+    function escapeHtml(value) {
+      const el = document.createElement('div');
+      el.textContent = value;
+      return el.innerHTML;
+    }
+    function updateRosterStatus() {
+      const count = names().length;
+      const label = labels[$('rosterSelect').value];
+      $('rosterStatus').textContent = `${label}：${count} 位學生`;
+      $('wheelSource').textContent = `${label}：目前可抽 ${count} 位學生`;
+    }
+    Object.entries(labels).forEach(([key, label]) => {
+      const option = document.querySelector(`#rosterSelect option[value="${key}"]`);
+      if (option) option.textContent = `${label}（${rosters[key].length} 人）`;
+    });
+    function spinWheel() {
+      const list = names();
+      if (!list.length) return;
+      const result = list[Math.floor(Math.random() * list.length)];
+      wheelRotation += 1080 + Math.floor(Math.random() * 720);
+      $('wheelDisc').style.transform = `rotate(${wheelRotation}deg)`;
+      $('wheelResult').textContent = '轉盤轉動中...';
+      setTimeout(() => { $('wheelResult').textContent = result; }, 850);
+    }
+    function parseQuiz() {
+      const lines = $('quizInput').value.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+      return (lines.length ? lines : defaultQuiz).map(line => {
+        const [q, a = '依學生回答判斷'] = line.split(/[｜|=]/);
+        return { q: q.trim(), a: a.trim() };
+      }).filter(item => item.q);
+    }
+    function buildSocialQuiz() {
+      const unit = currentUnit();
+      if (!unit) return;
+      const count = Number($('socialQuestionCount').value);
+      const conceptQuestions = unit.concepts.map(concept => [`「${concept}」這個概念可以怎麼說明？`, '能說出概念重點，並舉出合理例子即可。']);
+      const allQuestions = shuffle([...unit.questions, ...conceptQuestions]).slice(0, count);
+      $('quizInput').value = allQuestions.map(([q, a]) => `${q}｜${a}`).join('\n');
+      $('quizQuestion').textContent = '已產生課程練習題，請按「抽下一題」';
+      $('quizAnswer').classList.add('hidden');
+      $('showAnswerButton').textContent = '顯示答案';
+      answer = '';
+      $('socialQuizStatus').textContent = `已依 ${unit.subject}｜${unit.title} 產生 ${allQuestions.length} 題${unit.source?.sourceFile ? `；來源：${unit.source.sourceFile}` : ''}。`;
+    }
+    function buildSocialMatch() {
+      const unit = currentUnit();
+      if (!unit) return;
+      $('pairInput').value = unit.pairs.join('\n');
+      $('matchUnitStatus').textContent = `目前使用：${unit.subject}｜${unit.title}，已整理 ${unit.pairs.length} 組「概念－說明」配對${unit.source?.sourceFile ? `；來源：${unit.source.sourceFile}` : ''}，開始時隨機取最多 6 組。`;
+      $('matchStatus').textContent = '已帶入本課配對；請找出每個概念對應的說明。';
+      $('matchScore').textContent = '完成 0 組｜嘗試 0 次';
+      $('matchBoard').innerHTML = '';
+      flipped = [];
+      matched = new Set();
+      matchAttempts = 0;
+      matchTotal = 0;
+    }
+    function createSocialCourseUnits() {
+      const source = window.DONGWEI_COURSE_DATA?.socialLessonBank || socialUnits;
+      return Object.fromEntries(Object.entries(source).map(([key, unit]) => {
+        const fallback = socialUnits[key] || {};
+        const pairs = unit.pairs?.length ? unit.pairs : fallback.pairs || [];
+        const questions = unit.questions?.some(item => Array.isArray(item) && item.length > 1)
+          ? unit.questions
+          : fallback.questions || [];
+        return [key, {
+          subject: '社會',
+          title: unit.code ? `4 上 ${unit.code} ${unit.title}` : unit.title,
+          concepts: unit.concepts || fallback.concepts || [],
+          pairs: [...new Set([...pairs, ...questionPairLines(questions)])],
+          questions
+        }];
+      }));
+    }
+    function questionPairLines(items = []) {
+      return items
+        .filter(item => Array.isArray(item) && item.length > 1 && item[0] && item[1])
+        .map(([question, answer]) => `問題：${question}=答案：${answer}`);
+    }
+    function minnanPatternPairs(unit) {
+      const patterns = (unit.patterns || []).filter(item => item?.phrase && item?.sentence);
+      const vocabulary = [...new Set(unit.vocabulary || [])].filter(Boolean);
+      const pairs = patterns.map(item => `句型：${item.phrase}=例句：${item.sentence}`);
+      vocabulary.forEach(word => {
+        const example = patterns.find(item => item.sentence.includes(word));
+        if (example) {
+          const blank = example.sentence.replace(word, '＿＿');
+          pairs.push(`語詞：${word}=例句填空：${blank}`);
+        }
+      });
+      return [...new Set(pairs)];
+    }
+    function createMinnanCourseUnits() {
+      const records = window.DONGWEI_PENGHU_MINNAN?.records || [];
+      return Object.fromEntries(records.map(record => [record.id, {
+        subject: record.subject,
+        grade: record.grade,
+        semester: record.semester,
+        unit: record.unit,
+        title: `${record.grade}年級${record.semester}｜${record.unit} ${record.title}`,
+        concepts: record.focus || record.objectives || [],
+        pairs: record.pairs || [],
+        questions: record.questions || [],
+        source: record
+      }]));
+    }
+    const comprehensivePairDefinitions = {
+      '班級任務': '教室、外掃區與班級活動中，需要共同完成的工作。',
+      '責任分工': '依照能力、意願與任務需要安排每個人的角色。',
+      '團隊規範': '小組成員共同討論並願意遵守的約定。',
+      '自我貢獻': '運用自己的能力，為團隊完成任務提供幫助。',
+      '民主討論': '讓每個人都有表達想法與參與決定的機會。',
+      '尊重意見': '先聆聽不同想法，再用合宜的方式回應。',
+      '秩序': '依照共同約定行動，讓活動可以順利進行。',
+      '愛班行動': '主動改善班級環境或幫助同學的具體行動。',
+      '合作態度': '願意參與、溝通、互相幫忙並一起完成任務。',
+      '班級認同': '感受到自己是班級的一分子，願意關心班級。',
+      '共同目標': '小組一起努力，希望完成的結果。',
+      '團隊合作': '成員分工並互相配合，共同完成一件事。',
+      '溝通': '把自己的想法說清楚，也聽懂別人的意思。',
+      '分工': '把任務分成不同部分，分給適合的人負責。',
+      '互相支援': '同伴遇到困難時，主動提供協助。',
+      '關懷同伴': '注意同學的需要，並用適當方式表達關心。',
+      '同理心': '試著站在對方的角度，理解對方的感受與需要。',
+      '溝通技巧': '使用聆聽、提問與清楚表達來增進互動。',
+      '互動調整': '觀察對方反應後，調整自己的說法或做法。',
+      '合作任務': '需要兩人以上共同討論、分工與完成的任務。',
+      '互動技巧': '在合作時使用聆聽、輪流、協商與回饋。',
+      '團隊溝通': '小組成員交換訊息，確認任務與彼此的進度。',
+      '共同完成': '每個人完成自己的部分，最後合力達成目標。',
+      '志工服務': '不以獲得報酬為主要目的，主動為他人或社會服務。',
+      '服務內容': '志工在特定服務中實際做的工作。',
+      '服務能力': '完成服務工作需要的知識、技能或合作能力。',
+      '服務態度': '服務時表現出的尊重、耐心、負責與主動。',
+      '服務需求': '校園或社區中需要被發現與改善的需要。',
+      '服務計畫': '先訂定目標、工作內容、時間與分工的安排。',
+      '分工合作': '依照每個人的任務一起完成服務。',
+      '校園觀察': '實際查看校園環境，找出可以服務或改善的地方。',
+      '社區服務': '在社區中以實際行動關心環境或幫助他人。',
+      '服務實踐': '把計畫中的服務行動真正執行出來。',
+      '服務反思': '回顧服務過程，想一想做得好的地方與可改進處。',
+      '感謝與回饋': '向接受服務或一起合作的人表達謝意與學習收穫。',
+      '文化活動': '展現一個族群生活方式、價值與特色的活動。',
+      '參與禮儀': '參加活動時遵守規範、尊重他人並合宜行動。',
+      '文化特色': '一個地方或族群特有的生活、語言、食物或習俗。',
+      '尊重多元': '理解並尊重不同族群、想法與生活方式。',
+      '在地文化': '在家鄉長期發展、與地方生活密切相關的文化。',
+      '資料蒐集': '從訪問、觀察、書籍或網路取得相關資料。',
+      '文化意義': '文化活動或事物對族群生活與情感的重要意義。',
+      '摘要記錄': '整理資料中的重點，用簡短文字記錄下來。',
+      '文化保存': '透過記錄、維護與傳承，讓文化持續保留下來。',
+      '文化推廣': '用適當方式讓更多人認識與欣賞地方文化。',
+      '創意行動': '用新方法設計可以實際執行的文化行動。',
+      '在地認同': '認識家鄉特色，產生關心與珍惜家鄉的情感。',
+      '工作者': '在生活中提供專業服務或完成工作的人。',
+      '工作意義': '工作能滿足生活需要，也能發揮能力並貢獻社會。',
+      '生活影響': '工作者的服務會影響家庭、學校與社區的生活。',
+      '家人角色': '家人在家庭中共同分擔生活責任與照顧工作。',
+      '職業探索': '透過訪問、觀察或資料了解不同工作的內容。',
+      '工作甘苦': '工作中可能同時有成就與辛苦的地方。',
+      '個人興趣': '自己喜歡、願意投入時間學習或嘗試的事物。',
+      '資料整理': '把蒐集到的內容分類、比較並記錄重點。',
+      '感謝工作者': '看見工作者的付出，並用言語或行動表達謝意。',
+      '尊重職業': '理解各種工作都有價值，不嘲笑或貶低任何職業。',
+      '感恩行動': '把感謝化成一句話、一次協助或一項實際行動。',
+      '生活支持': '工作者提供的服務，讓生活更安全、便利或順利。',
+      '生活中的美': '在日常人物、事物、景色或互動中發現美好。',
+      '感受表達': '用語言、圖畫或動作說出自己感受到的美。',
+      '欣賞差異': '接受每個人對美的感受與看法可能不一樣。',
+      '美感觀察': '仔細看生活環境，注意色彩、形狀、聲音與整體感受。',
+      '美感探索': '主動在家庭、校園與社區尋找值得欣賞的美。',
+      '家庭生活': '家人共同生活的空間、習慣與互動。',
+      '校園觀察': '在學校中仔細查看環境與生活細節。',
+      '紀錄表達': '用文字、圖畫或照片留下觀察結果並分享。',
+      '美感創意': '運用想像與設計，讓生活變得更美好。',
+      '生活改造': '針對生活中的問題提出改善環境或做法的方案。',
+      '問題解決': '找出問題原因，提出方法並檢查結果。',
+      '行動實踐': '把想法與計畫付諸行動，觀察實際改變。',
+      '潛藏危機': '平常不一定容易發現，但可能造成傷害或損失的危險。',
+      '自然環境危機': '由地震、颱風、海嘯等自然現象造成的危險。',
+      '人為危機': '因人的行為、疏忽或錯誤判斷造成的危險。',
+      '危機影響': '危機發生後，可能對人、事、物與生活造成的改變。',
+      '危機預兆': '危機發生前可以觀察到的線索或警訊。',
+      '資料蒐集': '從可靠來源找出與危機相關的訊息。',
+      '資訊分析': '比較與整理資料，判斷哪些訊息值得相信與採取行動。',
+      '危機判斷': '根據線索分析危險程度與適當的處理方式。',
+      '事前預防': '危機發生前先準備、避開危險並降低風險。',
+      '當下處理': '危機發生時保持冷靜，依情況採取安全行動。',
+      '事後檢視': '危機過後回顧處理過程，找出下次可改進之處。',
+      '避難策略': '遇到危機時，選擇安全路線、地點與求助方法。',
+      '個人特質': '一個人較穩定的性格、能力、興趣或做事方式。',
+      '自我認識': '了解自己的想法、感受、能力與需要改進的地方。',
+      '他人眼中的我': '家人或同學觀察到的我的表現與特質。',
+      '適性展現': '依照場合與需要，合宜地表現自己的特質。',
+      '個別差異': '每個人在想法、能力、感受與做法上的不同。',
+      '情境反應': '面對不同事情或環境時所做出的感受與行動。',
+      '包容': '理解差異存在，願意尊重並接納別人的不同。',
+      '適切互動': '考慮對方感受，用合宜方式和他人相處。',
+      '欣賞他人': '看見別人的優點與努力，並具體說出來。',
+      '自我肯定': '看見自己的優點與進步，相信自己有能力學習。',
+      '特質展現': '在適當情境中用行動表現自己的長處。',
+      '真誠讚美': '根據具體行為或努力給予真實、合宜的肯定。',
+      '性別平等': '不因性別限制權利、選擇、責任或發展機會。',
+      '尊重差異': '理解每個人的身分、感受與選擇都值得被尊重。',
+      '情感表達': '用適當語言與行動表達自己的感受與在意。',
+      '互動選擇': '在相處時選擇安全、平等、尊重他人的做法。',
+      '我訊息': '用「我覺得……因為……我希望……」表達感受與需要。',
+      '溝通方式': '透過聆聽、說明、提問與回應來交換想法。',
+      '衝突解決': '理解彼此需要，討論並找到雙方可以接受的做法。'
+    };
+    function comprehensivePairs(unit) {
+      const activities = unit.activities || [];
+      return (unit.concepts || []).map((concept, index) => {
+        const definition = comprehensivePairDefinitions[concept] || (activities[index % activities.length] || unit.objectives?.[index % unit.objectives.length] || '請根據本課活動說明這個概念。');
+        return `${concept}=${definition}`;
+      }).filter(Boolean);
+    }
+    function createComprehensiveCourseUnits() {
+      const source = window.DONGWEI_COURSE_DATA?.comprehensiveLessonBank || {};
+      return Object.fromEntries(Object.entries(source).map(([key, unit]) => {
+        const grade = unit.manual?.match(/^c(\d+)/)?.[1] || key.match(/^c(\d+)/)?.[1] || '4';
+        const title = `${grade} 年級 ${unit.semester === '上學期' ? '上' : '下'} 單元${unit.unit} 活動${unit.activity} ${unit.title}`;
+        const concepts = unit.concepts || [];
+        const pairs = comprehensivePairs(unit);
+        return [key, {
+          subject: '綜合活動',
+          title,
+          concepts,
+          pairs,
+          questions: unit.questions || []
+        }];
+      }));
+    }
+    function normalizeKnshFocusPairs(record) {
+      const focusPairs = (record.focus || []).map((text, index) => {
+        const [question, answer = ''] = String(text).split('｜答案：');
+        return {
+          id: `focus-${index}`,
+          left: question.replace(/^問題：/, '').trim(),
+          right: answer.trim()
+        };
+      }).filter(item => item.left && item.right);
+      if (focusPairs.length) return focusPairs;
+
+      return (record.questions || []).map(([question, answer], index) => ({
+        id: `question-${index}`,
+        left: String(question || '').trim(),
+        right: String(answer || '').trim()
+      })).filter(item => item.left && item.right && !/(教材主題|教學重點|探究的內容)/.test(item.left));
+    }
+    function createKnshCourseUnits() {
+      const coreRecords = window.DONGWEI_KNSH_115?.records || window.DONGWEI_COURSE_DATA?.records || [];
+      const informationRecords = window.DONGWEI_INFORMATION_COURSE?.records || [];
+      const records = [...coreRecords.filter(record => record.subject !== '閩南語'), ...informationRecords];
+      return Object.fromEntries(records.map(record => {
+        const pairs = (record.pairs || []).map(p => {
+          if (typeof p === 'string') return p;
+          if (p.left && p.right) return `${p.left}=${p.right}`;
+          return '';
+        }).filter(Boolean);
+        
+        const questions = (record.questions || []).filter(item => Array.isArray(item) && item[0] && item[1]);
+        const concepts = (record.focus || record.objectives || []).slice(0, 5);
+        const title = `${record.grade}年級${record.semester}｜${record.unit} ${record.title}`;
+        
+        return [record.id, {
+          subject: record.subject,
+          grade: record.grade,
+          semester: record.semester,
+          unit: record.unit,
+          title,
+          concepts,
+          pairs: pairs.length ? pairs : questions.map(([q, a]) => `${q.slice(0, 30)}=${a.slice(0, 30)}`),
+          questions,
+          source: record
+        }];
+      }));
+    }
+    function setupCourseUnits() {
+      const infoCourseUnits = Object.fromEntries(Object.entries(infoUnits).map(([key, unit]) => [key, {
+        ...unit,
+        pairs: [...new Set([...(unit.pairs || []), ...questionPairLines(unit.questions)])]
+      }]));
+      const customCourseUnits = Object.fromEntries((window.TeacherProfile?.getActiveProfile?.()?.customLessons || []).map(item => {
+        const questions = (item.questions || []).map(question => [question, '請依老師提供的課程內容回答。']);
+        const pairs = (item.questions || []).map(question => `${question}=請依老師提供的課程內容回答`);
+        return [`custom-${item.id}`, {
+          subject: item.subject,
+          title: `${item.grade} 年級 ${item.lesson} ${item.title || '自訂課程'}`,
+          concepts: item.objectives || [],
+          pairs,
+          questions
+        }];
+      }));
+      Object.assign(courseUnits, createSocialCourseUnits(), createMinnanCourseUnits(), createComprehensiveCourseUnits(), createKnshCourseUnits(), infoCourseUnits, customCourseUnits);
+      const subjects = ['all', ...new Set(Object.values(courseUnits).map(unit => unit.subject))];
+      $('courseSubjectSelect').innerHTML = subjects.map(subject => `<option value="${escapeHtml(subject)}">${escapeHtml(subjectLabels[subject] || subject)}</option>`).join('');
+      renderCourseOptions();
+    }
+    function renderCourseOptions(selectedKey = '') {
+      const subject = $('courseSubjectSelect').value;
+      const entries = Object.entries(courseUnits).filter(([, unit]) => subject === 'all' || unit.subject === subject);
+      $('socialUnitSelect').innerHTML = entries.map(([key, unit]) => `<option value="${escapeHtml(key)}" ${key === selectedKey ? 'selected' : ''}>${escapeHtml(unit.subject)}｜${escapeHtml(unit.title)}</option>`).join('');
+    }
+    function currentUnit() {
+      return courseUnits[$('socialUnitSelect').value] || Object.values(courseUnits)[0] || infoUnits['info-custom'];
+    }
+    let activityState = null;
+    function activityPairs(unit) {
+      const pairs = pairObjects(unit).filter(item => item.left && item.right
+        && !/^請補上/.test(item.right)
+        && !/^(教材主題|教冊重點\d+|本課概念|概念說明)$/.test(item.left));
+      if (pairs.length >= 3) return pairs.slice(0, 3);
+      const questions = (unit.questions || []).map((item, index) => ({ id: `q${index}`, left: item[0], right: item[1] }))
+        .filter(item => item.left && item.right && !/(教材主題|教學重點|探究的內容)/.test(item.left));
+      return [...pairs, ...questions].slice(0, 3);
+    }
+    function renderActivityLab() {
+      const unit = currentUnit();
+      const pairs = activityPairs(unit);
+      activityState = { unit, pairs, score: 0, firstDone: false, secondDone: false, finalDone: false };
+      $('activityUnitStatus').textContent = `目前課程：${unit.subject}｜${unit.title}`;
+      if (!pairs.length) {
+        $('activityBoard').innerHTML = `<div class="rounded-2xl bg-white p-5 shadow-sm"><h3 class="text-2xl font-black text-orange-900">這一課目前沒有可操作題組</h3><p class="mt-2 leading-7">請先補上本課的題目或配對資料，系統不會用其他課程內容代替。</p></div>`;
+        return;
+      }
+      const first = pairs[0];
+      const firstChoices = shuffle([first.left, ...pairs.slice(1).map(item => item.left)]);
+      const answerOptions = shuffle(pairs.map(item => item.right));
+      const question = first.left || `請說明「${first.left}」和本課內容的關係。`;
+      $('activityBoard').innerHTML = `
+        <div class="grid gap-3 sm:grid-cols-3">
+          <div class="rounded-2xl bg-white p-4 shadow-sm"><p class="text-sm font-black text-orange-600">目前得分</p><p id="activityScore" class="mt-1 text-3xl font-black text-orange-900">0 / 3</p></div>
+          <div class="rounded-2xl bg-white p-4 shadow-sm"><p class="text-sm font-black text-orange-600">操作方式</p><p class="mt-1 font-black text-slate-700">三關依序完成</p></div>
+          <div class="rounded-2xl bg-white p-4 shadow-sm"><p class="text-sm font-black text-orange-600">使用資料</p><p class="mt-1 font-black text-slate-700">${escapeHtml(unit.subject)}｜${escapeHtml(unit.title)}</p></div>
+        </div>
+        <div class="mt-4 grid gap-4 lg:grid-cols-3">
+          <article class="rounded-2xl border-2 border-orange-200 bg-white p-4 shadow-sm">
+            <p class="text-sm font-black text-orange-600">第 1 關｜找重點</p>
+            <h3 class="mt-2 text-xl font-black text-orange-900">老師念出或投影這一題：</h3>
+            <p class="mt-2 min-h-16 rounded-xl bg-orange-50 p-3 font-bold text-slate-700">請找出教師手冊中的本課探究問題：</p>
+            <div class="mt-3 space-y-2">${firstChoices.map(choice => `<button type="button" class="activityChoice block w-full rounded-xl border-2 border-orange-100 bg-orange-50 px-3 py-3 text-left font-black text-orange-900 hover:bg-orange-100" data-answer="${escapeHtml(choice === first.left ? 'yes' : 'no')}">${escapeHtml(choice)}</button>`).join('')}</div>
+            <p id="activityFirstFeedback" class="mt-3 rounded-xl bg-slate-50 p-3 text-sm font-black text-slate-600">請選一個答案</p>
+          </article>
+          <article class="rounded-2xl border-2 border-orange-200 bg-white p-4 shadow-sm">
+            <p class="text-sm font-black text-orange-600">第 2 關｜配對說明</p>
+            <h3 class="mt-2 text-xl font-black text-orange-900">把每個重點配到正確說明：</h3>
+            <div class="mt-3 space-y-3">${pairs.map((item, index) => `<label class="block rounded-xl bg-orange-50 p-3"><span class="font-black text-slate-700">${index + 1}. ${escapeHtml(item.left)}</span><select class="activityMatch mt-2 w-full rounded-xl border-2 border-orange-200 bg-white px-3 py-2 font-bold" data-answer="${escapeHtml(item.right)}"><option value="">請選擇說明</option>${answerOptions.map(option => `<option value="${escapeHtml(option)}">${escapeHtml(option)}</option>`).join('')}</select></label>`).join('')}</div>
+            <button id="checkActivityMatch" type="button" class="mt-3 rounded-xl bg-orange-500 px-4 py-2 font-black text-white hover:bg-orange-400">檢查配對</button>
+            <p id="activitySecondFeedback" class="mt-3 rounded-xl bg-slate-50 p-3 text-sm font-black text-slate-600">完成配對後按檢查</p>
+          </article>
+          <article class="rounded-2xl border-2 border-orange-200 bg-white p-4 shadow-sm">
+            <p class="text-sm font-black text-orange-600">第 3 關｜說出理由</p>
+            <h3 class="mt-2 text-xl font-black text-orange-900">根據教師手冊回答：</h3>
+            <p class="mt-2 rounded-xl bg-orange-50 p-3 font-bold text-slate-700">${escapeHtml(question)}</p>
+            <textarea id="activityReason" rows="5" class="mt-3 w-full rounded-xl border-2 border-orange-200 p-3 font-bold outline-none" placeholder="學生口頭回答，老師也可以記下關鍵字"></textarea>
+            <button id="finishActivityButton" type="button" class="mt-3 rounded-xl bg-emerald-500 px-4 py-2 font-black text-white hover:bg-emerald-400">完成第 3 關</button>
+            <p id="activityThirdFeedback" class="mt-3 rounded-xl bg-slate-50 p-3 text-sm font-black text-slate-600">請先聽學生說明，再按完成</p>
+          </article>
+        </div>
+        <div class="mt-4 flex flex-wrap gap-2">
+          <button id="resetActivityButton" type="button" class="rounded-xl bg-white px-4 py-2 font-black text-orange-700 shadow-sm hover:bg-orange-100">重新開始</button>
+          <p id="activityOverallFeedback" class="rounded-xl bg-white px-4 py-2 font-black text-orange-800 shadow-sm">每關完成 1 分，共 3 分。</p>
+        </div>`;
+      bindActivityControls();
+    }
+    function updateActivityScore() {
+      const score = activityState ? activityState.score : 0;
+      const scoreBox = $('activityScore');
+      if (scoreBox) scoreBox.textContent = `${score} / 3`;
+    }
+    function bindActivityControls() {
+      document.querySelectorAll('.activityChoice').forEach(button => button.addEventListener('click', () => {
+        if (!activityState || activityState.firstDone) return;
+        const correct = button.dataset.answer === 'yes';
+        $('activityFirstFeedback').textContent = correct ? '答對了！這是本課資料中的重點。' : '再看一次本課重點，換一個選項。';
+        $('activityFirstFeedback').className = `mt-3 rounded-xl p-3 text-sm font-black ${correct ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-700'}`;
+        if (correct) {
+          activityState.firstDone = true;
+          activityState.score += 1;
+          button.classList.add('bg-emerald-200', 'border-emerald-400');
+          document.querySelectorAll('.activityChoice').forEach(item => { item.disabled = true; });
+          updateActivityScore();
+        }
+      }));
+      $('checkActivityMatch')?.addEventListener('click', () => {
+        if (!activityState || activityState.secondDone) return;
+        const selects = [...document.querySelectorAll('.activityMatch')];
+        const correct = selects.filter(select => select.value && select.value === select.dataset.answer).length;
+        $('activitySecondFeedback').textContent = `目前答對 ${correct} / ${selects.length} 組${correct === selects.length ? '，完成第二關！' : '，請修正後再檢查。'}`;
+        $('activitySecondFeedback').className = `mt-3 rounded-xl p-3 text-sm font-black ${correct === selects.length ? 'bg-emerald-100 text-emerald-800' : 'bg-yellow-100 text-yellow-800'}`;
+        if (correct === selects.length) {
+          activityState.secondDone = true;
+          activityState.score += 1;
+          selects.forEach(select => { select.disabled = true; });
+          $('checkActivityMatch').disabled = true;
+          updateActivityScore();
+        }
+      });
+      $('finishActivityButton')?.addEventListener('click', () => {
+        if (!activityState || activityState.finalDone) return;
+        const answer = $('activityReason').value.trim();
+        if (!answer) {
+          $('activityThirdFeedback').textContent = '請先記下學生回答的關鍵字，再按完成。';
+          $('activityThirdFeedback').className = 'mt-3 rounded-xl bg-yellow-100 p-3 text-sm font-black text-yellow-800';
+          return;
+        }
+        activityState.finalDone = true;
+        activityState.score += 1;
+        $('activityReason').disabled = true;
+        $('finishActivityButton').disabled = true;
+        $('activityThirdFeedback').textContent = '第 3 關完成！老師可依回答內容給予口頭回饋或個人點數。';
+        $('activityThirdFeedback').className = 'mt-3 rounded-xl bg-emerald-100 p-3 text-sm font-black text-emerald-800';
+        $('activityOverallFeedback').textContent = `課程任務完成！本組得分 ${activityState.score} / 3。`;
+        updateActivityScore();
+      });
+      $('resetActivityButton')?.addEventListener('click', renderActivityLab);
+    }
+    function applyCourseFromUrl() {
+      const params = new URLSearchParams(location.search);
+      const requestedCourse = params.get('course');
+      const requestedSubject = params.get('subject');
+      const requestedGrade = params.get('grade');
+      const requestedSemester = params.get('semester');
+      const requestedUnit = params.get('unit');
+      const matchedEntry = Object.entries(courseUnits).find(([, candidate]) => (
+        candidate.subject === requestedSubject
+        && (!requestedGrade || String(candidate.grade) === String(requestedGrade))
+        && (!requestedSemester || candidate.semester === requestedSemester)
+        && (!requestedUnit || candidate.unit === requestedUnit)
+      ));
+      const selectedCourse = requestedCourse && courseUnits[requestedCourse]
+        ? requestedCourse
+        : matchedEntry?.[0] || '';
+      const unit = selectedCourse ? courseUnits[selectedCourse] : null;
+      const targetSubject = unit?.subject || requestedSubject;
+      if (targetSubject && [...$('courseSubjectSelect').options].some(option => option.value === targetSubject)) {
+        $('courseSubjectSelect').value = targetSubject;
+      }
+      renderCourseOptions(selectedCourse);
+      if (selectedCourse && courseUnits[selectedCourse]) {
+        $('socialUnitSelect').value = selectedCourse;
+      }
+    }
+    function pairObjects(unit = currentUnit()) {
+      return unit.pairs.map((line, index) => {
+        const [left, right = '請補上說明'] = line.split(/[=｜|]/);
+        return { id: index, left: left.trim(), right: right.trim() };
+      }).filter(item => item.left && item.right);
+    }
+    function updateTemplateStatus() {
+      const unit = currentUnit();
+      const sourceLabel = unit.source?.subject === '資訊'
+        ? '115學年度澎湖縣資訊課程計畫'
+        : unit.source?.sourceLabel || '康軒115教師手冊';
+      $('templateUnitStatus').textContent = unit.source?.sourceFile
+        ? `目前課程：${unit.subject}｜${unit.title}｜來源：${sourceLabel}`
+        : `目前課程：${unit.subject}｜${unit.title}`;
+    }
+
+    function templateQuestionLimit() {
+      return Number($('templateQuestionCount')?.value || 5);
+    }
+
+    function templateQuestionPool(unit, pairs) {
+      const questions = (unit.questions || []).filter(item => Array.isArray(item) && item[0] && item[1]);
+      const seen = new Set(questions.map(([question]) => question));
+      pairs.forEach(pair => {
+        const question = `「${pair.left}」的正確說明是什麼？`;
+        if (!seen.has(question)) questions.push([question, pair.right]);
+      });
+      return questions;
+    }
+
+    function updateTemplateScoreboard() {
+      $('templateScore').textContent = templateScore;
+      $('templateAttempts').textContent = templateAttempts;
+    }
+
+    function recordTemplateResult(correct, total = 1) {
+      templateScore += Math.max(0, Number(correct) || 0);
+      templateAttempts += Math.max(0, Number(total) || 0);
+      updateTemplateScoreboard();
+    }
+
+    function recordTemplateCheck(feedbackId, correct, total = 1) {
+      const feedback = $(feedbackId);
+      if (!feedback || feedback.dataset.recorded === '1') return;
+      feedback.dataset.recorded = '1';
+      recordTemplateResult(correct, total);
+    }
+
+    function resetTemplateStats() {
+      templateScore = 0;
+      templateAttempts = 0;
+      updateTemplateScoreboard();
+    }
+
+    function stopTemplateTimer() {
+      if (templateTimerId) clearInterval(templateTimerId);
+      templateTimerId = null;
+    }
+
+    function startTemplateTimer() {
+      stopTemplateTimer();
+      const seconds = Number($('templateTimerSelect')?.value || 0);
+      templateSecondsLeft = seconds;
+      $('templateTimer').textContent = seconds ? `${seconds} 秒` : '不限時';
+      if (!seconds) return;
+      templateTimerId = setInterval(() => {
+        templateSecondsLeft -= 1;
+        $('templateTimer').textContent = templateSecondsLeft > 0 ? `${templateSecondsLeft} 秒` : '時間到';
+        if (templateSecondsLeft <= 0) {
+          stopTemplateTimer();
+          $('templateBoard').querySelectorAll('button, input, select').forEach(control => { control.disabled = true; });
+          $('templateBoard').insertAdjacentHTML('afterbegin', '<p class="mb-4 rounded-2xl bg-red-100 p-4 text-center text-xl font-black text-red-700">時間到，請按「重新出題」再挑戰一次。</p>');
+        }
+      }, 1000);
+    }
+
+    function setActiveTemplateButton(type) {
+      document.querySelectorAll('.templateButton').forEach(button => {
+        button.setAttribute('aria-pressed', button.dataset.template === type ? 'true' : 'false');
+      });
+    }
+
+    function renderTemplateRecommendations() {
+      const unit = currentUnit();
+      const recommended = subjectTemplateRecommendations[unit.subject] || ['test', 'matchdrop', 'cards', 'coursewheel'];
+      $('recommendedTemplateList').innerHTML = recommended.map(type => `<button type="button" data-recommended-template="${type}" class="rounded-full bg-white px-4 py-2 text-sm font-black text-indigo-700 shadow-sm hover:bg-yellow-100">${escapeHtml(templateCatalog[type].label)}</button>`).join('');
+      document.querySelectorAll('[data-recommended-template]').forEach(button => {
+        button.addEventListener('click', () => renderTemplate(button.dataset.recommendedTemplate));
+      });
+    }
+
+    function applyTemplateFilter() {
+      const category = $('templateCategorySelect').value;
+      document.querySelectorAll('.templateButton').forEach(button => {
+        const categories = (button.dataset.category || '').split(' ');
+        button.classList.toggle('template-hidden', category !== 'all' && !categories.includes(category));
+      });
+    }
+
+    function restartActiveTemplate() {
+      resetTemplateStats();
+      startTemplateTimer();
+      renderTemplate(activeTemplate || 'cards');
+    }
+
+    function updateTemplateUrl(type) {
+      const url = new URL(location.href);
+      url.searchParams.set('template', type);
+      history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
+    }
+
+    function renderTemplateEmpty(unit, message) {
+      $('templateBoard').innerHTML = `<div class="rounded-3xl border-2 border-amber-300 bg-amber-50 p-6"><h3 class="text-2xl font-black text-amber-900">這個玩法需要更多本課資料</h3><p class="mt-3 leading-7 text-amber-800">${escapeHtml(message)}</p><p class="mt-2 text-sm font-bold text-slate-600">目前課程：${escapeHtml(unit.subject)}｜${escapeHtml(unit.title)}</p></div>`;
+    }
+    const objectImageRules = [
+      [/香瓜/, 'melon fruit', '香瓜實物'],
+      [/嘉寶瓜/, 'melon fruit', '嘉寶瓜實物'],
+      [/金瓜/, 'pumpkin', '金瓜實物'],
+      [/菜瓜/, 'loofah vegetable', '菜瓜實物'],
+      [/冬瓜茶|冬瓜膏|冬瓜/, 'winter melon', '冬瓜實物'],
+      [/紅龍/, 'dragon fruit', '紅龍果實物'],
+      [/楊梅/, 'waxberry fruit', '楊梅實物'],
+      [/土豆糖|土豆/, 'peanut', '土豆實物'],
+      [/菜豆/, 'green bean', '菜豆實物'],
+      [/蕃薯|番薯/, 'sweet potato', '蕃薯實物'],
+      [/蔥/, 'spring onion', '蔥實物'],
+      [/紅|赤|朱|紅色/, 'red apple', '紅色實物'],
+      [/黃|黃色/, 'yellow banana', '黃色實物'],
+      [/藍|青|藍色/, 'blue sky', '藍色實景'],
+      [/綠|綠色/, 'green leaf', '綠色實物'],
+      [/白|白色/, 'white flower', '白色實物'],
+      [/黑|烏|黑色/, 'black cat', '黑色實物'],
+      [/魚|鰮|小管|烏賊|章魚|海鮮|釣魚/, 'fish', '魚類實物'],
+      [/船|討海|漁船|交通工具/, 'fishing boat', '船隻實物'],
+      [/菜宅|菜園|作穡|田園|農事/, 'vegetable garden', '農作物實景'],
+      [/水果/, 'fruit', '水果實物'],
+      [/蔬菜/, 'vegetables', '蔬菜實物'],
+      [/食物|小吃|甜粿|烏糖粿|飯|粿|茶|飲料/, 'Taiwanese food', '食物實物'],
+      [/衣|衫|褲|帽|鞋/, 'clothes', '衣物實物'],
+      [/眼|耳|鼻|喙|嘴|手|跤|身體|五官/, 'human body parts', '身體部位'],
+      [/狗|貓|牛|馬|羊|豬|雞|鳥|十二生肖|動物/, 'animals', '動物實物'],
+      [/雨|風|天氣|雲|太陽|月|星/, 'weather', '天氣實景'],
+      [/學校|教室|老師|學生|閱讀|書|郵局|市場|老街|廟|家|住屋/, 'school classroom', '生活場景'],
+      [/地圖|方向標|比例尺|圖例|行政區圖|交通路線圖|電子地圖/, 'map', '地圖實物'],
+      [/澎湖|海洋|海邊|島嶼|沙灘/, 'Penghu island', '澎湖實景']
+    ];
+    function imageInfoForText(text = '') {
+      const value = String(text).replace(/[「」『』：:？?，,。.!！｜|=]/g, ' ');
+      if (!value.trim()) return null;
+      const firstChunk = value.trim().split(/\s+/)[0] || value;
+      const exactRule = objectImageRules.find(([pattern]) => pattern.test(firstChunk));
+      if (exactRule) return { query: exactRule[1], label: exactRule[2] };
+      const rule = objectImageRules.find(([pattern]) => pattern.test(value));
+      if (!rule) return null;
+      return { query: rule[1], label: rule[2] };
+    }
+    function coreImageKeyword(text = '') {
+      const raw = String(text || '').trim();
+      const quoted = raw.match(/[「『](.*?)[」』]/);
+      if (quoted?.[1]) return quoted[1].trim();
+      return raw
+        .replace(/請讀出或說出|請用句型|的用法|本課新語詞|例句|參考答案/g, ' ')
+        .replace(/[「」『』：:？?，,。.!！｜|=]/g, ' ')
+        .trim()
+        .split(/\s+/)[0] || raw;
+    }
+    function googleImageSearchData(text) {
+      const query = coreImageKeyword(text);
+      return {
+        query,
+        url: `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(query)}`,
+        previewUrl: `https://tse1.mm.bing.net/th?q=${encodeURIComponent(query)}&w=900&h=520&c=7&rs=1&p=0`
+      };
+    }
+    function refreshGoogleImagePreview(id) {
+      const input = document.getElementById(`${id}Input`);
+      const image = document.getElementById(`${id}Image`);
+      const link = document.getElementById(`${id}Link`);
+      const query = input?.value.trim();
+      if (!query || !image || !link) return;
+      const encoded = encodeURIComponent(query);
+      image.src = `https://tse1.mm.bing.net/th?q=${encoded}&w=900&h=520&c=7&rs=1&p=0&cb=${Date.now()}`;
+      image.alt = `${query}圖片`;
+      link.href = `https://www.google.com/search?tbm=isch&q=${encoded}`;
+    }
+    function objectImageBlock(text) {
+      const keyword = coreImageKeyword(text);
+      if (!keyword || keyword.length > 12) return '';
+      const info = imageInfoForText(keyword);
+      const query = escapeHtml(info?.query || keyword);
+      const search = googleImageSearchData(text);
+      const id = `googleImage${Math.random().toString(36).slice(2)}`;
+      return `<div class="objectImageBox mt-4 overflow-hidden rounded-3xl border-2 border-blue-100 bg-white shadow-sm" data-image-query="${query}">
+        <img id="${id}Image" class="h-80 w-full bg-slate-100 object-contain" src="${search.previewUrl}" alt="${escapeHtml(search.query)}圖片" loading="lazy" onerror="this.closest('.objectImageBox').querySelector('.imageFallback').classList.remove('hidden')">
+        <div class="imageFallback hidden bg-yellow-50 px-4 py-3 text-sm font-bold text-yellow-800">圖片沒有載入，請用下方 Google 圖片搜尋。</div>
+        <div class="border-t border-blue-100 bg-blue-50 p-3">
+          <div class="flex flex-col gap-2 sm:flex-row">
+            <input id="${id}Input" class="min-w-0 flex-1 rounded-2xl border-2 border-blue-200 bg-white px-3 py-2 text-sm font-bold outline-none" value="${escapeHtml(search.query)}" aria-label="圖片搜尋關鍵字">
+            <button onclick="refreshGoogleImagePreview('${id}')" class="rounded-2xl bg-blue-600 px-4 py-2 text-sm font-black text-white shadow hover:bg-blue-500">重新搜尋</button>
+            <a id="${id}Link" class="rounded-2xl bg-white px-4 py-2 text-center text-sm font-black text-blue-700 shadow-sm hover:bg-blue-50" href="${search.url}" target="_blank">開啟 Google 圖片</a>
+          </div>
+          <p class="mt-2 text-xs font-bold text-slate-500">圖片若不準，直接改下方關鍵字再搜尋。</p>
+        </div>
+      </div>
+      `;
+    }
+    async function hydrateObjectImages(root = document) {
+      const boxes = [...root.querySelectorAll('.objectImageBox:not([data-loaded])')];
+      for (const box of boxes) {
+        box.dataset.loaded = '1';
+        box.classList.add('ring-2', 'ring-blue-100');
+      }
+    }
+    function renderTemplate(type = 'cards') {
+      updateTemplateStatus();
+      const unit = currentUnit();
+      const pairs = pairObjects(unit);
+      const questions = templateQuestionPool(unit, pairs);
+      const concepts = [...new Set((unit.concepts || []).filter(Boolean))];
+      const limit = templateQuestionLimit();
+      const changedTemplate = type !== activeTemplate;
+      activeTemplate = templateCatalog[type] ? type : 'cards';
+      setActiveTemplateButton(activeTemplate);
+      renderTemplateRecommendations();
+      updateTemplateUrl(activeTemplate);
+      if (changedTemplate) {
+        resetTemplateStats();
+        startTemplateTimer();
+      }
+      if (!pairs.length && !questions.length && !concepts.length) {
+        renderTemplateEmpty(unit, '目前教材單元尚未整理出題目、概念或配對內容，系統不會套用其他課程的題目。');
+        return;
+      }
+      if (type === 'test') {
+        if (questions.length < 2) {
+          renderTemplateEmpty(unit, '選擇題至少需要兩組不同的題目與答案。');
+          return;
+        }
+        const items = shuffle(questions).slice(0, limit).map(([q, a]) => {
+          const distractors = shuffle(questions.filter(item => item[1] !== a).map(item => item[1])).slice(0, 3);
+          const choices = shuffle([...new Set([a, ...distractors])]);
+          return { q, a, choices };
+        });
+        $('templateBoard').innerHTML = `<div class="rounded-3xl bg-white p-5 shadow-sm">
+          <p class="font-black text-sky-800">測驗：請選出最適合的答案</p>
+          <div class="mt-4 space-y-4">${items.map((item, i) => `<div class="rounded-2xl bg-sky-50 p-4"><p class="text-xl font-black text-blue-900">${i + 1}. ${escapeHtml(item.q)}</p><div class="mt-3 grid gap-2">${item.choices.map(choice => `<label class="rounded-xl bg-white p-3 font-bold shadow-sm"><input class="testChoice mr-2" type="radio" name="test${i}" data-answer="${escapeHtml(item.a)}" value="${escapeHtml(choice)}">${escapeHtml(choice)}</label>`).join('')}</div></div>`).join('')}</div>
+          <button onclick="checkTest()" class="mt-4 rounded-2xl bg-sky-500 px-5 py-3 font-black text-white">檢查測驗</button>
+          <p id="testFeedback" class="mt-3 font-black text-sky-800"></p>
+        </div>`;
+        return;
+      }
+      if (type === 'matchdrop') {
+        const items = shuffle(pairs).slice(0, limit);
+        if (items.length < 2) {
+          renderTemplateEmpty(unit, '匹配遊戲至少需要兩組「概念與說明」。');
+          return;
+        }
+        const options = shuffle(items.map(item => item.right));
+        $('templateBoard').innerHTML = `<div class="rounded-3xl bg-white p-5 shadow-sm">
+          <p class="font-black text-cyan-800">匹配遊戲：替每個關鍵字選正確說明</p>
+          <div class="mt-4 space-y-3">${items.map(item => `<div class="grid gap-3 rounded-2xl bg-cyan-50 p-4 md:grid-cols-[0.8fr_1.2fr]"><p class="text-xl font-black text-cyan-900">${escapeHtml(item.left)}</p><select class="matchDrop rounded-xl border-2 border-cyan-200 bg-white px-3 py-2 font-bold" data-answer="${escapeHtml(item.right)}"><option>請選擇</option>${options.map(option => `<option>${escapeHtml(option)}</option>`).join('')}</select></div>`).join('')}</div>
+          <button onclick="checkMatchDrop()" class="mt-4 rounded-2xl bg-cyan-500 px-5 py-3 font-black text-white">檢查匹配</button>
+          <p id="matchDropFeedback" class="mt-3 font-black text-cyan-800"></p>
+        </div>`;
+        return;
+      }
+      if (type === 'flash') {
+        const cards = shuffle(questions).slice(0, limit);
+        $('templateBoard').innerHTML = `<div class="rounded-3xl bg-white p-5 shadow-sm">
+          <p class="font-black text-amber-800">快閃記憶卡：先想答案，再翻開檢查</p>
+          <div class="mt-4 grid gap-3 md:grid-cols-2">${cards.map(([q, a]) => `<details class="rounded-2xl bg-amber-50 p-4"><summary class="cursor-pointer text-xl font-black text-blue-900">${escapeHtml(q)}</summary>${objectImageBlock(q)}<p class="mt-3 rounded-xl bg-white p-3 font-bold text-amber-900">${escapeHtml(a)}</p></details>`).join('')}</div>
+        </div>`;
+        hydrateObjectImages($('templateBoard'));
+        return;
+      }
+      if (type === 'spell') {
+        if (!pairs.length) {
+          renderTemplateEmpty(unit, '拼字遊戲需要本課關鍵詞與說明。');
+          return;
+        }
+        const item = pairs[Math.floor(Math.random() * pairs.length)];
+        const chars = shuffle([...item.left]);
+        $('templateBoard').innerHTML = `<div class="rounded-3xl bg-white p-6 shadow-sm">
+          <p class="text-sm font-black text-lime-700">拼字遊戲</p>
+          <p class="mt-3 text-xl font-bold text-slate-600">${escapeHtml(item.right)}</p>
+          <div class="mt-4 flex flex-wrap gap-2">${chars.map(ch => `<span class="rounded-xl bg-lime-100 px-4 py-3 text-2xl font-black text-lime-900">${escapeHtml(ch)}</span>`).join('')}</div>
+          <input id="spellInput" class="mt-5 w-full rounded-2xl border-2 border-lime-200 px-4 py-3 text-2xl font-black outline-none" placeholder="請輸入正確關鍵詞">
+          <button onclick="checkSpell('${encodeURIComponent(item.left)}')" class="mt-3 rounded-2xl bg-lime-500 px-5 py-3 font-black text-white">檢查拼字</button>
+          <p id="spellFeedback" class="mt-3 font-black text-lime-800"></p>
+        </div>`;
+        return;
+      }
+      if (type === 'cards') {
+        const pool = shuffle([...concepts.map(text => ({ label: '概念卡', text })), ...questions.map(([q, a]) => ({ label: '題目卡', text: q, answer: a }))]);
+        const card = pool[0];
+        $('templateBoard').innerHTML = `<div class="grid gap-4 lg:grid-cols-[1fr_0.8fr]">
+          <div class="rounded-3xl bg-white p-6 shadow-sm">
+            <p class="text-sm font-black text-yellow-700">${escapeHtml(card.label)}</p>
+            <p class="mt-4 min-h-36 text-4xl font-black leading-normal text-blue-900">${escapeHtml(card.text)}</p>
+            ${objectImageBlock(card.text)}
+            ${card.answer ? `<details class="mt-4 rounded-2xl bg-yellow-50 p-4"><summary class="cursor-pointer font-black text-yellow-800">顯示參考答案</summary><p class="mt-2 font-bold">${escapeHtml(card.answer)}</p></details>` : ''}
+          </div>
+          <button onclick="renderTemplate('cards')" class="rounded-3xl bg-yellow-400 p-6 text-2xl font-black text-yellow-950 shadow hover:bg-yellow-300">再抽一張</button>
+        </div>`;
+        hydrateObjectImages($('templateBoard'));
+        return;
+      }
+      if (type === 'coursewheel') {
+        const pool = shuffle([
+          ...concepts.map(text => ({ label: '請說明本課概念', text, answer: '' })),
+          ...questions.map(([question, answer]) => ({ label: '請回答', text: question, answer }))
+        ]).slice(0, Math.max(3, limit));
+        if (!pool.length) {
+          renderTemplateEmpty(unit, '課程輪盤需要本課題目或概念。');
+          return;
+        }
+        currentCourseWheelPool = pool;
+        $('templateBoard').innerHTML = `<div class="grid gap-5 lg:grid-cols-[0.75fr_1.25fr]">
+          <div class="flex flex-col items-center rounded-3xl bg-white p-6 shadow-sm">
+            <div id="courseWheelDisc" class="flex h-56 w-56 items-center justify-center rounded-full border-8 border-fuchsia-200 bg-[conic-gradient(#e879f9,#60a5fa,#facc15,#34d399,#fb7185,#e879f9)] text-center text-3xl font-black text-white shadow-xl transition-transform duration-1000">本課<br>輪盤</div>
+            <button id="spinCourseWheelButton" type="button" class="mt-5 rounded-2xl bg-fuchsia-600 px-6 py-3 text-xl font-black text-white shadow hover:bg-fuchsia-500">轉出一題</button>
+          </div>
+          <div id="courseWheelResult" class="flex min-h-64 flex-col justify-center rounded-3xl bg-fuchsia-50 p-6"><p class="text-sm font-black text-fuchsia-700">準備開始</p><p class="mt-3 text-3xl font-black leading-normal text-blue-900">按下輪盤，隨機抽出目前課程的概念或題目。</p></div>
+        </div>`;
+        $('spinCourseWheelButton').addEventListener('click', spinCourseWheel);
+        return;
+      }
+      if (type === 'judge') {
+        if (pairs.length < 2) {
+          renderTemplateEmpty(unit, '是非快打至少需要兩組不同的概念說明。');
+          return;
+        }
+        const right = pairs[Math.floor(Math.random() * pairs.length)];
+        const useCorrect = Math.random() > 0.45;
+        const wrong = pairs.find(item => item.id !== right.id) || right;
+        const statement = `${right.left}：${useCorrect ? right.right : wrong.right}`;
+        $('templateBoard').innerHTML = `<div class="rounded-3xl bg-white p-6 shadow-sm">
+          <p class="text-sm font-black text-blue-700">判斷這句話是否正確</p>
+          <p class="mt-4 text-4xl font-black leading-normal text-blue-900">${escapeHtml(statement)}</p>
+          <div class="mt-5 flex flex-wrap gap-3">
+            <button onclick="checkJudge(${useCorrect}, true)" class="rounded-2xl bg-emerald-500 px-6 py-3 text-xl font-black text-white">正確</button>
+            <button onclick="checkJudge(${useCorrect}, false)" class="rounded-2xl bg-red-500 px-6 py-3 text-xl font-black text-white">錯誤</button>
+            <button onclick="renderTemplate('judge')" class="rounded-2xl bg-slate-200 px-6 py-3 text-xl font-black text-slate-700">下一題</button>
+          </div>
+          <p id="judgeFeedback" class="mt-4 rounded-2xl bg-slate-50 p-4 font-black text-slate-700">等待作答</p>
+        </div>`;
+        return;
+      }
+      if (type === 'sort') {
+        const cards = shuffle([
+          ...concepts.slice(0, limit).map(text => ({ text, answer: '概念' })),
+          ...questions.slice(0, limit).map(([q]) => ({ text: q, answer: '題目' })),
+          ...pairs.slice(0, 3).map(item => ({ text: item.right, answer: '說明' }))
+        ]).slice(0, limit);
+        $('templateBoard').innerHTML = `<div class="rounded-3xl bg-white p-5 shadow-sm">
+          <p class="font-black text-emerald-800">請判斷每張卡屬於：概念、題目、說明</p>
+          <div class="mt-4 grid gap-3 md:grid-cols-2">${cards.map((card, i) => `<div class="rounded-2xl bg-emerald-50 p-4"><p class="min-h-16 font-black text-slate-700">${escapeHtml(card.text)}</p><select data-sort-answer="${escapeHtml(card.answer)}" class="sortSelect mt-3 w-full rounded-xl border-2 border-emerald-200 bg-white px-3 py-2 font-black"><option>請選擇</option><option>概念</option><option>題目</option><option>說明</option></select></div>`).join('')}</div>
+          <button onclick="checkSort()" class="mt-4 rounded-2xl bg-emerald-500 px-5 py-3 font-black text-white">檢查分類</button>
+          <p id="sortFeedback" class="mt-3 font-black text-emerald-800"></p>
+        </div>`;
+        return;
+      }
+      if (type === 'missing') {
+        if (pairs.length < 2) {
+          renderTemplateEmpty(unit, '缺詞填空至少需要兩組關鍵詞與說明。');
+          return;
+        }
+        const item = pairs[Math.floor(Math.random() * pairs.length)];
+        const choices = shuffle([item.left, ...pairs.filter(p => p.id !== item.id).slice(0, 3).map(p => p.left)]);
+        $('templateBoard').innerHTML = `<div class="rounded-3xl bg-white p-6 shadow-sm">
+          <p class="text-sm font-black text-orange-700">缺詞填空</p>
+          <p class="mt-4 text-4xl font-black leading-normal text-blue-900">＿＿＿＿：${escapeHtml(item.right)}</p>
+          <div class="mt-5 flex flex-wrap gap-3">${choices.map(choice => `<button onclick="checkMissing('${encodeURIComponent(item.left)}','${encodeURIComponent(choice)}')" class="rounded-2xl bg-orange-100 px-5 py-3 text-xl font-black text-orange-900 hover:bg-orange-200">${escapeHtml(choice)}</button>`).join('')}</div>
+          <p id="missingFeedback" class="mt-4 rounded-2xl bg-slate-50 p-4 font-black text-slate-700">請選答案</p>
+        </div>`;
+        return;
+      }
+      if (type === 'sentence') {
+        if (pairs.length < 2) {
+          renderTemplateEmpty(unit, '完成句子至少需要兩組關鍵詞與說明。');
+          return;
+        }
+        const item = pairs[Math.floor(Math.random() * pairs.length)];
+        const choices = shuffle([item.left, ...pairs.filter(p => p.id !== item.id).slice(0, 3).map(p => p.left)]);
+        $('templateBoard').innerHTML = `<div class="rounded-3xl bg-white p-6 shadow-sm">
+          <p class="text-sm font-black text-red-700">完成句子</p>
+          <p class="mt-4 text-4xl font-black leading-normal text-blue-900">「＿＿＿＿」是：${escapeHtml(item.right)}</p>
+          <div class="mt-5 flex flex-wrap gap-3">${choices.map(choice => `<button onclick="checkSentence('${encodeURIComponent(item.left)}','${encodeURIComponent(choice)}')" class="rounded-2xl bg-red-100 px-5 py-3 text-xl font-black text-red-900 hover:bg-red-200">${escapeHtml(choice)}</button>`).join('')}</div>
+          <p id="sentenceFeedback" class="mt-4 rounded-2xl bg-slate-50 p-4 font-black text-slate-700">請選答案</p>
+        </div>`;
+        return;
+      }
+      if (type === 'order') {
+        if (!pairs.length) {
+          renderTemplateEmpty(unit, '句子排列需要本課概念與完整說明。');
+          return;
+        }
+        const item = pairs[Math.floor(Math.random() * pairs.length)];
+        const pieces = [`「${item.left}」`, '是指', item.right];
+        const shuffled = shuffle(pieces);
+        $('templateBoard').innerHTML = `<div class="rounded-3xl bg-white p-6 shadow-sm">
+          <p class="font-black text-violet-800">句子排列：點選詞卡排出正確句子</p>
+          <div class="mt-4 flex flex-wrap gap-3">${shuffled.map(piece => `<button data-piece="${escapeHtml(piece)}" class="orderPiece rounded-2xl bg-violet-100 px-5 py-3 text-xl font-black text-violet-900">${escapeHtml(piece)}</button>`).join('')}</div>
+          <div id="orderAnswer" class="mt-4 min-h-20 rounded-2xl bg-violet-50 p-4 text-2xl font-black text-blue-900"></div>
+          <button onclick="checkOrder('${encodeURIComponent(pieces.join(''))}')" class="mt-3 rounded-2xl bg-violet-500 px-5 py-3 font-black text-white">檢查順序</button>
+          <button onclick="renderTemplate('order')" class="mt-3 rounded-2xl bg-slate-200 px-5 py-3 font-black text-slate-700">重排</button>
+          <p id="orderFeedback" class="mt-3 font-black text-violet-800"></p>
+        </div>`;
+        bindOrderPieces();
+        return;
+      }
+      if (type === 'find') {
+        const lefts = shuffle(pairs).slice(0, limit);
+        if (lefts.length < 2) {
+          renderTemplateEmpty(unit, '找匹配至少需要兩組概念與說明。');
+          return;
+        }
+        const rights = shuffle(lefts);
+        $('templateBoard').innerHTML = `<div class="rounded-3xl bg-white p-5 shadow-sm">
+          <p class="font-black text-pink-800">找匹配：點一個概念，再點一個說明</p>
+          <div class="mt-4 grid gap-4 md:grid-cols-2">
+            <div class="space-y-2">${lefts.map(item => `<button data-find-id="${item.id}" data-find-side="left" class="findButton block w-full rounded-2xl bg-pink-100 p-3 text-left font-black text-pink-900">${escapeHtml(item.left)}</button>`).join('')}</div>
+            <div class="space-y-2">${rights.map(item => `<button data-find-id="${item.id}" data-find-side="right" class="findButton block w-full rounded-2xl bg-white p-3 text-left font-bold text-slate-700 shadow-sm">${escapeHtml(item.right)}</button>`).join('')}</div>
+          </div>
+          <p id="findFeedback" class="mt-4 rounded-2xl bg-slate-50 p-4 font-black text-slate-700">請開始配對</p>
+        </div>`;
+        bindFindButtons();
+        return;
+      }
+      if (type === 'openbox') {
+        const boxes = shuffle([...questions.map(([q, a]) => ({ label: q, answer: a })), ...pairs.map(p => ({ label: p.left, answer: p.right }))]).slice(0, limit);
+        $('templateBoard').innerHTML = `<div class="rounded-3xl bg-white p-5 shadow-sm">
+          <p class="font-black text-slate-800">開箱遊戲：點箱子顯示題目或任務</p>
+          <div class="mt-4 grid grid-cols-3 gap-3">${boxes.map((box, i) => `<button data-label="${escapeHtml(box.label)}" data-answer="${escapeHtml(box.answer)}" class="openBox min-h-28 rounded-2xl bg-slate-200 text-4xl font-black text-slate-700 shadow"> ${i + 1} </button>`).join('')}</div>
+          <div id="openBoxResult" class="mt-4 rounded-2xl bg-slate-50 p-4 font-black text-slate-700">請點一個箱子</div>
+        </div>`;
+        bindOpenBoxes();
+        return;
+      }
+      if (type === 'group') {
+        const cards = shuffle([
+          ...concepts.slice(0, 3).map(text => ({ text, group: '本課概念' })),
+          ...pairs.slice(0, 3).map(p => ({ text: p.right, group: '概念說明' })),
+          ...questions.slice(0, 3).map(([q]) => ({ text: q, group: '練習題目' }))
+        ]).slice(0, limit);
+        $('templateBoard').innerHTML = `<div class="rounded-3xl bg-white p-5 shadow-sm">
+          <p class="font-black text-teal-800">按組排序：請把項目分到正確組別</p>
+          <div class="mt-4 space-y-3">${cards.map(card => `<div class="rounded-2xl bg-teal-50 p-4"><p class="font-black text-slate-700">${escapeHtml(card.text)}</p><select class="groupSelect mt-3 w-full rounded-xl border-2 border-teal-200 bg-white px-3 py-2 font-black" data-answer="${escapeHtml(card.group)}"><option>請選擇</option><option>本課概念</option><option>概念說明</option><option>練習題目</option></select></div>`).join('')}</div>
+          <button onclick="checkGroupSort()" class="mt-4 rounded-2xl bg-teal-500 px-5 py-3 font-black text-white">檢查排序</button>
+          <p id="groupFeedback" class="mt-3 font-black text-teal-800"></p>
+        </div>`;
+      }
+    }
+    function spinCourseWheel() {
+      if (!currentCourseWheelPool.length) return;
+      courseWheelRotation += 720 + Math.floor(Math.random() * 360);
+      $('courseWheelDisc').style.transform = `rotate(${courseWheelRotation}deg)`;
+      $('spinCourseWheelButton').disabled = true;
+      setTimeout(() => {
+        const item = currentCourseWheelPool[Math.floor(Math.random() * currentCourseWheelPool.length)];
+        $('courseWheelResult').innerHTML = `<p class="text-sm font-black text-fuchsia-700">${escapeHtml(item.label)}</p><p class="mt-3 text-3xl font-black leading-normal text-blue-900">${escapeHtml(item.text)}</p>${item.answer ? `<details class="mt-4 rounded-2xl bg-white p-4"><summary class="cursor-pointer font-black text-fuchsia-800">顯示參考答案</summary><p class="mt-2 font-bold text-slate-700">${escapeHtml(item.answer)}</p></details>` : '<p class="mt-4 rounded-2xl bg-white p-4 font-bold text-slate-600">請學生說明後，由老師或同學補充。</p>'}`;
+        $('spinCourseWheelButton').disabled = false;
+        recordTemplateResult(0, 1);
+      }, 1000);
+    }
+    window.renderTemplate = renderTemplate;
+    window.checkJudge = (actual, choice) => {
+      const correct = actual === choice;
+      $('judgeFeedback').textContent = correct ? '答對了！' : '再想想，這張卡的配對不正確。';
+      $('judgeFeedback').className = `mt-4 rounded-2xl p-4 font-black ${correct ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-700'}`;
+      recordTemplateCheck('judgeFeedback', correct ? 1 : 0);
+    };
+    window.checkSort = () => {
+      const selects = [...document.querySelectorAll('.sortSelect')];
+      const correct = selects.filter(select => select.value === select.dataset.sortAnswer).length;
+      $('sortFeedback').textContent = `答對 ${correct} / ${selects.length} 張`;
+      recordTemplateCheck('sortFeedback', correct, selects.length);
+    };
+    window.checkTest = () => {
+      const groups = [...new Set([...document.querySelectorAll('.testChoice')].map(input => input.name))];
+      let correct = 0;
+      groups.forEach(name => {
+        const checked = document.querySelector(`input[name="${name}"]:checked`);
+        if (checked && checked.value === checked.dataset.answer) correct += 1;
+      });
+      $('testFeedback').textContent = `答對 ${correct} / ${groups.length} 題`;
+      recordTemplateCheck('testFeedback', correct, groups.length);
+    };
+    window.checkMatchDrop = () => {
+      const selects = [...document.querySelectorAll('.matchDrop')];
+      const correct = selects.filter(select => select.value === select.dataset.answer).length;
+      $('matchDropFeedback').textContent = `答對 ${correct} / ${selects.length} 組`;
+      recordTemplateCheck('matchDropFeedback', correct, selects.length);
+    };
+    window.checkSpell = answerValue => {
+      const answerText = decodeURIComponent(answerValue);
+      const guess = $('spellInput').value.trim();
+      const correct = guess === answerText;
+      $('spellFeedback').textContent = correct ? '答對了！' : `再試一次，提示：答案共有 ${answerText.length} 個字。`;
+      recordTemplateCheck('spellFeedback', correct ? 1 : 0);
+    };
+    window.checkMissing = (answerValue, choiceValue) => {
+      const ok = decodeURIComponent(answerValue) === decodeURIComponent(choiceValue);
+      $('missingFeedback').textContent = ok ? '答對了！' : `再試一次，正確答案是：${decodeURIComponent(answerValue)}`;
+      $('missingFeedback').className = `mt-4 rounded-2xl p-4 font-black ${ok ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-700'}`;
+      recordTemplateCheck('missingFeedback', ok ? 1 : 0);
+    };
+    window.checkSentence = (answerValue, choiceValue) => {
+      const ok = decodeURIComponent(answerValue) === decodeURIComponent(choiceValue);
+      $('sentenceFeedback').textContent = ok ? '答對了！' : `再試一次，正確答案是：${decodeURIComponent(answerValue)}`;
+      $('sentenceFeedback').className = `mt-4 rounded-2xl p-4 font-black ${ok ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-700'}`;
+      recordTemplateCheck('sentenceFeedback', ok ? 1 : 0);
+    };
+    window.checkOrder = answerValue => {
+      const answerText = decodeURIComponent(answerValue);
+      const current = $('orderAnswer').dataset.value || '';
+      const correct = current === answerText;
+      $('orderFeedback').textContent = correct ? '排列正確！' : '順序還不對，請按「重排」再試一次。';
+      recordTemplateCheck('orderFeedback', correct ? 1 : 0);
+    };
+    window.checkGroupSort = () => {
+      const selects = [...document.querySelectorAll('.groupSelect')];
+      const correct = selects.filter(select => select.value === select.dataset.answer).length;
+      $('groupFeedback').textContent = `答對 ${correct} / ${selects.length} 張`;
+      recordTemplateCheck('groupFeedback', correct, selects.length);
+    };
+    function bindOrderPieces() {
+      const answerBox = $('orderAnswer');
+      answerBox.dataset.value = '';
+      document.querySelectorAll('.orderPiece').forEach(button => {
+        button.addEventListener('click', () => {
+          answerBox.dataset.value += button.dataset.piece;
+          answerBox.textContent = answerBox.dataset.value;
+          button.disabled = true;
+          button.classList.add('opacity-40');
+        });
+      });
+    }
+    function bindOpenBoxes() {
+      document.querySelectorAll('.openBox').forEach(button => {
+        button.addEventListener('click', () => {
+          $('openBoxResult').innerHTML = `<p class="text-sm text-slate-500">箱子內容</p><p class="mt-2 text-2xl text-blue-900">${escapeHtml(button.dataset.label)}</p>${objectImageBlock(button.dataset.label)}<details class="mt-3"><summary class="cursor-pointer text-orange-700">顯示答案 / 說明</summary><p class="mt-2">${escapeHtml(button.dataset.answer)}</p></details>`;
+          hydrateObjectImages($('openBoxResult'));
+          button.disabled = true;
+          button.classList.add('bg-emerald-200', 'text-emerald-900');
+        });
+      });
+    }
+    let findSelection = null;
+    function bindFindButtons() {
+      document.querySelectorAll('.findButton').forEach(button => {
+        button.addEventListener('click', () => {
+          if (!findSelection) {
+            findSelection = button;
+            button.classList.add('ring-4', 'ring-yellow-300');
+            return;
+          }
+          const ok = findSelection.dataset.findId === button.dataset.findId && findSelection.dataset.findSide !== button.dataset.findSide;
+          $('findFeedback').textContent = ok ? '配對成功！' : '還沒配對成功，再試一次。';
+          if (ok) {
+            findSelection.disabled = true;
+            button.disabled = true;
+            findSelection.classList.add('bg-emerald-200');
+            button.classList.add('bg-emerald-200');
+          }
+          recordTemplateResult(ok ? 1 : 0, 1);
+          findSelection.classList.remove('ring-4', 'ring-yellow-300');
+          findSelection = null;
+        });
+      });
+    }
+    function renderTeams() {
+      $('teamBoard').innerHTML = scores.map((score, i) => `<div class="rounded-2xl bg-blue-50 p-4 text-center shadow-sm"><p class="font-black text-blue-800">第 ${i + 1} 組</p><p class="my-2 text-4xl font-black text-yellow-600">${score}</p><button data-team="${i}" class="scoreButton rounded-xl bg-blue-600 px-4 py-2 font-black text-white">答對 +1</button></div>`).join('');
+      document.querySelectorAll('.scoreButton').forEach(btn => btn.addEventListener('click', () => {
+        scores[Number(btn.dataset.team)] += 1;
+        renderTeams();
+      }));
+    }
+    function nextQuiz() {
+      const list = parseQuiz();
+      const item = list[Math.floor(Math.random() * list.length)];
+      answer = item.a;
+      $('quizQuestion').textContent = item.q;
+      $('quizAnswer').textContent = `參考答案：${answer}`;
+      $('quizAnswer').classList.add('hidden');
+      $('showAnswerButton').textContent = '顯示答案';
+    }
+    function parsePairs() {
+      const lines = $('pairInput').value.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+      const fallback = currentUnit()?.pairs || [];
+      const pairs = (lines.length ? lines : fallback).map((line, i) => {
+        const [left, right = '請補上意思'] = line.split(/[=｜|]/);
+        return { id: i, left: left.trim(), right: right.trim() };
+      }).filter(item => item.left && item.right && !/^本課新語詞$|^本活動重要概念$/.test(item.right));
+      return shuffle(pairs).slice(0, 6);
+    }
+    function startMatch() {
+      const pairs = parsePairs();
+      flipped = [];
+      matched = new Set();
+      matchAttempts = 0;
+      matchTotal = pairs.length;
+      const cards = shuffle(pairs.flatMap(pair => [{ id: pair.id, text: pair.left, type: 'left' }, { id: pair.id, text: pair.right, type: 'right' }]));
+      $('matchBoard').innerHTML = cards.map((card, i) => `<button type="button" aria-label="第 ${i + 1} 張未翻開的配對卡" class="matchCard min-h-28 rounded-2xl border-2 border-pink-200 bg-gradient-to-br from-pink-50 to-white p-3 text-center text-xl font-black text-pink-800 shadow transition hover:-translate-y-1 hover:border-pink-400" data-i="${i}" data-id="${card.id}" data-type="${card.type}" data-text="${escapeHtml(card.text)}">?</button>`).join('');
+      $('matchStatus').textContent = `共有 ${pairs.length} 組配對；先翻一張概念卡，再找它的說明卡。`;
+      $('matchScore').textContent = `完成 0 組｜嘗試 0 次`;
+      document.querySelectorAll('.matchCard').forEach(card => card.addEventListener('click', () => flipCard(card)));
+    }
+    function flipCard(card) {
+      if (card.disabled || flipped.includes(card) || flipped.length >= 2) return;
+      card.textContent = `${card.dataset.type === 'left' ? '概念：' : '說明：'}${card.dataset.text}`;
+      card.classList.remove('from-pink-50', 'to-white');
+      card.classList.add(card.dataset.type === 'left' ? 'bg-blue-100' : 'bg-violet-100', 'border-blue-300');
+      flipped.push(card);
+      if (flipped.length < 2) return;
+      matchAttempts += 1;
+      const [a, b] = flipped;
+      if (a.dataset.id === b.dataset.id && a.dataset.type !== b.dataset.type) {
+        matched.add(a.dataset.id);
+        flipped.forEach(item => {
+          item.disabled = true;
+          item.classList.remove('bg-blue-100', 'bg-violet-100', 'border-blue-300');
+          item.classList.add('bg-emerald-200', 'border-emerald-400', 'text-emerald-900');
+        });
+        $('matchStatus').textContent = `配對成功！${matched.size === matchTotal ? '全部完成，太棒了！' : '繼續找下一組。'}`;
+        $('matchScore').textContent = `完成 ${matched.size} 組｜嘗試 ${matchAttempts} 次`;
+        flipped = [];
+      } else {
+        $('matchStatus').textContent = '這兩張不是同一組，記住位置再試一次。';
+        $('matchScore').textContent = `完成 ${matched.size} 組｜嘗試 ${matchAttempts} 次`;
+        setTimeout(() => {
+          flipped.forEach(item => {
+            item.textContent = '?';
+            item.classList.remove('bg-blue-100', 'bg-violet-100', 'border-blue-300');
+            item.classList.add('from-pink-50', 'to-white');
+          });
+          flipped = [];
+        }, 850);
+      }
+    }
+    function makeGroups(list, count) {
+      const groups = Array.from({ length: count }, () => []);
+      shuffle(list).forEach((name, i) => groups[i % count].push(name));
+      return groups;
+    }
+    function startPe() {
+      const count = Number($('peGroupCount').value);
+      if (names().length < count) return;
+      peGroups = makeGroups(names(), count);
+      peStations = $('stationInput').value.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+      if (!peStations.length) peStations = defaultStations;
+      peRound = 0;
+      renderPe();
+    }
+    function renderPe() {
+      $('peStatus').textContent = `第 ${peRound + 1} 輪：每站 3～5 分鐘，注意補水與安全距離。`;
+      $('stationBoard').innerHTML = peGroups.map((group, i) => `<div class="rounded-2xl bg-white p-4 shadow-sm"><p class="font-black text-emerald-800">第 ${i + 1} 組：${escapeHtml(peStations[(i + peRound) % peStations.length])}</p><p class="mt-1 text-sm text-slate-600">${group.map(escapeHtml).join('、')}</p></div>`).join('');
+    }
+
+    $('rosterSelect').addEventListener('change', updateRosterStatus);
+    $('spinButton').addEventListener('click', spinWheel);
+    $('buildSocialQuizButton').addEventListener('click', buildSocialQuiz);
+    $('buildSocialMatchButton').addEventListener('click', buildSocialMatch);
+    $('courseSubjectSelect').addEventListener('change', () => {
+      renderCourseOptions();
+      buildSocialQuiz();
+      buildSocialMatch();
+      restartActiveTemplate();
+      renderActivityLab();
+    });
+    $('socialUnitSelect').addEventListener('change', () => {
+      buildSocialQuiz();
+      buildSocialMatch();
+      restartActiveTemplate();
+      renderActivityLab();
+    });
+    $('nextQuizButton').addEventListener('click', nextQuiz);
+    $('showAnswerButton').addEventListener('click', () => {
+      if (!answer) nextQuiz();
+      $('quizAnswer').classList.toggle('hidden');
+      $('showAnswerButton').textContent = $('quizAnswer').classList.contains('hidden') ? '顯示答案' : '隱藏答案';
+    });
+    $('resetQuizButton').addEventListener('click', () => {
+      scores = [0, 0, 0, 0];
+      renderTeams();
+      $('quizQuestion').textContent = '請先抽題';
+      $('quizAnswer').classList.add('hidden');
+      $('showAnswerButton').textContent = '顯示答案';
+    });
+    $('startMatchButton').addEventListener('click', startMatch);
+    $('resetMatchButton').addEventListener('click', startMatch);
+    $('startPeButton').addEventListener('click', startPe);
+    $('rotatePeButton').addEventListener('click', () => {
+      if (!peGroups.length) return;
+      peRound += 1;
+      renderPe();
+    });
+    document.querySelectorAll('.templateButton').forEach(button => {
+      button.addEventListener('click', () => {
+        if (activeTemplate === button.dataset.template) {
+          resetTemplateStats();
+          startTemplateTimer();
+        }
+        renderTemplate(button.dataset.template);
+      });
+    });
+    $('templateCategorySelect').addEventListener('change', applyTemplateFilter);
+    $('templateQuestionCount').addEventListener('change', restartActiveTemplate);
+    $('templateTimerSelect').addEventListener('change', restartActiveTemplate);
+    $('restartTemplateButton').addEventListener('click', restartActiveTemplate);
+    $('randomTemplateButton').addEventListener('click', () => {
+      const visibleTypes = [...document.querySelectorAll('.templateButton:not(.template-hidden)')].map(button => button.dataset.template);
+      const nextType = visibleTypes[Math.floor(Math.random() * visibleTypes.length)] || 'cards';
+      renderTemplate(nextType);
+    });
+    $('fullscreenTemplateButton').addEventListener('click', async () => {
+      if (document.fullscreenElement) {
+        await document.exitFullscreen();
+        $('fullscreenTemplateButton').textContent = '全螢幕投影';
+      } else {
+        await $('templateLab').requestFullscreen();
+        $('fullscreenTemplateButton').textContent = '離開全螢幕';
+      }
+    });
+    document.addEventListener('fullscreenchange', () => {
+      $('fullscreenTemplateButton').textContent = document.fullscreenElement ? '離開全螢幕' : '全螢幕投影';
+    });
+    $('startActivityButton').addEventListener('click', renderActivityLab);
+
+    $('stationInput').value = defaultStations.join('\n');
+    setupCourseUnits();
+    applyCourseFromUrl();
+    $('activityUnitStatus').textContent = `目前課程：${currentUnit().subject}｜${currentUnit().title}`;
+    updateRosterStatus();
+    buildSocialQuiz();
+    buildSocialMatch();
+    const requestedTemplate = new URLSearchParams(location.search).get('template');
+    renderTemplate(templateCatalog[requestedTemplate] ? requestedTemplate : 'cards');
+    applyTemplateFilter();
+    renderTeams();
+    if (location.hash) setTimeout(() => document.querySelector(location.hash)?.scrollIntoView({ behavior: 'smooth' }), 100);
+  </script>
+</body>
+</html>

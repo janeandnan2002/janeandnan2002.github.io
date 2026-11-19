@@ -1,0 +1,247 @@
+[
+  {
+    "key": "g1u1",
+    "source": "修訂三版/1上/第01課.mp3",
+    "sha256": "d6ce1c8165f87773f60fc239c00a406fc1545aac699361d1bc499d397b045831",
+    "outputBytes": 545529,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g1u2",
+    "source": "修訂三版/1上/第02課.mp3",
+    "sha256": "7dba4ebe87a908b023e0707a76e007e5b2ec154187e45c56a00887a73af891bb",
+    "outputBytes": 1033114,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g1u3",
+    "source": "修訂三版/1上/第03課.mp3",
+    "sha256": "04b9d26f6edfcbca43152abbc33f58ed27743e0c858304f5128ea3b6b964ce06",
+    "outputBytes": 1062490,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g1u4",
+    "source": "修訂三版/1上/第04課.mp3",
+    "sha256": "4069e265aaa120924b174a347ab6e7f79584b97a90f29ba0a457a688e91a9e6f",
+    "outputBytes": 622137,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g1u5",
+    "source": "修訂三版/1上/第05課.mp3",
+    "sha256": "6f81672078f4c38c5c73f9ac15041c3966eee5bb74da41631e0f1e3deb39dc3a",
+    "outputBytes": 1032250,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g1u6",
+    "source": "修訂三版/1上/第06課.mp3",
+    "sha256": "4a30895bdaf959d85bf56d8d8ceb0f6025a7640f1f432d16bb4cf53a0f585ba0",
+    "outputBytes": 978394,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g2u1",
+    "source": "修訂三版/2上/第01課.mp3",
+    "sha256": "7c7474243d55c26898031b7e0c40a178fe7edfd2964f71cf6f77645f4fd3b721",
+    "outputBytes": 1469722,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g2u2",
+    "source": "修訂三版/2上/第02課.mp3",
+    "sha256": "2198c7707690895192cb796d3a68d43abcad29493bfe782194ff0a4cc04b994e",
+    "outputBytes": 1484698,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g2u3",
+    "source": "修訂三版/2上/第03課.mp3",
+    "sha256": "975bb1778f3a36a7605e5ec2464f33d29d09ad859ae8a6e8cfe7b745099ab25e",
+    "outputBytes": 1553242,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g2u4",
+    "source": "修訂三版/2上/第04課.mp3",
+    "sha256": "c433ab5f1d91b8a8595bced187072cfdb3ad7e9342141ba7e7add2a766ed9b31",
+    "outputBytes": 1315642,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g2u5",
+    "source": "修訂三版/2上/第05課.mp3",
+    "sha256": "0cec71f860c93846b5dab7ff28e99feec3ca65e9a1c7115a0b78b7f6a79969cd",
+    "outputBytes": 1267834,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g2u6",
+    "source": "修訂三版/2上/第06課.mp3",
+    "sha256": "5c87e5515364d99d755b9e89185f4cbc10bc97dbcef98a9797d414d97d7a13bb",
+    "outputBytes": 1777306,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g3u1",
+    "source": "修訂三版/3上/第01課.mp3",
+    "sha256": "e440ec0b63b441bfd8542b9ef49d3ae3ef851d740d70d5607a7a4f2c97c6a94a",
+    "outputBytes": 2217370,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g3u2",
+    "source": "修訂三版/3上/第02課.mp3",
+    "sha256": "5ff3b2b164d6d27b74b9b0f7704c54d72fc3bd20cfa62b1007b5e0e01d666b01",
+    "outputBytes": 2556634,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g3u3",
+    "source": "修訂三版/3上/第03課.mp3",
+    "sha256": "1759c16945c544392a3fd2f24e2353b7ff4d596e99890325d7f46e42ee38c0df",
+    "outputBytes": 1719706,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g3u4",
+    "source": "修訂三版/3上/第04課.mp3",
+    "sha256": "69f58d2009baa587beb6bb79108fbc618425f7897996bb4a53146ededcb3ef90",
+    "outputBytes": 1815322,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g3u5",
+    "source": "修訂三版/3上/第05課.mp3",
+    "sha256": "f54aea60fa6043c43ed5fb1b483376c8057a0f0a49ea9b59d760b0c25e0f7403",
+    "outputBytes": 2739226,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g3u6",
+    "source": "修訂三版/3上/第06課.mp3",
+    "sha256": "dab92bf4ef0f7f472a63c8635959b9fab047d3b0bb913ff7a08ceb4d8b805e24",
+    "outputBytes": 2964154,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g4u1",
+    "source": "修訂三版/4上/第01課.mp3",
+    "sha256": "0f181e74443c300e9658b84bf8a3e34ba1982c55aca261a9a932a81c4e183b7a",
+    "outputBytes": 2111674,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g4u2",
+    "source": "修訂三版/4上/第02課.mp3",
+    "sha256": "5825b663c995758bd754039a33e0c008ec50edc424850966dcffb66f1acbc06b",
+    "outputBytes": 2551162,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g4u3",
+    "source": "修訂三版/4上/第03課.mp3",
+    "sha256": "2c2bb62eab5195fba909224ac96dd9b137c94cff4c42003254caa4f9e232b0aa",
+    "outputBytes": 1968250,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g4u4",
+    "source": "修訂三版/4上/第04課.mp3",
+    "sha256": "343218c237f0e347d3e432a547bf8054300aebb5ba378010525a744c26396efd",
+    "outputBytes": 1917850,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g4u5",
+    "source": "修訂三版/4上/第05課.mp3",
+    "sha256": "f3cecc9326f366afda5065a1ad6c6fe72ef2091d29c8e7ce5836a8767de48a73",
+    "outputBytes": 2212474,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g4u6",
+    "source": "修訂三版/4上/第06課.mp3",
+    "sha256": "1e1d1df3bb52805341d897dc2502862590dad96a0acff260fe51851b2e0e747b",
+    "outputBytes": 2317594,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g5u1",
+    "source": "修訂三版/5上/第01課.mp3",
+    "sha256": "1482203db7e598e6bab691eab8cc9728768e0dd7e947f86cd5ed619c1416a7cf",
+    "outputBytes": 2926895,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g5u2",
+    "source": "修訂三版/5上/第02課.mp3",
+    "sha256": "1c07ba8f12e3e66a3320ded3f9d5eb0f6d5e37deb03701c398d8f00f01f5b257",
+    "outputBytes": 2506703,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g5u3",
+    "source": "修訂三版/5上/第03課.mp3",
+    "sha256": "da41a36a897d8f85c913582c33825e12e8a9483562335da5b70f34f2e9dc9296",
+    "outputBytes": 2236271,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g5u4",
+    "source": "修訂三版/5上/第04課.mp3",
+    "sha256": "1425b36a9c4d9e9aa93c6da63b1efd1602187cb5fabb57080a04ac674ce52d90",
+    "outputBytes": 3317423,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g5u5",
+    "source": "修訂三版/5上/第05課.mp3",
+    "sha256": "e8cfabfbdf346e04dae51945db7805c9be63430bd6e7b5864e0e64b36b0399c8",
+    "outputBytes": 3141743,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g5u6",
+    "source": "修訂三版/5上/第06課.mp3",
+    "sha256": "58f0c23a225186e0aa75083a88698810964aff96db4c2a3e5afe1c8aec57a961",
+    "outputBytes": 2693615,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g6u2",
+    "source": "修訂三版/6上/第02課.mp3",
+    "sha256": "519aed7950ccd21fad05bf896124a6333979dd11f0fe6234f9c1ac84871224d9",
+    "outputBytes": 4237965,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g6u3",
+    "source": "修訂三版/6上/第03課.mp3",
+    "sha256": "d49490f5bc4a26f4ddb7c3b2bdcc477b07446cb519ea20e7a274881281961c8c",
+    "outputBytes": 2612781,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g6u4",
+    "source": "修訂三版/6上/第04課.mp3",
+    "sha256": "7e60ccceede4254b6e0ebf62741bdeefbda1cd9bdb154789790a241022e0f611",
+    "outputBytes": 2412045,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g6u5",
+    "source": "修訂三版/6上/第05課.mp3",
+    "sha256": "03de2c3af0cdb82789b1ddee8f59a5a3a612ba3396f28a1cdee487bd7db23fa5",
+    "outputBytes": 3106413,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  },
+  {
+    "key": "g6u6",
+    "source": "修訂三版/6上/第06課.mp3",
+    "sha256": "b0b5a416fde9a5a04461339414ebdf9f6040f11d62148bf5eb2cf88ede32c44a",
+    "outputBytes": 2444013,
+    "review": "依年級課次檔名配對，尚未逐句核音"
+  }
+]

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>東衛教學星球｜閩南語歌曲歌單</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #fff7ed;
+      background-image:
+        radial-gradient(circle at 10% 12%, rgba(250, 204, 21, .38) 0 110px, transparent 111px),
+        radial-gradient(circle at 88% 10%, rgba(59, 130, 246, .18) 0 150px, transparent 151px),
+        radial-gradient(circle at 78% 90%, rgba(244, 114, 182, .16) 0 145px, transparent 146px);
+    }
+    .card-in { animation: cardIn .35s ease-out both; }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-700">
+  <div class="fixed bottom-5 right-5 z-50 flex flex-col gap-3">
+    <a href="#songTop" aria-label="回到本頁頁首" class="rounded-full bg-orange-400 px-5 py-3 text-center text-base font-black text-orange-950 shadow-xl shadow-orange-100 transition hover:-translate-y-1 hover:bg-orange-300 focus:outline-none focus:ring-4 focus:ring-yellow-300">回頁首 ↑</a>
+    <a href="index.html#top" aria-label="回到東衛教學星球首頁" class="rounded-full bg-blue-600 px-5 py-3 text-center text-base font-black text-white shadow-xl shadow-blue-200 transition hover:-translate-y-1 hover:bg-blue-500 focus:outline-none focus:ring-4 focus:ring-yellow-300">回首頁</a>
+  </div>
+
+  <main id="songTop" class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:py-10">
+    <header class="rounded-3xl border-4 border-orange-300 bg-white p-6 shadow-xl shadow-orange-100">
+      <div class="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p class="text-sm font-bold text-orange-600">東衛教學星球</p>
+          <h1 class="mt-1 text-4xl font-black text-blue-800 sm:text-5xl">閩南語歌曲分類歌單</h1>
+          <p class="mt-3 max-w-3xl text-slate-600">先用低、中、高年級整理歌曲。每首歌都可以開 Apple Music 搜尋，也可以用 YouTube 搜尋；若貼上 YouTube 連結，右側會直接顯示播放畫面。</p>
+        </div>
+        <a href="index.html#top" class="rounded-2xl bg-slate-200 px-4 py-2 font-black text-slate-700 hover:bg-slate-300">回首頁</a>
+      </div>
+    </header>
+
+    <section class="mt-8 grid gap-4 lg:grid-cols-3">
+      <button data-grade="low" class="gradeButton rounded-3xl border-4 border-yellow-300 bg-yellow-50 p-6 text-left shadow-lg transition hover:-translate-y-1 hover:bg-yellow-100">
+        <p class="text-sm font-black text-yellow-700">1～2 年級</p>
+        <h2 class="mt-1 text-3xl font-black text-yellow-900">低年級歌單</h2>
+        <p class="mt-3 text-slate-600">短句、重複性高、動作律動、生活問候。</p>
+      </button>
+      <button data-grade="middle" class="gradeButton rounded-3xl border-4 border-sky-300 bg-sky-50 p-6 text-left shadow-lg transition hover:-translate-y-1 hover:bg-sky-100">
+        <p class="text-sm font-black text-sky-700">3～4 年級</p>
+        <h2 class="mt-1 text-3xl font-black text-blue-900">中年級歌單</h2>
+        <p class="mt-3 text-slate-600">節慶、校園生活、澎湖海洋與日常對話。</p>
+      </button>
+      <button data-grade="high" class="gradeButton rounded-3xl border-4 border-pink-300 bg-pink-50 p-6 text-left shadow-lg transition hover:-translate-y-1 hover:bg-pink-100">
+        <p class="text-sm font-black text-pink-700">5～6 年級</p>
+        <h2 class="mt-1 text-3xl font-black text-pink-900">高年級歌單</h2>
+        <p class="mt-3 text-slate-600">文化、情感、俗諺、地方認同與歌詞討論。</p>
+      </button>
+    </section>
+
+    <section class="mt-8 grid gap-6 lg:grid-cols-[1fr_0.85fr]">
+      <article class="rounded-3xl border-4 border-blue-200 bg-white p-5 shadow-xl shadow-blue-100 sm:p-7">
+        <div class="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <p id="gradeLabel" class="text-sm font-black text-blue-600">低年級</p>
+            <h2 id="gradeTitle" class="text-3xl font-black text-blue-800">低年級歌單</h2>
+          </div>
+          <label class="w-full max-w-xs font-black text-slate-700">
+            關鍵字搜尋
+            <input id="songSearch" class="mt-2 w-full rounded-2xl border-2 border-blue-100 bg-blue-50 px-4 py-3 outline-none focus:border-blue-300" placeholder="輸入歌名、主題或用途">
+          </label>
+        </div>
+        <div class="mt-4 flex flex-wrap gap-2">
+          <button data-artist="" class="artistButton rounded-full bg-blue-600 px-4 py-2 text-sm font-black text-white shadow hover:bg-blue-500">全部歌手</button>
+          <button data-artist="江蕙" class="artistButton rounded-full bg-white px-4 py-2 text-sm font-black text-blue-700 shadow hover:bg-blue-50">江蕙</button>
+          <button data-artist="葉啟田" class="artistButton rounded-full bg-white px-4 py-2 text-sm font-black text-blue-700 shadow hover:bg-blue-50">葉啟田</button>
+          <button data-artist="黃乙玲" class="artistButton rounded-full bg-white px-4 py-2 text-sm font-black text-blue-700 shadow hover:bg-blue-50">黃乙玲</button>
+          <button data-artist="沈文程" class="artistButton rounded-full bg-white px-4 py-2 text-sm font-black text-blue-700 shadow hover:bg-blue-50">沈文程</button>
+          <button data-artist="蕭煌奇" class="artistButton rounded-full bg-white px-4 py-2 text-sm font-black text-blue-700 shadow hover:bg-blue-50">蕭煌奇</button>
+          <button data-artist="陳雷" class="artistButton rounded-full bg-white px-4 py-2 text-sm font-black text-blue-700 shadow hover:bg-blue-50">陳雷</button>
+        </div>
+
+        <div id="songList" class="mt-5 grid gap-4"></div>
+      </article>
+
+      <aside class="rounded-3xl border-4 border-emerald-200 bg-white p-5 shadow-xl shadow-emerald-100 sm:p-7">
+        <p class="text-sm font-black text-emerald-600">播放與備課</p>
+        <h2 id="playerTitle" class="mt-1 text-3xl font-black text-emerald-800">先選一首歌</h2>
+        <p id="playerHint" class="mt-2 text-slate-500">點左側「選這首」後，這裡會出現 YouTube 播放入口；若有指定影片網址，也可以貼在下方嵌入播放。</p>
+
+        <div class="mt-5 overflow-hidden rounded-3xl bg-slate-100 shadow-inner">
+          <iframe id="youtubeFrame" class="hidden aspect-video w-full" title="YouTube 播放區" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+          <div id="emptyPlayer" class="flex aspect-video items-center justify-center p-6 text-center font-black text-slate-400">選一首歌後會出現 YouTube 播放入口</div>
+        </div>
+
+        <label class="mt-5 block font-black text-slate-700">
+          有指定影片時，貼上 YouTube 連結
+          <input id="youtubeUrl" class="mt-2 w-full rounded-2xl border-2 border-emerald-100 bg-emerald-50 px-4 py-3 outline-none focus:border-emerald-300" placeholder="https://www.youtube.com/watch?v=...">
+        </label>
+        <button id="loadYoutubeButton" class="mt-3 rounded-2xl bg-emerald-500 px-5 py-3 font-black text-white shadow hover:bg-emerald-400">顯示影片</button>
+
+        <div id="selectedLinks" class="mt-5 grid gap-2"></div>
+      </aside>
+    </section>
+
+    <section class="mt-8 rounded-3xl border-4 border-violet-200 bg-white p-5 shadow-xl shadow-violet-100 sm:p-7">
+      <p class="text-sm font-black text-violet-600">老師維護區</p>
+      <h2 class="mt-1 text-3xl font-black text-blue-800">之後可補的資料欄位</h2>
+      <p class="mt-2 text-slate-600">每首歌建議補：歌名、演唱者、適合年級、教學用途、Apple Music 連結、YouTube 連結、搭配語詞或句型。</p>
+    </section>
+  </main>
+
+  <script>
+    const songData = {
+      low: {
+        label: '1～2 年級',
+        title: '低年級歌單',
+        songs: [
+          { title: '歡喜就好', artist: '陳雷', theme: '心情與律動', use: '副歌節奏明顯，適合暖身、拍手節奏、說出「歡喜」等心情語詞。', keywords: ['歡喜', '心情', '拍手', '律動'] },
+          { title: '來去台東', artist: '沈文程', theme: '地名與旅行', use: '旋律輕快，適合帶入「來去……」句型、地名替換，也可改成「來去澎湖」。', keywords: ['來去', '地名', '旅行', '澎湖'] },
+          { title: '愛拚才會贏', artist: '葉啟田', theme: '努力與鼓勵', use: '可取副歌做班級精神口號，搭配動作律動與正向鼓勵。', keywords: ['努力', '加油', '鼓勵', '副歌'] },
+          { title: '阿嬤的話', artist: '蕭煌奇', theme: '家人與感謝', use: '可選短段落聆聽，讓學生說出家人稱謂與一句感謝的話。', keywords: ['阿嬤', '家人', '感謝', '稱謂'] },
+          { title: '藝界人生', artist: '江蕙', theme: '表演與欣賞', use: '適合做音樂欣賞，讓學生聽辨情緒、節奏，不需深入成人情境歌詞。', keywords: ['表演', '欣賞', '情緒', '節奏'] },
+          { title: '春天在哪裡？', artist: '待確認', theme: '季節與自然', use: '適合春天主題、律動暖身與語詞圖卡，可讓學生找出花、草、鳥、春天等詞。', keywords: ['春天', '季節', '自然', '律動'] },
+          { title: '媽媽請你也保重', artist: '待確認', theme: '家人與關心', use: '適合母親節或家庭主題，選副歌練習「媽媽、保重、感謝」等語詞。', keywords: ['媽媽', '保重', '家人', '感謝'] },
+          { title: '家後', artist: '江蕙', theme: '親情欣賞', use: '低年級建議只取副歌或短段落欣賞，重點放在家人、陪伴、感謝，不深入成人情境。', keywords: ['家人', '陪伴', '感謝', '副歌'] }
+        ]
+      },
+      middle: {
+        label: '3～4 年級',
+        title: '中年級歌單',
+        songs: [
+          { title: '博杯', artist: '江蕙', theme: '民俗文化', use: '可搭配臺灣民俗、廟宇文化與「祈願」語詞討論，適合社會與閩南語連結。', keywords: ['博杯', '民俗', '廟宇', '祈願'] },
+          { title: '落雨聲', artist: '江蕙', theme: '天氣與情感', use: '可先聽旋律與關鍵詞，練習雨天、聲音、心情語詞。', keywords: ['落雨', '天氣', '聲音', '心情'] },
+          { title: '車站', artist: '黃乙玲', theme: '交通與離別', use: '適合擷取地點與交通語詞，討論車站、等候、出發等生活情境。', keywords: ['車站', '交通', '等候', '出發'] },
+          { title: '心事誰人知', artist: '沈文程', theme: '心情表達', use: '可用來練習「心事、知影、啥人」等語詞，讓學生用安全情境說心情。', keywords: ['心事', '知影', '心情', '表達'] },
+          { title: '歡喜就好', artist: '陳雷', theme: '生活態度', use: '適合小組改編歌詞，把生活中讓自己歡喜的事寫成短句。', keywords: ['歡喜', '生活', '改編', '短句'] },
+          { title: '愛拚才會贏', artist: '葉啟田', theme: '努力與目標', use: '適合搭配班級任務、運動會或綜合活動，討論努力與合作。', keywords: ['努力', '目標', '合作', '運動會'] },
+          { title: '心肝寶貝', artist: '待確認', theme: '親情與珍惜', use: '適合家庭、照顧與感謝主題，可讓學生說出想珍惜的人與一句感謝話。', keywords: ['心肝寶貝', '親情', '珍惜', '感謝'] },
+          { title: '雨夜花', artist: '待確認', theme: '臺灣經典歌謠', use: '適合認識臺灣經典歌謠與「雨、花、夜」等意象，搭配聽辨旋律與情緒。', keywords: ['雨夜花', '雨', '花', '經典歌謠'] },
+          { title: '阿嬤的話', artist: '蕭煌奇', theme: '家人與生命故事', use: '適合中年級做聆聽理解，練習家人稱謂、訪問長輩與說一句感謝。', keywords: ['阿嬤', '長輩', '家人', '訪問'] }
+        ]
+      },
+      high: {
+        label: '5～6 年級',
+        title: '高年級歌單',
+        songs: [
+          { title: '家後', artist: '江蕙', theme: '家庭與陪伴', use: '適合高年級做歌詞理解、家庭角色與情感表達討論，提醒以尊重多元家庭為原則。', keywords: ['家庭', '陪伴', '情感', '歌詞理解'] },
+          { title: '甲你攬牢牢', artist: '江蕙', theme: '情感與承諾', use: '可作臺語情感詞彙欣賞，討論歌詞中的語氣與修辭。', keywords: ['情感', '承諾', '修辭', '欣賞'] },
+          { title: '浪子的心情', artist: '葉啟田', theme: '人生故事', use: '適合分析歌曲敘事角色、心情轉折與臺語常用表達。', keywords: ['人生', '故事', '心情', '角色'] },
+          { title: '舊情也綿綿', artist: '沈文程', theme: '記憶與情感', use: '適合高年級欣賞旋律與語詞，練習從歌詞找關鍵句。', keywords: ['記憶', '情感', '關鍵句', '旋律'] },
+          { title: '無字的情批', artist: '黃乙玲', theme: '書信與心意', use: '可搭配書信、心意表達與歌詞意象討論。', keywords: ['情批', '書信', '心意', '意象'] },
+          { title: '阿嬤的話', artist: '蕭煌奇', theme: '親情與生命故事', use: '適合高年級做聆聽理解、訪問家人、寫一句想對長輩說的話。', keywords: ['阿嬤', '親情', '生命故事', '訪問'] },
+          { title: '往事就是我的安慰', artist: '陳雷', theme: '回憶與心情', use: '適合做情緒語詞與回憶敘事練習，可讓學生改寫成自己的生活小回憶。', keywords: ['往事', '安慰', '回憶', '敘事'] },
+          { title: '成功的條件', artist: '待確認', theme: '努力與自我管理', use: '適合高年級討論成功需要的態度、方法與行動計畫，可連結綜合活動目標設定。', keywords: ['成功', '條件', '努力', '目標'] },
+          { title: '回鄉的我', artist: '待確認', theme: '家鄉與返鄉', use: '適合討論家鄉記憶、澎湖生活經驗與地方認同，讓學生分享家鄉印象。', keywords: ['回鄉', '家鄉', '澎湖', '認同'] },
+          { title: '故鄉', artist: '待確認', theme: '故鄉與認同', use: '適合歌詞理解、家鄉書寫與口語分享，可讓學生寫一句「我的故鄉有……」。', keywords: ['故鄉', '家鄉', '土地', '分享'] },
+          { title: '大船入港', artist: '待確認', theme: '海洋與港口', use: '很適合澎湖海洋教育，搭配港口、漁船、討海生活與在地文化討論。', keywords: ['大船', '入港', '海洋', '港口', '澎湖'] }
+        ]
+      }
+    };
+
+    const $ = id => document.getElementById(id);
+    let currentGrade = 'low';
+    let selectedSong = null;
+    let currentArtist = '';
+
+    function escapeHtml(value) {
+      const el = document.createElement('div');
+      el.textContent = value;
+      return el.innerHTML;
+    }
+    function searchUrl(kind, song) {
+      const query = encodeURIComponent(`${song.title} ${song.artist !== '待補' ? song.artist : ''} 閩南語 台語`.trim());
+      if (kind === 'apple') return `https://music.apple.com/tw/search?term=${query}`;
+      return `https://www.youtube.com/results?search_query=${query}`;
+    }
+    function showYoutubeEmbed(embedUrl) {
+      $('youtubeFrame').src = embedUrl;
+      $('youtubeFrame').classList.remove('hidden');
+      $('emptyPlayer').classList.add('hidden');
+    }
+    function showYoutubePlayCard(song) {
+      $('youtubeFrame').src = '';
+      $('youtubeFrame').classList.add('hidden');
+      $('emptyPlayer').classList.remove('hidden');
+      $('emptyPlayer').innerHTML = `
+        <div class="max-w-md">
+          <p class="text-sm font-black text-red-500">YouTube 播放入口</p>
+          <h3 class="mt-2 text-3xl font-black text-slate-700">${escapeHtml(song.title)}</h3>
+          <p class="mt-2 text-slate-500">${escapeHtml(song.artist)}｜${escapeHtml(song.theme)}</p>
+          <a class="mt-5 inline-flex rounded-2xl bg-red-500 px-6 py-3 text-lg font-black text-white shadow hover:bg-red-400" href="${searchUrl('youtube', song)}" target="_blank">開啟 YouTube 播放</a>
+          <p class="mt-3 text-xs leading-5 text-slate-400">本機檔案開啟時，YouTube 搜尋播放清單常會阻擋內嵌，所以改用穩定播放入口。</p>
+        </div>
+      `;
+    }
+    function renderSongs() {
+      const grade = songData[currentGrade];
+      const keyword = $('songSearch').value.trim().toLowerCase();
+      $('gradeLabel').textContent = grade.label;
+      $('gradeTitle').textContent = grade.title;
+      const songs = grade.songs.filter(song => {
+        const text = `${song.title} ${song.artist} ${song.theme} ${song.use} ${song.keywords.join(' ')}`.toLowerCase();
+        const artistMatch = !currentArtist || song.artist === currentArtist;
+        const keywordMatch = !keyword || text.includes(keyword);
+        return artistMatch && keywordMatch;
+      });
+      $('songList').innerHTML = songs.map((song, index) => `
+        <article class="card-in rounded-3xl border-2 border-blue-100 bg-blue-50 p-5 shadow-sm">
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p class="text-sm font-black text-orange-600">${escapeHtml(song.theme)}</p>
+              <h3 class="mt-1 text-2xl font-black text-blue-900">${escapeHtml(song.title)}</h3>
+              <p class="mt-1 text-sm font-bold text-slate-500">演唱者：${escapeHtml(song.artist)}</p>
+            </div>
+            <button data-song-index="${index}" class="selectSongButton rounded-2xl bg-blue-600 px-4 py-2 font-black text-white shadow hover:bg-blue-500">選這首</button>
+          </div>
+          <p class="mt-3 leading-7">${escapeHtml(song.use)}</p>
+          <div class="mt-3 flex flex-wrap gap-2">${song.keywords.map(item => `<span class="rounded-full bg-white px-3 py-1 text-sm font-black text-slate-600 shadow-sm">${escapeHtml(item)}</span>`).join('')}</div>
+        </article>
+      `).join('') || '<p class="rounded-3xl bg-slate-50 p-5 font-black text-slate-500">目前沒有符合的歌曲。</p>';
+      document.querySelectorAll('.selectSongButton').forEach(button => {
+        button.addEventListener('click', () => selectSong(songs[Number(button.dataset.songIndex)]));
+      });
+    }
+    function selectSong(song) {
+      selectedSong = song;
+      $('playerTitle').textContent = song.title;
+      $('playerHint').textContent = `${song.theme}｜${song.use}`;
+      $('youtubeUrl').value = song.youtubeUrl || '';
+      if (song.youtubeUrl) {
+        const embed = youtubeEmbedUrl(song.youtubeUrl);
+        if (embed) showYoutubeEmbed(embed);
+        else showYoutubePlayCard(song);
+      } else {
+        showYoutubePlayCard(song);
+      }
+      $('selectedLinks').innerHTML = `
+        <a class="rounded-2xl bg-pink-500 px-4 py-3 text-center font-black text-white shadow hover:bg-pink-400" href="${searchUrl('apple', song)}" target="_blank">到 Apple Music 搜尋</a>
+        <a class="rounded-2xl bg-red-500 px-4 py-3 text-center font-black text-white shadow hover:bg-red-400" href="${searchUrl('youtube', song)}" target="_blank">換 YouTube 版本</a>
+      `;
+    }
+    function youtubeEmbedUrl(url) {
+      const value = url.trim();
+      const match = value.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([A-Za-z0-9_-]{6,})/);
+      return match ? `https://www.youtube.com/embed/${match[1]}` : '';
+    }
+
+    document.querySelectorAll('.gradeButton').forEach(button => {
+      button.addEventListener('click', () => {
+        currentGrade = button.dataset.grade;
+        $('songSearch').value = '';
+        currentArtist = '';
+        updateArtistButtons();
+        renderSongs();
+      });
+    });
+    function updateArtistButtons() {
+      document.querySelectorAll('.artistButton').forEach(button => {
+        const active = button.dataset.artist === currentArtist;
+        button.classList.toggle('bg-blue-600', active);
+        button.classList.toggle('text-white', active);
+        button.classList.toggle('bg-white', !active);
+        button.classList.toggle('text-blue-700', !active);
+      });
+    }
+    document.querySelectorAll('.artistButton').forEach(button => {
+      button.addEventListener('click', () => {
+        currentArtist = button.dataset.artist;
+        updateArtistButtons();
+        renderSongs();
+      });
+    });
+    $('songSearch').addEventListener('input', renderSongs);
+    $('loadYoutubeButton').addEventListener('click', () => {
+      const embed = youtubeEmbedUrl($('youtubeUrl').value);
+      if (!embed) {
+        alert('請貼上正確的 YouTube 影片連結。');
+        return;
+      }
+      showYoutubeEmbed(embed);
+    });
+
+    renderSongs();
+    selectSong(songData.low.songs[0]);
+  </script>
+</body>
+</html>

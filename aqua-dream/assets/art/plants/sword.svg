@@ -1,0 +1,27 @@
+<svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="sword-green" x1="0%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%" stop-color="#14532d"/>
+          <stop offset="60%" stop-color="#22c55e"/>
+          <stop offset="100%" stop-color="#86efac"/>
+        </linearGradient>
+      </defs>
+      <!-- Tall Sword-like Lanceolate Leaves -->
+      <!-- Center Main Blade -->
+      <path d="M100 230 Q92 120 95 30 Q100 10 105 30 Q108 120 100 230 Z" fill="url(#sword-green)"/>
+      <path d="M100 230 L100 20" stroke="#f0fdf4" stroke-width="2" opacity="0.6"/>
+      <!-- Inner Left Blade -->
+      <path d="M96 230 Q70 130 65 50 Q75 35 85 55 Q95 135 96 230 Z" fill="url(#sword-green)"/>
+      <path d="M96 230 Q78 135 73 45" stroke="#f0fdf4" stroke-width="1.8" opacity="0.6"/>
+      <!-- Inner Right Blade -->
+      <path d="M104 230 Q130 130 135 50 Q125 35 115 55 Q105 135 104 230 Z" fill="url(#sword-green)"/>
+      <path d="M104 230 Q122 135 127 45" stroke="#f0fdf4" stroke-width="1.8" opacity="0.6"/>
+      <!-- Outer Left Blade (Curving outwards) -->
+      <path d="M93 230 Q50 160 30 90 Q38 80 50 95 Q75 165 93 230 Z" fill="url(#sword-green)"/>
+      <path d="M93 230 Q58 165 38 85" stroke="#f0fdf4" stroke-width="1.5" opacity="0.5"/>
+      <!-- Outer Right Blade (Curving outwards) -->
+      <path d="M107 230 Q150 160 170 90 Q162 80 150 95 Q125 165 107 230 Z" fill="url(#sword-green)"/>
+      <path d="M107 230 Q142 165 162 85" stroke="#f0fdf4" stroke-width="1.5" opacity="0.5"/>
+      <!-- Roots -->
+      <path d="M90 230 Q80 238 70 240 M100 230 L100 240 M110 230 Q120 238 130 240" stroke="#ca8a04" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>

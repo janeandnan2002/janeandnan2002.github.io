@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>康軒教材資料庫｜東衛教學星球</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: #eff6ff; background-image: radial-gradient(circle at 10% 8%, rgba(253,224,71,.35) 0 110px, transparent 111px), radial-gradient(circle at 90% 12%, rgba(96,165,250,.22) 0 150px, transparent 151px); }
+    .material-card { animation: cardIn .35s ease-out both; }
+    @keyframes cardIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body class="min-h-screen text-slate-700">
+  <a href="index.html#top" class="fixed bottom-5 right-5 z-50 rounded-full bg-blue-600 px-5 py-4 text-lg font-black text-white shadow-xl hover:bg-blue-500">回首頁 ↑</a>
+  <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:py-12">
+    <header class="mb-8 rounded-3xl border-4 border-blue-300 bg-white p-6 shadow-xl shadow-blue-100 sm:p-8">
+      <div class="flex flex-wrap items-start justify-between gap-5">
+        <div>
+          <p class="font-black text-orange-500">東衛教學星球｜教材附件</p>
+          <h1 class="mt-2 text-4xl font-black text-blue-800 sm:text-5xl">康軒教材資料庫</h1>
+          <p class="mt-3 max-w-3xl text-lg leading-8 text-slate-600">已整理 115 學年度上學期 3～6 年級綜合活動、體育與社會教材。課本與教冊保留在雲端硬碟，網站提供快速索引，不把大型 PDF 打包進網頁。</p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <a href="index.html#lessonLab" class="rounded-2xl bg-blue-600 px-4 py-3 font-black text-white shadow hover:bg-blue-500">回課堂包</a>
+          <a href="index.html#weeklySchedule" class="rounded-2xl bg-cyan-500 px-4 py-3 font-black text-white shadow hover:bg-cyan-400">看本週課表</a>
+        </div>
+      </div>
+      <div class="mt-5 grid gap-3 sm:grid-cols-3">
+        <div class="rounded-2xl bg-blue-50 p-4"><p class="text-sm font-black text-blue-600">涵蓋年級</p><p class="mt-1 text-2xl font-black text-blue-900">3、4、5、6 年級</p></div>
+        <div class="rounded-2xl bg-emerald-50 p-4"><p class="text-sm font-black text-emerald-600">教材科目</p><p class="mt-1 text-2xl font-black text-emerald-900">綜合、體育、社會</p></div>
+        <div class="rounded-2xl bg-amber-50 p-4"><p class="text-sm font-black text-amber-600">資料位置</p><p class="mt-1 text-2xl font-black text-amber-900">Google Drive</p></div>
+      </div>
+    </header>
+
+    <section class="mb-6 rounded-3xl border-4 border-emerald-300 bg-white p-5 shadow-xl shadow-emerald-100 sm:p-7">
+      <div class="grid gap-4 md:grid-cols-4">
+        <label class="rounded-2xl bg-blue-50 p-4 font-black text-blue-900">科目<select id="subjectFilter" class="mt-2 w-full rounded-xl border-2 border-blue-200 bg-white px-3 py-2 font-black"><option value="all">全部科目</option><option value="綜合活動">綜合活動</option><option value="體育">體育</option><option value="社會">社會</option></select></label>
+        <label class="rounded-2xl bg-yellow-50 p-4 font-black text-yellow-900">年級<select id="gradeFilter" class="mt-2 w-full rounded-xl border-2 border-yellow-200 bg-white px-3 py-2 font-black"><option value="all">3～6 年級</option><option value="3">3 年級</option><option value="4">4 年級</option><option value="5">5 年級</option><option value="6">6 年級</option></select></label>
+        <label class="rounded-2xl bg-pink-50 p-4 font-black text-pink-900 md:col-span-2">搜尋教材名稱<input id="searchFilter" class="mt-2 w-full rounded-xl border-2 border-pink-200 bg-white px-3 py-2 font-black" placeholder="例如：5上、教冊、單元二、習作"></label>
+      </div>
+      <div class="mt-4 flex flex-wrap items-center justify-between gap-3">
+        <p id="resultLabel" class="font-black text-blue-800"></p>
+        <a href="https://drive.google.com/drive/folders/1N7r5r7ncljHjyqCsCB4QomiSyFzSr52C" target="_blank" rel="noopener" class="rounded-2xl bg-emerald-500 px-4 py-3 font-black text-white shadow hover:bg-emerald-400">開啟康軒教材總資料夾</a>
+      </div>
+    </section>
+
+    <section id="materialGrid" class="grid gap-5 lg:grid-cols-2"></section>
+
+    <section class="mt-8 rounded-3xl border-4 border-orange-300 bg-white p-5 shadow-xl shadow-orange-100 sm:p-7">
+      <h2 class="text-2xl font-black text-orange-800">使用提醒</h2>
+      <ul class="mt-3 space-y-2 leading-7 text-slate-600">
+        <li>• 「開啟雲端資料夾」會開啟你已下載並整理的科目資料夾；若 Drive 尚在同步，請稍候重新整理。</li>
+        <li>• 「本機開啟檔案」只在教師自己的 Windows 電腦有效，手機與公開網站請使用雲端資料夾。</li>
+        <li>• 教材檔案沒有複製到網站主體，避免網頁過大，也方便日後替換新版教材。</li>
+      </ul>
+    </section>
+  </main>
+
+  <script>
+    const driveFolders = {
+      root: 'https://drive.google.com/drive/folders/1N7r5r7ncljHjyqCsCB4QomiSyFzSr52C',
+      社會: 'https://drive.google.com/drive/folders/10S6I-O5XmtYV3Ob8KnCxitXtJ18VSugN',
+      體育: 'https://drive.google.com/drive/folders/1xW6barhWbU8o1vnQRFcJpnfpip6_NlEs',
+      綜合活動: 'https://drive.google.com/drive/folders/1ye3onaSmM2xdAqgVOAGkhyGkE8sB8xVc'
+    };
+    const localBase = 'C:/Users/janea/我的雲端硬碟/116/02_班級經營/康軒教材下載_115上';
+    const localUrl = (subject, file) => 'file:///' + [localBase, subject, file].join('/').split('/').map((part, i) => i === 0 ? part : encodeURIComponent(part)).join('/');
+    const materials = [];
+    const add = (subject, grade, kind, file) => materials.push({ subject, grade, kind, file });
+
+    for (const grade of [3, 4, 5, 6]) {
+      add('體育', grade, '課本（學生）', `00_國小健體${grade}上課本_全_(學).pdf`);
+      add('體育', grade, '教冊（教師）', `00_國小健體${grade}上教冊_全_(教).pdf`);
+      for (const unit of [1, 2, 3]) {
+        const unitName = `單元${['一', '二', '三'][unit - 1]}`;
+        const studentSuffix = [3, 5, 6].includes(grade) ? `_${unitName}(學).pdf` : `${unitName}(學).pdf`;
+        const teacherSuffix = [3, 5].includes(grade) ? `_${unitName}_(教).pdf` : `_${unitName}(教).pdf`;
+        add('綜合活動', grade, `單元${unit}課本（學生）`, `0${unit}_國小綜合${grade}上課本${studentSuffix}`);
+        add('綜合活動', grade, `單元${unit}教冊（教師）`, `0${unit}_國小綜合${grade}上教冊${teacherSuffix}`);
+      }
+      const dataSuffix = [3, 5].includes(grade) ? '_資料篇_(教).pdf' : '_資料篇(教).pdf';
+      add('綜合活動', grade, '資料篇教冊（教師）', `04_國小綜合${grade}上教冊${dataSuffix}`);
+      add('社會', grade, '課本（學生）', `01_社會${grade}上課本PDF.zip`);
+      add('社會', grade, '習作（學生）', `02_社會${grade}上習作PDF.zip`);
+      add('社會', grade, '教冊教學篇（教師）', `03_社會${grade}上教冊(教學篇).zip`);
+      add('社會', grade, '教冊資料篇（教師）', `04_社會${grade}上教冊(資料篇).zip`);
+    }
+
+    const esc = value => String(value).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+    const subjectClass = { 綜合活動: 'border-emerald-200 bg-emerald-50 text-emerald-900', 體育: 'border-blue-200 bg-blue-50 text-blue-900', 社會: 'border-orange-200 bg-orange-50 text-orange-900' };
+    function render() {
+      const subject = document.querySelector('#subjectFilter').value;
+      const grade = document.querySelector('#gradeFilter').value;
+      const query = document.querySelector('#searchFilter').value.trim().toLowerCase();
+      const filtered = materials.filter(item => (subject === 'all' || item.subject === subject) && (grade === 'all' || String(item.grade) === grade) && (!query || `${item.subject}${item.grade}${item.kind}${item.file}`.toLowerCase().includes(query)));
+      document.querySelector('#resultLabel').textContent = `目前顯示 ${filtered.length} 份教材索引（共 ${materials.length} 份）`;
+      document.querySelector('#materialGrid').innerHTML = filtered.map((item, index) => `
+        <article class="material-card rounded-3xl border-4 ${subjectClass[item.subject]} p-5 shadow-lg" style="animation-delay:${Math.min(index, 10) * 25}ms">
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div><p class="text-sm font-black opacity-70">${esc(item.subject)}｜${item.grade} 年級</p><h2 class="mt-1 text-xl font-black">${esc(item.kind)}</h2></div>
+            <span class="rounded-full bg-white/80 px-3 py-1 text-sm font-black">115 上</span>
+          </div>
+          <p class="mt-4 break-all rounded-2xl bg-white/75 p-3 text-sm font-bold leading-6">${esc(item.file)}</p>
+          <div class="mt-4 flex flex-wrap gap-2">
+            <a href="${localUrl(item.subject, item.file)}" target="_blank" rel="noopener" class="rounded-xl bg-white px-3 py-2 text-sm font-black shadow hover:bg-slate-50">本機開啟</a>
+            <a href="${driveFolders[item.subject]}" target="_blank" rel="noopener" class="rounded-xl bg-slate-800 px-3 py-2 text-sm font-black text-white shadow hover:bg-slate-700">開啟雲端資料夾</a>
+          </div>
+        </article>`).join('') || '<p class="rounded-3xl bg-white p-8 text-center font-black text-slate-500 lg:col-span-2">找不到符合條件的教材，請調整搜尋文字。</p>';
+    }
+    ['subjectFilter', 'gradeFilter', 'searchFilter'].forEach(id => document.getElementById(id).addEventListener(id === 'searchFilter' ? 'input' : 'change', render));
+    render();
+  </script>
+</body>
+</html>

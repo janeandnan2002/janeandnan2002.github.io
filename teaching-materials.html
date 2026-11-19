@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>教材整合資料庫｜東衛教學星球</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: #eff6ff; background-image: radial-gradient(circle at 8% 8%, rgba(253,224,71,.32) 0 120px, transparent 121px), radial-gradient(circle at 92% 12%, rgba(45,212,191,.18) 0 150px, transparent 151px); }
+    .material-card { animation: cardIn .28s ease-out both; }
+    @keyframes cardIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body class="min-h-screen text-slate-700">
+  <a href="index.html#top" class="fixed bottom-5 right-5 z-50 rounded-full bg-blue-600 px-5 py-4 text-lg font-black text-white shadow-xl shadow-blue-200 hover:bg-blue-500">回東衛首頁 ↑</a>
+  <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:py-12">
+    <header class="rounded-3xl border-4 border-cyan-300 bg-white p-6 shadow-xl shadow-cyan-100 sm:p-8">
+      <div class="flex flex-wrap items-start justify-between gap-5">
+        <div>
+          <p class="font-black text-emerald-600">東衛教學星球｜雲端教材整合</p>
+          <h1 class="mt-2 text-4xl font-black text-blue-800 sm:text-5xl">教材整合資料庫</h1>
+          <p class="mt-3 max-w-4xl text-lg leading-8 text-slate-600">集中連結美鳳資料庫中的實際教材。課本、教師手冊、教案、習作、學習單、題庫與試卷仍保留在 Google Drive，網站只保存索引與連結，方便手機和電腦使用。</p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <a href="index.html#lessonLab" class="rounded-2xl bg-blue-600 px-4 py-3 font-black text-white shadow hover:bg-blue-500">回課堂包</a>
+          <a href="knsh-library.html" class="rounded-2xl bg-violet-600 px-4 py-3 font-black text-white shadow hover:bg-violet-500">看逐課索引</a>
+        </div>
+      </div>
+      <div class="mt-5 grid gap-3 sm:grid-cols-3">
+        <div class="rounded-2xl bg-blue-50 p-4"><p class="text-sm font-black text-blue-600">資料來源</p><p class="mt-1 text-xl font-black text-blue-900">美鳳資料庫</p></div>
+        <div class="rounded-2xl bg-emerald-50 p-4"><p class="text-sm font-black text-emerald-600">目前整理</p><p class="mt-1 text-xl font-black text-emerald-900">國語、數學、社會、自然、健康、體育、綜合、閩南語</p></div>
+        <div class="rounded-2xl bg-amber-50 p-4"><p class="text-sm font-black text-amber-600">使用方式</p><p class="mt-1 text-xl font-black text-amber-900">按用途直接開啟雲端資料夾</p></div>
+      </div>
+    </header>
+
+    <section class="mt-6 rounded-3xl border-4 border-blue-200 bg-white p-5 shadow-xl shadow-blue-100 sm:p-7">
+      <div class="grid gap-4 md:grid-cols-4">
+        <label class="rounded-2xl bg-blue-50 p-4 font-black text-blue-900">科目<select id="subjectFilter" class="mt-2 w-full rounded-xl border-2 border-blue-200 bg-white px-3 py-2"></select></label>
+        <label class="rounded-2xl bg-yellow-50 p-4 font-black text-yellow-900">年級／學期<select id="termFilter" class="mt-2 w-full rounded-xl border-2 border-yellow-200 bg-white px-3 py-2"></select></label>
+        <label class="rounded-2xl bg-pink-50 p-4 font-black text-pink-900 md:col-span-2">搜尋資料<input id="searchFilter" class="mt-2 w-full rounded-xl border-2 border-pink-200 bg-white px-3 py-2" placeholder="例如：教案、學習單、題庫、五下、六上"></label>
+      </div>
+      <div class="mt-4 flex flex-wrap items-center justify-between gap-3">
+        <p id="resultLabel" class="font-black text-blue-800"></p>
+        <a href="https://drive.google.com/drive/folders/1FlwxcBzzyq1Bl2rDX3IbAULv4-EloIs4" target="_blank" rel="noopener" class="rounded-2xl bg-emerald-500 px-4 py-3 font-black text-white shadow hover:bg-emerald-400">開啟 115 Doris 教材總資料夾</a>
+      </div>
+    </section>
+
+    <section id="materialGrid" class="mt-6 grid gap-5 lg:grid-cols-2"></section>
+
+    <section class="mt-8 rounded-3xl border-4 border-orange-300 bg-white p-5 shadow-xl shadow-orange-100 sm:p-7">
+      <h2 class="text-2xl font-black text-orange-800">整合說明</h2>
+      <ul class="mt-3 space-y-2 leading-7 text-slate-600">
+        <li>• 南一國語的解壓資料包含五下、六上、六下課文、備課、資源與題庫資料夾。</li>
+        <li>• 數學區分五上、五下、六上、六下，並保留課課教案、隨堂練習、學習單與月考卷入口。</li>
+        <li>• 社會、自然、健康、體育與綜合活動連結至實際教材資料夾，不把大型檔案複製到網站。</li>
+        <li>• 若某個資料夾仍在 Drive 同步或權限尚未完成，按卡片上的「開啟雲端」即可直接檢查原始資料。</li>
+      </ul>
+    </section>
+  </main>
+
+  <script>
+    const materials = [
+      { subject: '國語文', term: '南一｜五下、六上、六下', kind: '完整解壓教材', detail: '課文、備課、資源與題庫；適合課堂包、作文教學與閱讀任務。', url: 'https://drive.google.com/drive/folders/1-1p-PEQJmCWqzEaYmo9GpixQOhSu42Ns', tags: '南一 國語 五下 六上 六下 課文 備課 資源 題庫' },
+      { subject: '國語文', term: '南一｜五下', kind: '學習單與作文教學資源', detail: '讀寫任務單、寫作加油站、寫作輕鬆練、主題作文與預習單。', url: 'https://drive.google.com/drive/folders/1ZmmDICJYcT4Lqc4HAzvoAX983VZg1oR6', tags: '南一 五下 學習單 作文 寫作 預習 讀寫' },
+      { subject: '國語文', term: '康軒｜115上 3～6年級', kind: '國語逐課教師手冊索引', detail: '東衛原有康軒 115 上逐課索引，包含教冊重點、單元題目與教材連結。', url: 'https://drive.google.com/drive/folders/1Og8bTTnij4Z5ZfpskcTUtylfJkTen3lo', tags: '康軒 115上 3年級 4年級 5年級 6年級 教師手冊' },
+      { subject: '數學', term: '康軒｜五上', kind: '教案、學習單與單元檢測', detail: '教學活動教案、活動練習單、學習單與單元學後檢測卷。', url: 'https://drive.google.com/drive/folders/1RiNlaeyaRZOuhjkRfWkp2ozta-6hNaJN', tags: '康軒 數學 五上 教案 學習單 檢測卷' },
+      { subject: '數學', term: '康軒｜五下', kind: '備課、課本、習作、題庫與學習單', detail: '五下數學課課練習、隨堂練習、學習單、教案與評量資料。', url: 'https://drive.google.com/drive/folders/1WtN2yO1wmPwyVhhwWk6gTaLOnYbth38M', tags: '康軒 數學 五下 備課 課本 習作 題庫 學習單 教案' },
+      { subject: '數學', term: '康軒｜六上', kind: '已找到的題庫與學習單', detail: '六上單元活動練習單、知新溫故、隨堂練習與評量。', url: 'https://drive.google.com/drive/folders/1e3GF_QU8ITRCRWAqlkd34srl_7Io-pnh', tags: '康軒 數學 六上 題庫 學習單 隨堂練習' },
+      { subject: '數學', term: '康軒｜六下', kind: '已找到的題庫與學習單', detail: '六下單元練習、期中考、期末考與學習單。', url: 'https://drive.google.com/drive/folders/1r6wABOSdoeY_UzhDs7D3oLo6m4C0YPyk', tags: '康軒 數學 六下 題庫 學習單 期中考 期末考' },
+      { subject: '數學', term: '康軒｜115上 3～6年級', kind: '數學逐單元教師手冊索引', detail: '東衛原有康軒 115 上數學逐單元索引，可由課堂包與遊戲庫帶入。', url: 'https://drive.google.com/drive/folders/1TLEikqzLcUYQYsl-OtClUo40mxp9bSnp', tags: '康軒 115上 數學 3年級 4年級 5年級 6年級 教師手冊' },
+      { subject: '社會', term: '康軒｜115上 3～6年級', kind: '課本、習作與教師手冊', detail: '課本、習作、教師手冊教學篇與資料篇的解壓教材。', url: 'https://drive.google.com/drive/folders/1MdBUZL4aFN3eFwZu9Ug575GF2sTWEHXh', tags: '康軒 社會 115上 3年級 4年級 5年級 6年級 課本 習作 教師手冊' },
+      { subject: '社會', term: '康軒｜115上 3～6年級', kind: '逐單元課程索引與題目', detail: '東衛原有 115 上社會逐單元索引；課堂包、搶答與配對翻牌可使用索引。', url: 'https://drive.google.com/drive/folders/1MWGNJQ72b8p3NXkw32WJQihBn9bySnjJ', tags: '康軒 社會 115上 單元 題目 搶答 配對' },
+      { subject: '自然', term: '康軒｜115上 3～6年級', kind: '課本、教冊與教學資源', detail: '自然科 3～6 年級 115 上教材總資料夾。', url: 'https://drive.google.com/drive/folders/1JvykozM8vxQBZzJPFRA94DsYcct1v63F', tags: '康軒 自然 115上 3年級 4年級 5年級 6年級 課本 教冊' },
+      { subject: '健康', term: '翰林｜五下、六上、六下', kind: '課課教案、學習單與月考卷', detail: '健康科課課教案、學習單與月考卷，適合課堂包附件與評量。', url: 'https://drive.google.com/drive/folders/1qw3CAnValn4NXmW-SFOyn9X8WpnXiDkw', tags: '翰林 健康 五下 六上 六下 教案 學習單 月考卷' },
+      { subject: '健康', term: '翰林｜五上', kind: '五上健康教材', detail: '五上健康課本、教冊與相關教材。', url: 'https://drive.google.com/drive/folders/11cqWNqOAlUiwSI4LAbzrbO5eG15NqvJo', tags: '翰林 健康 五上 課本 教冊' },
+      { subject: '體育', term: '康軒｜115上 3～6年級', kind: '體育課本與教師手冊', detail: '體育 3～6 年級解壓教材，課堂包可搭配分組遊戲與安全提醒。', url: 'https://drive.google.com/drive/folders/1JKPIqkpWagAYsXDAwfxvNKGnjQYG2FpP', tags: '康軒 體育 115上 3年級 4年級 5年級 6年級 課本 教師手冊' },
+      { subject: '綜合活動', term: '康軒｜五上', kind: '課本與教師手冊', detail: '五上三個單元課本、教冊與資料篇。', url: 'https://drive.google.com/drive/folders/1jL-A174q5uS2f6FbVxTh6Q4lwEI_QuLO', tags: '康軒 綜合活動 五上 課本 教師手冊 教冊' },
+      { subject: '綜合活動', term: '康軒｜115上 3～6年級', kind: '解壓教材總資料夾', detail: '東衛原有 3～6 年級綜合活動解壓教材。', url: 'https://drive.google.com/drive/folders/1jL-A174q5uS2f6FbVxTh6Q4lwEI_QuLO', tags: '康軒 綜合活動 115上 3年級 4年級 5年級 6年級' },
+      { subject: '閩南語', term: '康軒｜五下、六上、六下', kind: '閩南語教材與教師手冊', detail: '五下、六上、六下閩語教材；新詞頁可連到系列課程影片。', url: 'https://drive.google.com/drive/folders/1xLpW0GryASHBVn4m77b-gd0ZZaXbVhTq', tags: '康軒 閩南語 閩語 五下 六上 六下 教材 教師手冊' },
+      { subject: '閩南語', term: '康軒｜五上', kind: '五上鄉土教材', detail: '五上鄉土／閩南語教材資料夾。', url: 'https://drive.google.com/drive/folders/150yCVis9Ff7GpqomxpJAfJQ9H2mL8jTU', tags: '康軒 鄉土 閩南語 五上 教材' }
+    ];
+
+    const $ = id => document.getElementById(id);
+    const esc = value => { const node = document.createElement('div'); node.textContent = value ?? ''; return node.innerHTML; };
+    const colors = { 國語文: 'border-blue-200 bg-blue-50 text-blue-900', 數學: 'border-violet-200 bg-violet-50 text-violet-900', 社會: 'border-orange-200 bg-orange-50 text-orange-900', 自然: 'border-green-200 bg-green-50 text-green-900', 健康: 'border-pink-200 bg-pink-50 text-pink-900', 體育: 'border-cyan-200 bg-cyan-50 text-cyan-900', 綜合活動: 'border-emerald-200 bg-emerald-50 text-emerald-900', 閩南語: 'border-amber-200 bg-amber-50 text-amber-900' };
+    const subjects = ['全部科目', ...new Set(materials.map(item => item.subject))];
+    const terms = ['全部年級／學期', ...new Set(materials.map(item => item.term))];
+    $('subjectFilter').innerHTML = subjects.map(item => `<option>${esc(item)}</option>`).join('');
+    $('termFilter').innerHTML = terms.map(item => `<option>${esc(item)}</option>`).join('');
+    function render() {
+      const subject = $('subjectFilter').value;
+      const term = $('termFilter').value;
+      const query = $('searchFilter').value.trim().toLowerCase();
+      const filtered = materials.filter(item => (subject === '全部科目' || item.subject === subject) && (term === '全部年級／學期' || item.term === term) && (!query || `${item.subject} ${item.term} ${item.kind} ${item.detail} ${item.tags}`.toLowerCase().includes(query)));
+      $('resultLabel').textContent = `目前顯示 ${filtered.length} 個教材入口（共 ${materials.length} 個）`;
+      $('materialGrid').innerHTML = filtered.map((item, index) => `<article class="material-card rounded-3xl border-4 ${colors[item.subject] || 'border-slate-200 bg-slate-50 text-slate-900'} p-5 shadow-lg" style="animation-delay:${Math.min(index, 12) * 25}ms">
+        <div class="flex flex-wrap items-start justify-between gap-3"><div><p class="text-sm font-black opacity-70">${esc(item.subject)}</p><h2 class="mt-1 text-2xl font-black">${esc(item.kind)}</h2></div><span class="rounded-full bg-white/80 px-3 py-1 text-sm font-black">${esc(item.term)}</span></div>
+        <p class="mt-4 rounded-2xl bg-white/75 p-4 leading-7">${esc(item.detail)}</p>
+        <div class="mt-4 flex flex-wrap gap-2"><a href="${esc(item.url)}" target="_blank" rel="noopener" class="rounded-xl bg-slate-800 px-4 py-2 font-black text-white shadow hover:bg-slate-700">開啟雲端教材 ↗</a><a href="index.html#lessonLab" class="rounded-xl bg-white px-4 py-2 font-black shadow hover:bg-white/80">回課堂包</a></div>
+      </article>`).join('') || '<p class="rounded-3xl bg-white p-8 text-center font-black text-slate-500 lg:col-span-2">找不到符合條件的教材入口，請調整搜尋文字。</p>';
+    }
+    ['subjectFilter', 'termFilter', 'searchFilter'].forEach(id => $(id).addEventListener(id === 'searchFilter' ? 'input' : 'change', render));
+    render();
+  </script>
+</body>
+</html>

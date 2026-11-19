@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的作文小教室｜東衛教學星球</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root { --ink: #233876; --blue: #2563eb; --mint: #0f9f89; --paper: #f7fbff; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #eff6ff; color: #334155; font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif; }
+    button, input, textarea, select { font: inherit; }
+    button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 4px solid #fde68a; outline-offset: 2px; }
+    .card { border: 3px solid #dbeafe; border-radius: 24px; background: #fff; box-shadow: 0 12px 30px rgba(37, 99, 235, .09); }
+    .choice { transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+    .choice:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(37, 99, 235, .12); }
+    .choice.selected { border-color: #2563eb; background: #eff6ff; box-shadow: 0 0 0 4px rgba(37, 99, 235, .12); }
+    .step { min-width: 104px; }
+    .step.active { color: #1d4ed8; }
+    .step.done { color: #0f9f89; }
+    .step-dot { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 999px; background: #e2e8f0; color: #475569; font-weight: 900; }
+    .step.active .step-dot { background: #2563eb; color: white; }
+    .step.done .step-dot { background: #10b981; color: white; }
+    .progress-bar { height: 10px; border-radius: 999px; background: #e2e8f0; overflow: hidden; }
+    .progress-bar > span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #2563eb, #14b8a6); transition: width .25s ease; }
+    .tip { border-left: 6px solid #fbbf24; background: #fffbeb; }
+    .chip { border: 2px solid #cbd5e1; border-radius: 999px; background: white; padding: .55rem .8rem; font-weight: 800; color: #334155; cursor: pointer; }
+    .chip:hover, .chip.selected { border-color: #2563eb; background: #eff6ff; color: #1d4ed8; }
+    .sense-card { border: 2px solid #ccfbf1; border-radius: 18px; background: #f0fdfa; padding: 1rem; }
+    .print-only { display: none; }
+    @media print {
+      body { background: white; }
+      .no-print, #app { display: none !important; }
+      .print-only { display: block !important; }
+      .print-sheet { font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif; color: #111827; }
+      .print-sheet h1 { font-size: 24pt; }
+      .print-sheet h2 { margin-top: 18pt; border-bottom: 1px solid #64748b; padding-bottom: 4pt; }
+      .print-box { min-height: 42pt; border: 1px solid #94a3b8; padding: 8pt; white-space: pre-wrap; }
+    }
+  </style>
+</head>
+<body>
+  <a href="./" class="no-print fixed bottom-5 right-5 z-50 rounded-full bg-blue-600 px-5 py-4 text-lg font-black text-white shadow-xl hover:bg-blue-500">回東衛首頁 ↑</a>
+  <main id="app" class="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:py-10">
+    <header class="mb-6 flex flex-wrap items-start justify-between gap-4">
+      <div>
+        <a href="./" class="no-print text-sm font-black text-blue-600 hover:text-blue-800">← 回東衛教學星球</a>
+        <p class="mt-3 inline-flex rounded-full bg-yellow-300 px-4 py-2 font-black text-yellow-900">✏️ 東衛作文學習工具</p>
+        <h1 class="mt-3 text-4xl font-black text-blue-800 sm:text-6xl">我的作文小教室</h1>
+        <p class="mt-3 max-w-3xl text-lg font-medium leading-8 text-slate-600">不知道怎麼開始嗎？跟著作文小老師，一步一步把想法變成文章！</p>
+      </div>
+      <div class="no-print flex flex-wrap gap-2">
+        <button id="resumeButton" class="rounded-2xl bg-white px-4 py-3 font-black text-blue-700 shadow hover:bg-blue-50">繼續上次作文</button>
+        <button id="newButton" class="rounded-2xl bg-slate-700 px-4 py-3 font-black text-white shadow hover:bg-slate-600">開始新作文</button>
+        <button id="teacherModeButton" class="rounded-2xl bg-indigo-600 px-4 py-3 font-black text-white shadow hover:bg-indigo-500">👩‍🏫 老師模式</button>
+      </div>
+    </header>
+
+    <section class="card no-print mb-6 p-4 sm:p-6">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex flex-wrap items-center gap-2" id="stepper"></div>
+        <span id="saveStatus" class="text-sm font-bold text-slate-500" aria-live="polite">尚未開始</span>
+      </div>
+      <div class="progress-bar mt-4"><span id="progressFill" style="width:20%"></span></div>
+    </section>
+
+    <section id="coachTip" class="tip no-print mb-6 rounded-2xl p-4 text-lg font-bold leading-8" aria-live="polite"></section>
+    <section id="writingPlanImport" class="card no-print mb-6 hidden border-teal-200 bg-teal-50 p-4 sm:p-5" aria-live="polite">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div><p class="font-black text-teal-700">已準備好一份作文教學設計</p><p id="writingPlanImportText" class="mt-1 font-bold text-slate-700"></p></div>
+        <button id="useWritingPlanButton" type="button" class="rounded-xl bg-teal-600 px-4 py-3 font-black text-white shadow hover:bg-teal-500">帶入本課作文教學</button>
+      </div>
+      <p class="mt-2 text-sm leading-6 text-slate-600">帶入後會成為作文小教室的題目與寫作提示，學生仍需自行思考、取材與完成文章。</p>
+    </section>
+    <section id="stepContent" class="no-print"></section>
+
+    <section id="teacherPanel" class="card no-print fixed inset-4 z-50 hidden max-h-[calc(100vh-2rem)] overflow-y-auto border-indigo-200 bg-indigo-50 p-5 shadow-2xl sm:inset-8 sm:p-7" role="dialog" aria-modal="true" aria-labelledby="teacherPanelTitle">
+      <div class="flex flex-wrap items-start justify-between gap-3">
+        <div><p class="font-black text-indigo-600">教師備課模式</p><h2 id="teacherPanelTitle" class="text-2xl font-black text-indigo-900">把國語課文學習連到作文</h2></div>
+        <button id="closeTeacherButton" class="rounded-xl bg-white px-4 py-2 font-black text-indigo-700 shadow">關閉</button>
+      </div>
+      <p class="mt-3 text-sm font-medium leading-7 text-slate-600">目前東衛網站沒有國語逐課教材索引，因此以下欄位由老師帶入實際課本內容；資料會保存在本機瀏覽器，不會自動上傳。</p>
+      <div class="mt-4 rounded-2xl border-2 border-teal-200 bg-teal-50 p-4">
+        <p class="font-black text-teal-800">作文教學導入</p>
+        <p class="mt-1 text-sm leading-6 text-slate-600">先填寫本課作文教學設計，再一次帶入作文小教室的題目、課次與寫作線索。系統不會自行捏造課文內容。</p>
+        <div class="mt-3 grid gap-3 sm:grid-cols-2">
+          <input id="writingPlanLesson" class="rounded-xl border-2 border-teal-200 bg-white p-3" placeholder="國語第幾課／單元，例如：第五課" />
+          <select id="writingPlanGenre" class="rounded-xl border-2 border-teal-200 bg-white p-3"><option>記敘文</option><option>說明文</option><option>應用文</option><option>讀後感</option><option>景物描寫</option></select>
+          <input id="writingPlanTopic" class="rounded-xl border-2 border-teal-200 bg-white p-3 sm:col-span-2" placeholder="作文題目，例如：難忘的一天" />
+          <textarea id="writingPlanEvidence" rows="3" class="rounded-xl border-2 border-teal-200 bg-white p-3 sm:col-span-2" placeholder="從國語課本、習作整理出的好詞、句型、段落寫法或寫作線索"></textarea>
+        </div>
+        <button id="importWritingPlanButton" type="button" class="mt-3 rounded-xl bg-teal-600 px-4 py-3 font-black text-white shadow hover:bg-teal-500">導入到作文小教室</button>
+        <span id="writingPlanStatus" class="ml-2 text-sm font-bold text-teal-800" aria-live="polite"></span>
+      </div>
+      <div class="mt-4 grid gap-4 sm:grid-cols-2">
+        <label class="font-black text-slate-700">年級<select id="teacherGrade" class="mt-2 w-full rounded-xl border-2 border-indigo-200 bg-white p-3"><option>一年級</option><option>二年級</option><option>三年級</option><option>四年級</option><option>五年級</option><option>六年級</option></select></label>
+        <label class="font-black text-slate-700">課本版本<input id="teacherBook" class="mt-2 w-full rounded-xl border-2 border-indigo-200 p-3" placeholder="例如：康軒國語" /></label>
+        <label class="font-black text-slate-700">課次／單元<input id="teacherLesson" class="mt-2 w-full rounded-xl border-2 border-indigo-200 p-3" placeholder="例如：第 3 課" /></label>
+        <label class="font-black text-slate-700">課文名稱<input id="teacherTextTitle" class="mt-2 w-full rounded-xl border-2 border-indigo-200 p-3" placeholder="例如：特別的海" /></label>
+        <label class="font-black text-slate-700 sm:col-span-2">好詞、語詞、成語<textarea id="teacherWords" rows="3" class="mt-2 w-full rounded-xl border-2 border-indigo-200 p-3" placeholder="一行一個，或用頓號分隔"></textarea></label>
+        <label class="font-black text-slate-700">句型／連接詞<textarea id="teacherSentence" rows="3" class="mt-2 w-full rounded-xl border-2 border-indigo-200 p-3" placeholder="例如：雖然……但是……"></textarea></label>
+        <label class="font-black text-slate-700">寫作技巧／修辭<textarea id="teacherTechnique" rows="3" class="mt-2 w-full rounded-xl border-2 border-indigo-200 p-3" placeholder="例如：以五感描寫景物"></textarea></label>
+      </div>
+      <button id="saveTeacherButton" class="mt-4 rounded-2xl bg-indigo-600 px-5 py-3 font-black text-white shadow hover:bg-indigo-500">套用到作文小教室</button>
+    </section>
+
+    <div id="actions" class="no-print mt-6 mb-28 flex flex-wrap justify-between gap-3"></div>
+  </main>
+
+  <section id="printSheet" class="print-only print-sheet p-8"></section>
+
+  <script>
+    (() => {
+      const STORAGE_KEY = 'dongwei-writing-studio-v1';
+      const steps = ['選主題', '想一想', '說清楚', '寫成段落', '完成作文'];
+      const types = [
+        ['📖', '記敘文', '把一件發生過的事情，按照順序寫清楚。'],
+        ['👤', '寫人', '觀察人物的外表、個性與讓你感動的事情。'],
+        ['🏞️', '寫景', '用五感寫出景物的特色與你的感受。'],
+        ['🐶', '寫物', '介紹物品、動物或植物，也寫出你的情感。'],
+        ['💭', '想像作文', '把想像中的人物、地方或故事寫得有畫面。'],
+        ['❤️', '生活感想', '從生活經驗出發，寫出自己的想法與收穫。'],
+        ['🧠', '說理作文', '提出觀點，說明理由，並舉出生活中的例子。'],
+        ['🖼️', '看圖作文', '觀察圖中的人物、時間、地點與事件，再組織成文。']
+      ];
+      const topics = {
+        '一年級': ['我的一天', '我喜歡的動物', '校園裡的一角'],
+        '二年級': ['我的好朋友', '一次有趣的遊戲', '我最喜歡的地方'],
+        '三年級': ['一次難忘的旅行', '第一次自己完成一件事', '校園裡的美好時光'],
+        '四年級': ['一件讓我學會成長的事', '我想推薦的澎湖景點', '我和家人的一天'],
+        '五年級': ['一次難忘的挑戰', '我眼中的家鄉', '一個值得學習的人'],
+        '六年級': ['我想留下的一段回憶', '面對改變，我學會了什麼', '給未來自己的信']
+      };
+      const emotionWords = ['😊 開心', '😆 興奮', '😰 緊張', '😢 難過', '😡 生氣', '😳 驚訝', '😌 放鬆', '🥹 感動', '😨 害怕', '🤔 疑惑'];
+      const connectors = ['首先', '接著', '然後', '沒想到', '突然', '最後', '因此', '雖然', '但是'];
+      const tools = [
+        ['比喻', '像……一樣', '天空像一大片藍色的海洋。'],
+        ['擬人', '讓東西像人一樣', '太陽慢慢爬上山頭。'],
+        ['排比', '連續寫出三個相似的畫面', '我看見藍色的大海、白色的浪花、金色的沙灘。'],
+        ['成語', '選一個真正適合語意的成語', '先想清楚意思，再放進自己的句子。']
+      ];
+      const toolGroups = [
+        { title: '🎨 畫面變清楚', desc: '適合「看到、聞到、嚐到」時使用。', target: 'sense', items: [['加上顏色', '＿＿色的＿＿＿＿', '金黃色的陽光'], ['加上形狀', '像＿＿＿＿一樣＿＿＿＿', '像綢緞一樣柔軟'], ['加上程度', '＿＿＿＿地＿＿＿＿', '輕輕地飄過來'], ['加上味道', '帶著＿＿＿＿的味道', '帶著海水的鹹味']] },
+        { title: '🏃 動作更有順序', desc: '把事情寫得像影片一樣連續。', target: 'sense', items: [['動作串接', '先＿＿＿＿，接著＿＿＿＿', '先拿起筆，接著畫下第一筆'], ['突然變化', '沒想到，＿＿＿＿', '沒想到，天空突然下起雨'], ['動作放慢', '慢慢地＿＿＿＿', '浪花慢慢靠近腳邊'], ['聲音描寫', '＿＿＿＿的聲音傳過來', '嘩啦嘩啦的聲音傳過來']] },
+        { title: '💗 心情說出原因', desc: '不只寫「我很開心」，還要說明為什麼。', target: 'emotion', items: [['心情＋原因', '我感到＿＿＿＿，因為＿＿＿＿', '我感到期待，因為要和朋友一起出發'], ['心情變化', '原本＿＿＿＿，後來＿＿＿＿', '原本很緊張，後來慢慢放心'], ['身體反應', '我的＿＿＿＿不由得＿＿＿＿', '我的嘴角不由得上揚'], ['學到的事', '這件事讓我明白＿＿＿＿', '這件事讓我明白合作很重要']] },
+        { title: '🔗 句子接得順', desc: '點選後會放到目前的輸入框。', target: 'sense', items: [['開始', '首先，＿＿＿＿'], ['接續', '接著，＿＿＿＿'], ['轉折', '但是，＿＿＿＿'], ['結尾', '最後，＿＿＿＿']] }
+      ];
+      const defaults = () => ({ grade: '三年級', type: '記敘文', title: '', step: 0, brainstormIndex: 0, brainstorm: {}, senseIndex: 0, senses: { seen: '', heard: '', smelled: '', tasted: '', felt: '' }, emotion: '', emotionReason: '', sentenceInput: '', paragraphs: ['', '', '', ''], draft: '', checklist: {}, teacherApplied: false, teacher: { grade: '三年級', book: '', lesson: '', textTitle: '', words: '', sentence: '', technique: '' } });
+      let state = loadState();
+      const $ = (id) => document.getElementById(id);
+      const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+      const save = () => { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); $('saveStatus').textContent = '已儲存到本機'; };
+      function loadState() { try { return { ...defaults(), ...JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}') }; } catch { return defaults(); } }
+      function readWritingPlan() { try { return JSON.parse(localStorage.getItem('dongwei-writing-plan-v1') || 'null'); } catch { return null; } }
+      function applyWritingPlan(plan) {
+        if (!plan) return false;
+        const teacher = state.teacher || {};
+        state.grade = plan.grade || state.grade;
+        state.type = types.some(([, name]) => name === plan.genre) ? plan.genre : state.type;
+        if (plan.topic) state.title = plan.topic;
+        state.teacher = { ...teacher, grade: state.grade, book: plan.book || teacher.book || '國語課本與習作', lesson: plan.lesson || teacher.lesson, textTitle: plan.topic || teacher.textTitle, words: plan.evidence || teacher.words, technique: plan.genre || teacher.technique };
+        state.teacherApplied = Boolean(teacherSource());
+        save();
+        render();
+        return true;
+      }
+      function renderWritingPlanImport() {
+        const plan = readWritingPlan();
+        const panel = $('writingPlanImport');
+        if (!panel) return;
+        if (!plan) { panel.classList.add('hidden'); return; }
+        panel.classList.remove('hidden');
+        $('writingPlanImportText').textContent = `${plan.lesson || '未填課次'}｜${plan.genre || '未選文體'}｜${plan.topic || '未填題目'}`;
+      }
+      function newWriting() { state = defaults(); save(); render(); }
+      function setState(key, value) { state[key] = value; save(); render(); }
+      function gradeBand() { return state.grade === '一年級' || state.grade === '二年級' ? 'low' : (state.grade === '三年級' || state.grade === '四年級' ? 'middle' : 'high'); }
+      function paragraphCount() { return gradeBand() === 'low' ? 3 : (gradeBand() === 'middle' ? 4 : 5); }
+      const senseSteps = [
+        { key: 'seen', icon: '👀', name: '看到', question: '先找一個最清楚的畫面。', prompts: ['顏色、形狀、大小或遠近是什麼？', '哪個畫面最值得寫？'] },
+        { key: 'heard', icon: '👂', name: '聽到', question: '把聲音寫得像真的一樣。', prompts: ['是誰發出的聲音？', '聲音聽起來大聲、小聲、急促還是輕柔？'] },
+        { key: 'smelled', icon: '👃', name: '聞到', question: '用氣味讓讀者更靠近現場。', prompts: ['是香味、食物味、海風味，還是其他味道？', '這個味道讓你想到什麼？'] },
+        { key: 'tasted', icon: '👅', name: '嚐到', question: '如果有食物或飲料，可以寫味道；沒有也可以跳過。', prompts: ['酸、甜、鹹、苦或清爽嗎？', '吃下去之後有什麼感覺？'] },
+        { key: 'felt', icon: '✋', name: '身體感覺', question: '寫身體的感受，也可以寫心裡的感受。', prompts: ['冷、熱、濕、乾、軟、硬或風吹過來嗎？', '你的心情因此有什麼變化？'] }
+      ];
+      function brainstormTemplate() {
+        return ['時間：', '地點：', '人物：', '發生的事：'][state.brainstormIndex] || '我想到：';
+      }
+      function brainstormStarter() {
+        return ['那一天，當我來到＿＿＿＿時，', '一開始，＿＿＿＿正在＿＿＿＿，', '沒想到，＿＿＿＿突然＿＿＿＿，', '最後，我感到＿＿＿＿，因為＿＿＿＿。'][state.brainstormIndex] || '我想寫的是＿＿＿＿。';
+      }
+      function paragraphMaterial(index) {
+        const brain = Object.values(state.brainstorm || {}).filter(Boolean);
+        const sense = state.senses || {};
+        const material = [];
+        if (index === 0) material.push(state.brainstorm?.[0], sense.seen);
+        if (index === 1) material.push(state.brainstorm?.[1], state.brainstorm?.[2], sense.heard);
+        if (index === 2) material.push(state.brainstorm?.[2], sense.smelted || sense.smelled, sense.tasted);
+        if (index >= 3) material.push(state.brainstorm?.[3], sense.felt, state.emotion, state.emotionReason);
+        if (!material.filter(Boolean).length) material.push(...brain.slice(index, index + 2));
+        return material.filter(Boolean).join('\n');
+      }
+      function appendField(id, text) {
+        const input = $(id);
+        if (!input || !text) return;
+        input.value = [input.value.trim(), text].filter(Boolean).join(input.value.trim() ? '\n' : '');
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+      function questions() {
+        if (state.type === '寫人') return ['這個人是誰？你在哪裡認識他？', '他做過哪一件事讓你印象深刻？', '你注意到他的外表、動作或說話方式嗎？', '這件事讓你學到什麼？'];
+        if (state.type === '寫景') return ['什麼時候、在哪裡看見這個景色？', '你看見哪些顏色、形狀或遠近變化？', '你聽見、聞到或感覺到什麼？', '你最喜歡哪個畫面？為什麼？'];
+        if (state.type === '寫物') return ['你要介紹什麼？它有什麼外觀或特色？', '它怎麼來到你身邊？', '你和它一起發生過什麼事？', '你想對它說什麼？'];
+        if (state.type === '生活感想' || state.type === '說理作文') return ['你想談的事情或觀點是什麼？', '你為什麼這樣想？', '生活中有什麼例子可以支持你的想法？', '最後你希望讀者記住什麼？'];
+        if (state.type === '看圖作文') return ['圖中有哪些人物、時間與地點？', '事情一開始發生什麼？', '接著有什麼變化或意外？', '人物的心情如何？最後結果是什麼？'];
+        if (state.type === '想像作文') return ['你的故事發生在哪個特別的地方？', '主角遇到什麼任務或問題？', '過程中出現什麼意外？', '最後怎麼解決？你想表達什麼？'];
+        return ['什麼時候、在哪裡、有哪些人？為什麼會發生這件事？', '事情一開始怎麼發生？接著發生了什麼？', '有沒有意外、對話、動作或最精彩的地方？', '最後怎麼了？你的心情如何？你學到了什麼？'];
+      }
+      function teacherSource() {
+        const t = state.teacher || {};
+        return [t.book, t.lesson, t.textTitle].filter(Boolean).join('｜');
+      }
+      function renderTeacherSummary() {
+        const t = state.teacher || {};
+        if (!state.teacherApplied || !teacherSource()) return '';
+        const items = [
+          ['課文取材', t.textTitle || '尚未填寫'],
+          ['好詞語詞', t.words || '尚未填寫'],
+          ['句型連接', t.sentence || '尚未填寫'],
+          ['寫作技巧', t.technique || '尚未填寫']
+        ];
+        return `<div class="teacher-applied-summary mt-5 rounded-2xl border-2 border-emerald-200 bg-emerald-50 p-4"><p class="font-black text-emerald-800">✅ 已套用教師課文資料</p><p class="mt-1 text-sm font-bold text-slate-600">${esc(teacherSource())}｜${esc(t.grade || state.grade)}</p><div class="mt-3 grid gap-2 sm:grid-cols-2">${items.map(([label, value]) => `<div class="rounded-xl bg-white p-3"><p class="text-xs font-black text-emerald-700">${label}</p><p class="mt-1 whitespace-pre-wrap text-sm leading-6 text-slate-700">${esc(value)}</p></div>`).join('')}</div><p class="mt-3 text-sm font-bold text-emerald-800">這些內容會在後續的腦力激盪、五感描寫與作文地圖中作為寫作提示。</p></div>`;
+      }
+      function renderStepper() { $('stepper').innerHTML = steps.map((label, index) => `<button type="button" class="step flex items-center gap-2 ${index === state.step ? 'active' : ''} ${index < state.step ? 'done' : ''}" data-step="${index}" aria-label="前往第 ${index + 1} 步"><span class="step-dot">${index < state.step ? '✓' : index + 1}</span><span class="hidden font-black sm:inline">${label}</span></button>${index < steps.length - 1 ? '<span class="hidden text-slate-300 sm:inline">→</span>' : ''}`).join(''); }
+      function renderTip() { const tips = ['先選一個你有話想說的主題，不用一開始就寫完整文章。', '不用急著寫漂亮句子，先把想到的事情記下來就好！', '很好！現在把看到、聽到和感受到的內容說清楚。', '把作文地圖排好，再一段一段寫，文章會更有方向。', '完成後自己檢查一次，你就是自己的作文小老師！']; $('coachTip').textContent = `作文小老師：${tips[state.step]}`; }
+      function renderStepOne() {
+        $('stepContent').innerHTML = `<div class="grid gap-6 lg:grid-cols-[1.1fr_.9fr]"><section class="card p-5 sm:p-7"><p class="font-black text-blue-600">第 1 步／選主題</p><h2 class="mt-2 text-3xl font-black text-blue-900">先找到你想說的事</h2><div class="mt-5"><p class="mb-3 font-black">你的年級</p><div class="grid grid-cols-2 gap-3 sm:grid-cols-3">${['一年級','二年級','三年級','四年級','五年級','六年級'].map(g => `<button type="button" data-grade="${g}" class="choice rounded-2xl border-2 p-4 text-left font-black ${state.grade === g ? 'selected' : ''}">${g}<span class="mt-1 block text-xs font-medium text-slate-500">${g === '一年級' || g === '二年級' ? '看圖、造句、短文' : g === '三年級' || g === '四年級' ? '事件、人物、生活' : '感受、轉折、觀點'}</span></button>`).join('')}</div></div><div class="mt-6"><p class="mb-3 font-black">作文類型</p><div class="grid gap-3 sm:grid-cols-2">${types.map(([icon, name, desc]) => `<button type="button" data-type="${name}" class="choice rounded-2xl border-2 p-4 text-left ${state.type === name ? 'selected' : ''}"><span class="text-2xl">${icon}</span><span class="ml-2 font-black text-blue-900">${name}</span><span class="mt-1 block text-sm leading-6 text-slate-500">${desc}</span></button>`).join('')}</div></div></section><section class="card p-5 sm:p-7"><p class="font-black text-indigo-600">作文題目</p><h2 class="mt-2 text-2xl font-black text-indigo-900">你想寫什麼？</h2><label class="mt-5 block font-black">老師指定題目<input id="titleInput" class="mt-2 w-full rounded-2xl border-2 border-indigo-200 p-4 text-lg" value="${esc(state.title)}" placeholder="例如：難忘的一天" /></label><button id="randomTopicButton" class="mt-3 rounded-2xl bg-yellow-400 px-5 py-3 font-black text-yellow-950 shadow hover:bg-yellow-300">🎲 幫我想題目</button><div class="mt-6 rounded-2xl bg-indigo-50 p-4"><p class="font-black text-indigo-900">從國語課文學寫作</p><p class="mt-2 text-sm leading-7 text-slate-600">${teacherSource() ? `目前帶入：${esc(teacherSource())}` : '尚未帶入課本資料，老師可在右上角「老師模式」填寫。'}</p>${state.teacher?.words ? `<div class="mt-3 flex flex-wrap gap-2">${String(state.teacher.words).split(/[、,\n]/).filter(Boolean).slice(0, 12).map(w => `<button type="button" class="chip" data-insert="${esc(w.trim())}">${esc(w.trim())}</button>`).join('')}</div>` : ''}</div></section></div>`;
+      }
+      function renderStepTwo() { const qs = questions(); const q = qs[state.brainstormIndex] || qs[0]; const answer = state.brainstorm[state.brainstormIndex] || ''; $('stepContent').innerHTML = `<section class="card p-5 sm:p-8"><p class="font-black text-blue-600">第 2 步／想一想</p><h2 class="mt-2 text-3xl font-black text-blue-900">一題一卡片，把想法慢慢找出來</h2><div class="mt-5 grid gap-6 lg:grid-cols-[.8fr_1.2fr]"><div><div class="rounded-3xl bg-blue-50 p-6"><p class="text-sm font-black text-blue-600">問題 ${state.brainstormIndex + 1}／${qs.length}</p><p class="mt-3 text-2xl font-black leading-10 text-blue-900">${q}</p></div><div class="mt-4 flex flex-wrap gap-2">${qs.map((_, i) => `<button type="button" data-question-index="${i}" class="chip ${i === state.brainstormIndex ? 'selected' : ''}">第 ${i + 1} 題</button>`).join('')}</div></div><div><label class="font-black text-slate-700">把想到的關鍵字或句子寫下來<textarea id="brainstormInput" rows="8" class="mt-2 w-full rounded-2xl border-2 border-blue-200 p-4 text-lg leading-8" placeholder="先寫關鍵字也可以，不用一次寫得很完整。">${esc(answer)}</textarea></label><p class="mt-3 text-sm font-bold text-slate-500">提示：時間、地點、人物、動作、對話、心情，都可以先記下來。</p></div></div></section>`; }
+      function renderStepThree() { const sense = state.senses || {}; $('stepContent').innerHTML = `<div class="grid gap-6 lg:grid-cols-[1.1fr_.9fr]"><section class="card p-5 sm:p-7"><p class="font-black text-teal-600">第 3 步／說清楚</p><h2 class="mt-2 text-3xl font-black text-teal-900">🔍 用五感讓文章更生動</h2><div class="mt-5 grid gap-4 sm:grid-cols-2">${[['seen','👀 我看到……'],['heard','👂 我聽到……'],['smelled','👃 我聞到……'],['tasted','👅 我嚐到……'],['felt','✋ 我感覺……']].map(([key, label]) => `<label class="sense-card font-black">${label}<textarea data-sense="${key}" rows="3" class="mt-2 w-full rounded-xl border-2 border-teal-100 bg-white p-3 font-medium" placeholder="寫一個畫面或感受">${esc(sense[key])}</textarea></label>`).join('')}</div></section><section class="card p-5 sm:p-7"><p class="font-black text-pink-600">心情詞語庫</p><h2 class="mt-2 text-2xl font-black text-pink-900">你有什麼感覺？</h2><div class="mt-4 flex flex-wrap gap-2">${emotionWords.map(word => `<button type="button" data-emotion="${esc(word)}" class="chip ${state.emotion === word ? 'selected' : ''}">${esc(word)}</button>`).join('')}</div><label class="mt-5 block font-black">為什麼會有這種感覺？<textarea id="emotionReason" rows="4" class="mt-2 w-full rounded-xl border-2 border-pink-200 p-3" placeholder="不要只寫『我很開心』，試著說明原因。">${esc(state.emotionReason)}</textarea></label><div class="mt-6 rounded-2xl bg-yellow-50 p-4"><p class="font-black text-yellow-900">🧰 寫作魔法工具箱</p><div class="mt-3 space-y-3">${tools.map(([name, pattern, example]) => `<button type="button" data-tool="${esc(pattern)}" class="block w-full rounded-xl bg-white p-3 text-left shadow-sm hover:bg-yellow-100"><span class="font-black text-yellow-800">${name}：</span>${pattern}<span class="mt-1 block text-sm text-slate-500">例：${example}</span></button>`).join('')}</div><div class="mt-4 flex flex-wrap gap-2">${connectors.map(word => `<button type="button" data-connector="${word}" class="chip">${word}</button>`).join('')}</div></div></section></div>`; }
+      function renderStepFour() { const count = paragraphCount(); const paragraphs = Array.from({ length: count }, (_, i) => state.paragraphs[i] || ''); const labels = gradeBand() === 'low' ? ['開頭：什麼時候、在哪裡？', '經過：發生了什麼？', '結尾：結果與心情'] : (gradeBand() === 'middle' ? ['開頭：人物、時間、地點', '事情開始', '事情經過與精彩處', '結果與感想'] : ['開頭：背景與主題', '事情開始', '發展與轉折', '最精彩的地方', '結果、感受與想法']); $('stepContent').innerHTML = `<section class="card p-5 sm:p-8"><p class="font-black text-orange-600">第 4 步／寫成段落</p><h2 class="mt-2 text-3xl font-black text-orange-900">🗺️ 我的作文地圖</h2><p class="mt-3 leading-7 text-slate-600">先把每一段的重點排好，不必馬上寫完整。題目：<strong>${esc(state.title || '尚未設定')}</strong></p><div class="mt-5 space-y-4">${labels.map((label, i) => `<label class="block rounded-2xl border-2 border-orange-100 bg-orange-50 p-4 font-black text-orange-900"><span>${i + 1}. ${label}</span><textarea data-paragraph="${i}" rows="3" class="mt-2 w-full rounded-xl border-2 border-orange-100 bg-white p-3 font-medium text-slate-700" placeholder="這一段想寫的重點……">${esc(paragraphs[i])}</textarea></label>`).join('')}</div><div class="mt-6 grid gap-4 sm:grid-cols-2"><div class="rounded-2xl bg-blue-50 p-4"><p class="font-black text-blue-900">前面想到的內容</p><p class="mt-2 whitespace-pre-wrap text-sm leading-7">${esc(Object.values(state.brainstorm || {}).filter(Boolean).join(' → ') || '尚未填寫')}</p></div><div class="rounded-2xl bg-teal-50 p-4"><p class="font-black text-teal-900">五感與心情</p><p class="mt-2 whitespace-pre-wrap text-sm leading-7">${esc(Object.values(state.senses || {}).filter(Boolean).join('；') || state.emotionReason || '尚未填寫')}</p></div></div></section>`; }
+      function renderGuidedStepTwo() {
+        const qs = questions();
+        const index = Math.min(state.brainstormIndex, qs.length - 1);
+        const answer = state.brainstorm[index] || '';
+        const completed = qs.filter((_, i) => state.brainstorm[i]).length;
+        $('stepContent').innerHTML = `<section class="card p-5 sm:p-8"><p class="font-black text-blue-600">第 2 步／想一想</p><h2 class="mt-2 text-3xl font-black text-blue-900">一題一卡片，把想法慢慢找出來</h2><div class="mt-3 rounded-2xl bg-blue-50 p-4 text-sm font-bold leading-7 text-blue-900">先回答這一題就好。可以只寫關鍵字，回答完再換下一題；不用一次寫成完整作文。</div><div class="mt-5 grid gap-6 lg:grid-cols-[.9fr_1.1fr]"><div><div class="rounded-3xl bg-blue-50 p-6"><p class="text-sm font-black text-blue-600">已完成 ${completed}／${qs.length} 題</p><p class="mt-3 text-2xl font-black leading-10 text-blue-900">${qs[index]}</p><p class="mt-4 text-sm font-bold leading-7 text-slate-600">本題可以先找：時間、地點、人物、動作、對話或心情。</p></div><div class="mt-4 flex flex-wrap gap-2">${qs.map((_, i) => `<button type="button" data-question-index="${i}" class="chip ${i === index ? 'selected' : ''}">${state.brainstorm[i] ? '✓ ' : ''}第 ${i + 1} 題</button>`).join('')}</div></div><div><label class="font-black text-slate-700">我的關鍵字或句子<textarea id="brainstormInput" rows="7" class="mt-2 w-full rounded-2xl border-2 border-blue-200 p-4 text-lg leading-8" placeholder="先寫幾個關鍵字也可以。">${esc(answer)}</textarea></label><div class="mt-3 flex flex-wrap gap-2"><button type="button" data-brainstorm-template="${esc(brainstormTemplate())}" class="rounded-xl bg-white px-4 py-2 text-sm font-black text-blue-700 shadow ring-2 ring-blue-100">填入提示欄</button><button type="button" data-brainstorm-starter="${esc(brainstormStarter())}" class="rounded-xl bg-blue-100 px-4 py-2 text-sm font-black text-blue-800">帶入句子開頭</button></div><p class="mt-3 text-sm font-bold text-slate-500">提示文字只是起點，請換成自己的經驗與說法。</p></div></div></section>`;
+      }
+      function renderGuidedStepThree() {
+        const sense = state.senses || {};
+        const index = Math.min(state.senseIndex || 0, senseSteps.length - 1);
+        const current = senseSteps[index];
+        const completed = senseSteps.filter(({ key }) => sense[key]).length;
+        const previous = Object.values(state.brainstorm || {}).filter(Boolean).join('；');
+        const starter = `我${current.name}到＿＿＿＿，那是＿＿＿＿的感覺。`;
+        $('stepContent').innerHTML = `<section class="card p-5 sm:p-8"><p class="font-black text-teal-600">第 3 步／說清楚</p><h2 class="mt-2 text-3xl font-black text-teal-900">🔍 五感小卡：一次完成一種感覺</h2><div class="mt-3 rounded-2xl bg-teal-50 p-4 text-sm font-bold leading-7 text-teal-900">先觀察，再寫一小句。沒有符合的感官可以跳過，重點是選最能讓讀者看見、聽見或感受到的細節。</div><div class="mt-5 grid gap-6 lg:grid-cols-[1.1fr_.9fr]"><section><div class="flex flex-wrap gap-2">${senseSteps.map(({ key, icon, name }, i) => `<button type="button" data-sense-index="${i}" class="chip ${i === index ? 'selected' : ''}">${sense[key] ? '✓ ' : ''}${icon} ${name}</button>`).join('')}</div><div class="mt-5 rounded-3xl border-2 border-teal-100 bg-white p-5"><p class="text-sm font-black text-teal-600">已完成 ${completed}／${senseSteps.length} 張小卡</p><h3 class="mt-2 text-2xl font-black text-teal-900">${current.icon} 我${current.name}到……</h3><p class="mt-2 font-bold text-slate-600">${current.question}</p><ul class="mt-3 list-disc space-y-1 pl-5 text-sm leading-6 text-slate-600">${current.prompts.map(prompt => `<li>${prompt}</li>`).join('')}</ul><textarea id="senseInput-${index}" data-sense="${current.key}" rows="5" class="mt-4 w-full rounded-2xl border-2 border-teal-200 p-4 text-lg leading-8" placeholder="先寫關鍵字，再補成一句話">${esc(sense[current.key])}</textarea><div class="mt-3 flex flex-wrap gap-2"><button type="button" data-sense-starter="${esc(starter)}" class="rounded-xl bg-teal-100 px-4 py-2 text-sm font-black text-teal-800">帶入句子開頭</button><button type="button" data-sense-clear="${current.key}" class="rounded-xl bg-slate-100 px-4 py-2 text-sm font-black text-slate-700">清除此卡</button></div></div><div class="mt-4 flex flex-wrap justify-between gap-2"><button type="button" id="prevSenseButton" class="rounded-2xl bg-white px-5 py-3 font-black text-teal-700 shadow ring-2 ring-teal-100" ${index === 0 ? 'disabled' : ''}>← 上一張</button><button type="button" id="nextSenseButton" class="rounded-2xl bg-teal-600 px-5 py-3 font-black text-white shadow hover:bg-teal-500">${index === senseSteps.length - 1 ? '完成五感，下一步 ➜' : '下一張小卡 ➜'}</button></div></section><aside class="space-y-4"><div class="rounded-2xl bg-blue-50 p-4"><p class="font-black text-blue-900">前面想到的內容</p><p class="mt-2 whitespace-pre-wrap text-sm leading-7 text-slate-700">${esc(previous || '還沒有內容，回第 2 步補充也可以。')}</p></div><div class="rounded-2xl bg-pink-50 p-4"><p class="font-black text-pink-900">最後，再加上心情</p><div class="mt-3 flex flex-wrap gap-2">${emotionWords.map(word => `<button type="button" data-emotion="${esc(word)}" class="chip ${state.emotion === word ? 'selected' : ''}">${esc(word)}</button>`).join('')}</div><textarea id="emotionReason" rows="4" class="mt-4 w-full rounded-xl border-2 border-pink-200 p-3" placeholder="我有這種感覺，是因為……">${esc(state.emotionReason)}</textarea></div></aside></div></section>`;
+      }
+      function renderGuidedStepFour() {
+        const count = paragraphCount();
+        const paragraphs = Array.from({ length: count }, (_, i) => state.paragraphs[i] || '');
+        const labels = gradeBand() === 'low' ? ['開頭：什麼時候、在哪裡？', '經過：發生了什麼？', '結尾：結果與心情'] : (gradeBand() === 'middle' ? ['開頭：人物、時間、地點', '事情開始', '事情經過與精彩處', '結果與感想'] : ['開頭：背景與主題', '事情開始', '發展與轉折', '最精彩的地方', '結果、感受與想法']);
+        $('stepContent').innerHTML = `<section class="card p-5 sm:p-8"><p class="font-black text-orange-600">第 4 步／寫成段落</p><h2 class="mt-2 text-3xl font-black text-orange-900">🗺️ 我的作文地圖</h2><p class="mt-3 leading-7 text-slate-600">把前面回答的內容分配到適合的段落。每一格都可以先按「帶入前面素材」，再修改成自己的句子。題目：<strong>${esc(state.title || '尚未設定')}</strong></p><div class="mt-5 space-y-4">${labels.map((label, i) => { const material = paragraphMaterial(i); return `<label class="block rounded-2xl border-2 border-orange-100 bg-orange-50 p-4 font-black text-orange-900"><span>${i + 1}. ${label}</span><textarea data-paragraph="${i}" rows="4" class="mt-2 w-full rounded-xl border-2 border-orange-100 bg-white p-3 font-medium text-slate-700" placeholder="這一段想寫的重點……">${esc(paragraphs[i])}</textarea>${material ? `<button type="button" data-fill-paragraph="${i}" class="mt-3 rounded-xl bg-orange-100 px-4 py-2 text-sm font-black text-orange-800">↳ 帶入前面素材</button><p class="mt-2 whitespace-pre-wrap text-xs font-medium leading-6 text-slate-500">可帶入：${esc(material)}</p>` : '<p class="mt-2 text-xs font-medium text-slate-500">先回第 2、3 步補充素材，這裡就能帶入。</p>'}</label>`; }).join('')}</div></section>`;
+      }
+      function renderStepTwo() { renderGuidedStepTwo(); }
+      function renderStepThree() { renderGuidedStepThree(); }
+      function renderStepFour() { renderGuidedStepFour(); }
+      function renderToolbox() {
+        return `<div class="mt-6 rounded-2xl bg-yellow-50 p-4"><div class="flex flex-wrap items-center justify-between gap-2"><p class="font-black text-yellow-900">🧰 寫作魔法工具箱</p><span class="text-xs font-bold text-yellow-800">點一下，帶入目前輸入框</span></div><div class="mt-3 space-y-3">${toolGroups.map((group, groupIndex) => `<details class="rounded-xl bg-white p-3 shadow-sm" ${groupIndex === 0 ? 'open' : ''}><summary class="cursor-pointer font-black text-yellow-900">${group.title}<span class="ml-2 text-xs font-medium text-slate-500">${group.desc}</span></summary><div class="mt-3 grid gap-2 sm:grid-cols-2">${group.items.map(item => `<button type="button" data-writing-tool="${esc(item[1])}" data-writing-target="${group.target}" class="rounded-xl border border-yellow-100 bg-yellow-50 p-3 text-left hover:bg-yellow-100"><span class="block font-black text-yellow-800">${esc(item[0])}</span><span class="mt-1 block font-bold text-slate-700">${esc(item[1])}</span><span class="mt-1 block text-xs leading-5 text-slate-500">例：${esc(item[2] || '點擊後再把底線換成自己的內容')}</span></button>`).join('')}</div></details>`).join('')}</div></div>`;
+      }
+      function renderGuidedStepThreeRich() { renderGuidedStepThree(); const aside = $('stepContent').querySelector('aside'); if (aside) aside.insertAdjacentHTML('beforeend', renderToolbox()); }
+      function renderStepThree() { renderGuidedStepThreeRich(); }
+      function renderStepFive() { const checks = [['title','我有寫題目'],['sections','我有分段'],['who','我有寫清楚人物、時間、地點'],['order','我有按照事情順序寫'],['feeling','我有寫自己的心情'],['vivid','我至少使用一個生動的句子'],['typo','我有檢查錯字'],['punctuation','我有使用標點符號'],['ending','我有寫結尾']]; $('stepContent').innerHTML = `<div class="grid gap-6 lg:grid-cols-[1fr_.8fr]"><section class="card p-5 sm:p-8"><p class="font-black text-violet-600">第 5 步／完成作文</p><h2 class="mt-2 text-3xl font-black text-violet-900">✍️ 開始寫作文</h2><div class="mt-4 flex flex-wrap gap-2 text-sm font-black"><span class="chip">題目：${esc(state.title || '尚未設定')}</span><span class="chip">字數：${String(state.draft || '').replace(/\s/g, '').length}</span><span class="chip">段落：${String(state.draft || '').split(/\n\s*\n/).filter(Boolean).length}</span></div><label class="mt-5 block font-black">正式作文<textarea id="draftInput" rows="20" class="mt-2 w-full rounded-2xl border-2 border-violet-200 p-4 text-lg leading-9" placeholder="看著右側作文地圖，一段一段寫下來。">${esc(state.draft)}</textarea></label><div class="mt-3 flex flex-wrap gap-2"><button id="fullscreenButton" class="rounded-xl bg-violet-600 px-4 py-2 font-black text-white">全螢幕寫作</button><button id="clearDraftButton" class="rounded-xl bg-slate-200 px-4 py-2 font-black text-slate-700">清除草稿</button></div></section><section class="card p-5 sm:p-7"><p class="font-black text-emerald-600">🔎 我是作文小老師</p><h2 class="mt-2 text-2xl font-black text-emerald-900">完成前自己檢查</h2><div class="mt-4 space-y-3">${checks.map(([key, label]) => `<label class="flex cursor-pointer items-start gap-3 rounded-xl bg-emerald-50 p-3 font-bold"><input type="checkbox" data-check="${key}" class="mt-1 h-5 w-5 accent-emerald-600" ${state.checklist[key] ? 'checked' : ''}><span>${label}</span></label>`).join('')}</div><div class="mt-5 rounded-2xl bg-yellow-50 p-4 text-center font-black text-yellow-900">${checks.every(([key]) => state.checklist[key]) ? '🎉 太棒了！你的作文完成囉！' : '再檢查幾項，就能更安心地交出作文。'}</div></section></div>`; }
+      function renderActions() { const back = state.step > 0 ? '<button id="backButton" class="rounded-2xl bg-white px-5 py-3 font-black text-blue-700 shadow ring-2 ring-blue-100">← 上一步</button>' : '<span></span>'; const next = state.step < steps.length - 1 ? '<button id="nextButton" class="rounded-2xl bg-blue-600 px-6 py-3 font-black text-white shadow-lg hover:bg-blue-500">下一步 ➜</button>' : '<div class="flex flex-wrap gap-2"><button id="printWorksheetButton" class="rounded-2xl bg-purple-600 px-5 py-3 font-black text-white shadow hover:bg-purple-500">🖨️ 列印作文學習單</button><button id="printDraftButton" class="rounded-2xl bg-emerald-600 px-5 py-3 font-black text-white shadow hover:bg-emerald-500">🖨️ 列印完成作文</button></div>'; $('actions').innerHTML = `${back}${next}`; }
+      function render() { renderStepper(); renderTip(); renderWritingPlanImport(); [renderStepOne, renderStepTwo, renderStepThree, renderStepFour, renderStepFive][state.step](); if (state.step === 0 && state.teacherApplied) $('stepContent').insertAdjacentHTML('beforeend', renderTeacherSummary()); renderActions(); fillTeacherPanel(); $('progressFill').style.width = `${(state.step + 1) * 20}%`; }
+      function fillTeacherPanel() { const t = state.teacher || {}; ['Grade','Book','Lesson','TextTitle','Words','Sentence','Technique'].forEach(key => { const el = $('teacher' + key); if (el) el.value = t[key.charAt(0).toLowerCase() + key.slice(1)] || ''; }); const plan = readWritingPlan(); if (plan) { if ($('writingPlanLesson')) $('writingPlanLesson').value = plan.lesson || ''; if ($('writingPlanGenre')) $('writingPlanGenre').value = plan.genre || '記敘文'; if ($('writingPlanTopic')) $('writingPlanTopic').value = plan.topic || ''; if ($('writingPlanEvidence')) $('writingPlanEvidence').value = plan.evidence || ''; } }
+      function print(kind) { const teacher = teacherSource(); const map = Object.values(state.paragraphs || {}).filter(Boolean).join('\n\n'); const worksheet = `<h1>我的作文學習單</h1><p>年級：${esc(state.grade)}　類型：${esc(state.type)}　題目：${esc(state.title || '　')}</p>${teacher ? `<p>課文連結：${esc(teacher)}</p>` : ''}<h2>腦力激盪</h2><div class="print-box">${esc(Object.values(state.brainstorm || {}).filter(Boolean).join('\n'))}</div><h2>五感與心情</h2><div class="print-box">${esc(Object.entries(state.senses || {}).filter(([, v]) => v).map(([k, v]) => `${k}：${v}`).join('\n'))}\n心情：${esc(state.emotion)}\n原因：${esc(state.emotionReason)}</div><h2>作文地圖</h2><div class="print-box">${esc(map)}</div>`; const essay = `<h1>${esc(state.title || '我的作文')}</h1><p>年級：${esc(state.grade)}　類型：${esc(state.type)}</p><div class="print-box">${esc(state.draft || '尚未完成作文。')}</div>`; $('printSheet').innerHTML = kind === 'essay' ? essay : worksheet; document.body.classList.add('printing'); window.print(); setTimeout(() => document.body.classList.remove('printing'), 500); }
+      document.addEventListener('click', (event) => {
+        const target = event.target.closest('button');
+        if (!target) return;
+        if (target.dataset.writingTool) { const inputId = target.dataset.writingTarget === 'emotion' ? 'emotionReason' : `senseInput-${state.senseIndex || 0}`; appendField(inputId, target.dataset.writingTool); return; }
+        if (target.dataset.brainstormTemplate) { appendField('brainstormInput', target.dataset.brainstormTemplate); return; }
+        if (target.dataset.brainstormStarter) { appendField('brainstormInput', target.dataset.brainstormStarter); return; }
+        if (target.dataset.senseIndex !== undefined) { state.senseIndex = Number(target.dataset.senseIndex); save(); render(); return; }
+        if (target.dataset.senseStarter) { appendField(`senseInput-${state.senseIndex}`, target.dataset.senseStarter); return; }
+        if (target.dataset.senseClear) { state.senses[target.dataset.senseClear] = ''; save(); render(); return; }
+        if (target.dataset.fillParagraph !== undefined) { const index = Number(target.dataset.fillParagraph); const material = paragraphMaterial(index); if (material) state.paragraphs[index] = [state.paragraphs[index], material].filter(Boolean).join(state.paragraphs[index] ? '\n' : ''); save(); render(); return; }
+        if (target.id === 'prevSenseButton') { state.senseIndex = Math.max(0, (state.senseIndex || 0) - 1); save(); render(); return; }
+        if (target.id === 'nextSenseButton') { state.senseIndex = Math.min(senseSteps.length - 1, (state.senseIndex || 0) + 1); if ((state.senseIndex || 0) === senseSteps.length - 1 && state.senses[senseSteps[senseSteps.length - 1].key]) state.step = Math.min(4, state.step + 1); save(); render(); return; }
+      });
+      document.addEventListener('click', (event) => {
+        const applyButton = event.target.closest('#saveTeacherButton');
+        if (!applyButton) return;
+        const teacher = state.teacher || {};
+        [['Grade', 'grade'], ['Book', 'book'], ['Lesson', 'lesson'], ['TextTitle', 'textTitle'], ['Words', 'words'], ['Sentence', 'sentence'], ['Technique', 'technique']].forEach(([id, key]) => {
+          teacher[key] = $(`teacher${id}`)?.value.trim() || '';
+        });
+        state.teacher = teacher;
+        if (teacher.grade) state.grade = teacher.grade;
+        if (teacher.textTitle) state.title = teacher.textTitle;
+        state.teacherApplied = Boolean(teacherSource());
+        save();
+        $('teacherPanel').classList.add('hidden');
+        render();
+      });
+      document.addEventListener('click', (event) => {
+        const target = event.target.closest('button');
+        if (!target) return;
+        if (target.id === 'useWritingPlanButton') {
+          const plan = readWritingPlan();
+          if (applyWritingPlan(plan)) {
+            localStorage.removeItem('dongwei-writing-plan-v1');
+            render();
+          }
+          return;
+        }
+        if (target.id === 'importWritingPlanButton') {
+          const plan = {
+            grade: $('teacherGrade')?.value || state.grade,
+            book: $('teacherBook')?.value.trim() || '國語課本與習作',
+            lesson: $('writingPlanLesson')?.value.trim(),
+            genre: $('writingPlanGenre')?.value,
+            topic: $('writingPlanTopic')?.value.trim(),
+            evidence: $('writingPlanEvidence')?.value.trim(),
+          };
+          if (!plan.lesson && !plan.topic && !plan.evidence) {
+            $('writingPlanStatus').textContent = '請先填寫課次、題目或課本線索';
+            return;
+          }
+          localStorage.setItem('dongwei-writing-plan-v1', JSON.stringify(plan));
+          applyWritingPlan(plan);
+          $('teacherPanel').classList.add('hidden');
+          $('writingPlanStatus').textContent = '已導入作文小教室';
+          render();
+        }
+      });
+      document.addEventListener('click', (event) => { const target = event.target.closest('button'); if (!target) return; if (target.dataset.step) { state.step = Number(target.dataset.step); save(); render(); return; } if (target.dataset.grade) { state.grade = target.dataset.grade; save(); render(); return; } if (target.dataset.type) { state.type = target.dataset.type; state.brainstormIndex = 0; save(); render(); return; } if (target.dataset.questionIndex) { state.brainstormIndex = Number(target.dataset.questionIndex); save(); render(); return; } if (target.dataset.emotion) { state.emotion = target.dataset.emotion; save(); render(); return; } if (target.dataset.insert) { state.title = state.title || ''; const input = $('titleInput'); if (input) { input.value = `${input.value}${input.value ? '、' : ''}${target.dataset.insert}`; state.title = input.value; save(); } return; } if (target.dataset.connector || target.dataset.tool) { const input = $('brainstormInput') || $('draftInput'); if (input) { input.value += `${input.value && !input.value.endsWith('\n') ? ' ' : ''}${target.dataset.connector || target.dataset.tool}`; input.dispatchEvent(new Event('input', { bubbles: true })); } return; } if (target.id === 'randomTopicButton') { const list = topics[state.grade] || topics['三年級']; state.title = list[Math.floor(Math.random() * list.length)]; save(); render(); return; } if (target.id === 'nextButton') { state.step = Math.min(4, state.step + 1); save(); render(); return; } if (target.id === 'backButton') { state.step = Math.max(0, state.step - 1); save(); render(); return; } if (target.id === 'newButton') { if (window.confirm('要開始新的作文嗎？目前草稿會清除。')) newWriting(); return; } if (target.id === 'resumeButton') { state = loadState(); render(); return; } if (target.id === 'teacherModeButton') { $('teacherPanel').classList.remove('hidden'); return; } if (target.id === 'closeTeacherButton') { $('teacherPanel').classList.add('hidden'); return; } if (target.id === 'saveTeacherButton') { const t = state.teacher || {}; [['Grade','grade'],['Book','book'],['Lesson','lesson'],['TextTitle','textTitle'],['Words','words'],['Sentence','sentence'],['Technique','technique']].forEach(([id, key]) => { t[key] = $('teacher' + id).value; }); state.teacher = t; save(); $('teacherPanel').classList.add('hidden'); render(); return; } if (target.id === 'clearDraftButton') { state.draft = ''; save(); render(); return; } if (target.id === 'fullscreenButton') { const area = $('draftInput'); if (area?.requestFullscreen) area.requestFullscreen(); return; } if (target.id === 'printWorksheetButton') { print('worksheet'); return; } if (target.id === 'printDraftButton') { print('essay'); return; } });
+      document.addEventListener('input', (event) => { const el = event.target; if (el.id === 'titleInput') state.title = el.value; else if (el.id === 'brainstormInput') state.brainstorm[state.brainstormIndex] = el.value; else if (el.id === 'emotionReason') state.emotionReason = el.value; else if (el.dataset.sense) state.senses[el.dataset.sense] = el.value; else if (el.dataset.paragraph !== undefined) state.paragraphs[Number(el.dataset.paragraph)] = el.value; else if (el.id === 'draftInput') state.draft = el.value; else return; save(); });
+      document.addEventListener('change', (event) => { const el = event.target; if (el.dataset.check) { state.checklist[el.dataset.check] = el.checked; save(); render(); } });
+      render();
+    })();
+  </script>
+</body>
+</html>

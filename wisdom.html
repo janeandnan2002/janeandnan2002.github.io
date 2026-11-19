@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="東衛教學星球每日智慧語：靜思語、成語故事與兒童哲學影片的課堂引導工具。">
+  <title>每日智慧語｜東衛教學星球</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #f0fdf4;
+      background-image:
+        radial-gradient(circle at 8% 8%, rgba(253, 224, 71, .34) 0 110px, transparent 111px),
+        radial-gradient(circle at 94% 14%, rgba(45, 212, 191, .22) 0 155px, transparent 156px);
+    }
+    .category-button[aria-pressed="true"] {
+      background: #047857;
+      color: #fff;
+      border-color: #047857;
+      box-shadow: 0 10px 22px rgba(4, 120, 87, .20);
+    }
+    .wisdom-card { animation: cardIn .32s ease-out both; }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media print {
+      body { background: #fff; }
+      .no-print, #videoPanel, #librarySection { display: none !important; }
+      .print-card { border: 2px solid #94a3b8 !important; box-shadow: none !important; }
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-700">
+  <main id="top" class="mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:py-10">
+    <header class="mb-6 flex flex-wrap items-start justify-between gap-4">
+      <div>
+        <a href="index.html#top" class="no-print inline-flex rounded-full bg-white px-4 py-2 font-black text-emerald-700 shadow hover:bg-emerald-50">返回東衛教學星球</a>
+        <p class="mt-5 text-sm font-black tracking-wide text-emerald-700">品格、語文與思考練習</p>
+        <h1 class="mt-1 text-4xl font-black text-blue-900 sm:text-5xl">每日智慧語</h1>
+        <p class="mt-3 max-w-3xl text-base leading-7 text-slate-600">抽一句好話或一個問題，搭配繁體中文 YouTube 影片，用「讀、看、想、做」帶完一段 5～10 分鐘的晨光或課堂活動。</p>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <span id="todayLabel" class="rounded-2xl bg-white px-4 py-3 font-black text-emerald-800 shadow"></span>
+        <button type="button" onclick="window.print()" class="no-print rounded-2xl bg-slate-700 px-5 py-3 font-black text-white shadow hover:bg-slate-600">列印智慧小卡</button>
+      </div>
+    </header>
+
+    <section class="no-print mb-6 rounded-3xl border-4 border-emerald-200 bg-white p-4 shadow-lg sm:p-5">
+      <div class="flex flex-wrap items-center gap-3" role="group" aria-label="智慧語類別">
+        <span class="mr-1 font-black text-slate-700">選擇類別</span>
+        <button type="button" class="category-button rounded-full border-2 border-emerald-200 bg-emerald-50 px-5 py-2 font-black text-emerald-800" data-category="全部" aria-pressed="true">全部</button>
+        <button type="button" class="category-button rounded-full border-2 border-emerald-200 bg-white px-5 py-2 font-black text-emerald-800" data-category="靜思語" aria-pressed="false">靜思語</button>
+        <button type="button" class="category-button rounded-full border-2 border-emerald-200 bg-white px-5 py-2 font-black text-emerald-800" data-category="成語" aria-pressed="false">成語</button>
+        <button type="button" class="category-button rounded-full border-2 border-emerald-200 bg-white px-5 py-2 font-black text-emerald-800" data-category="哲學思考" aria-pressed="false">哲學思考</button>
+        <button id="drawButton" type="button" class="ml-auto rounded-2xl bg-yellow-400 px-6 py-3 text-lg font-black text-yellow-950 shadow-lg shadow-yellow-100 transition hover:-translate-y-1 hover:bg-yellow-300">換一句／換一題</button>
+      </div>
+    </section>
+
+    <section class="grid gap-6 lg:grid-cols-[1.05fr_.95fr]">
+      <article id="wisdomCard" class="print-card wisdom-card rounded-3xl border-4 border-emerald-300 bg-white p-6 shadow-xl shadow-emerald-100 sm:p-8" aria-live="polite">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <span id="categoryBadge" class="rounded-full bg-emerald-100 px-4 py-2 text-sm font-black text-emerald-800"></span>
+          <span id="gradeBadge" class="text-sm font-bold text-slate-500"></span>
+        </div>
+        <p id="itemTitle" class="mt-6 text-lg font-black text-amber-700"></p>
+        <blockquote id="itemPhrase" class="mt-2 border-l-8 border-yellow-300 pl-5 text-3xl font-black leading-tight text-blue-900 sm:text-4xl"></blockquote>
+
+        <div class="mt-7 grid gap-4 sm:grid-cols-2">
+          <div class="rounded-2xl bg-blue-50 p-5">
+            <p class="text-sm font-black text-blue-700">白話說一說</p>
+            <p id="itemMeaning" class="mt-2 leading-7 text-slate-700"></p>
+          </div>
+          <div class="rounded-2xl bg-yellow-50 p-5">
+            <p class="text-sm font-black text-yellow-700">老師問一問</p>
+            <p id="itemPrompt" class="mt-2 leading-7 text-slate-700"></p>
+          </div>
+        </div>
+
+        <div class="mt-4 rounded-2xl border-2 border-emerald-200 bg-emerald-50 p-5">
+          <p class="text-sm font-black text-emerald-700">今天做一做</p>
+          <p id="itemAction" class="mt-2 text-lg font-bold leading-7 text-emerald-950"></p>
+        </div>
+
+        <div class="mt-5 flex flex-wrap items-center gap-3 text-sm">
+          <span id="sourceLabel" class="font-bold text-slate-500"></span>
+          <a id="sourceLink" class="no-print font-black text-blue-700 underline decoration-2 underline-offset-4 hover:text-blue-500" target="_blank" rel="noopener noreferrer">查看文字來源</a>
+        </div>
+      </article>
+
+      <aside id="videoPanel" class="rounded-3xl border-4 border-red-200 bg-white p-5 shadow-xl shadow-red-100 sm:p-6">
+        <p class="text-sm font-black text-red-600">繁體中文影片</p>
+        <h2 id="videoTitle" class="mt-1 text-2xl font-black leading-tight text-blue-900"></h2>
+        <div class="mt-4 overflow-hidden rounded-2xl bg-slate-900 shadow-inner">
+          <iframe id="youtubeFrame" class="aspect-video w-full" title="每日智慧語 YouTube 影片播放區" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+        <p class="mt-3 text-sm leading-6 text-slate-500">影片由原頻道提供；若嵌入播放受限，可按下方按鈕直接到 YouTube 觀看。</p>
+        <a id="youtubeLink" class="mt-4 inline-flex w-full justify-center rounded-2xl bg-red-600 px-5 py-3 font-black text-white shadow hover:bg-red-500" target="_blank" rel="noopener noreferrer">到 YouTube 觀看 ↗</a>
+      </aside>
+    </section>
+
+    <section class="mt-7 rounded-3xl border-4 border-blue-200 bg-white p-5 shadow-lg sm:p-7">
+      <p class="text-sm font-black text-blue-600">5～10 分鐘直接帶</p>
+      <h2 class="mt-1 text-3xl font-black text-blue-900">讀、看、想、做</h2>
+      <div class="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div class="rounded-2xl bg-blue-50 p-5"><span class="text-2xl font-black text-blue-700">1 讀</span><p class="mt-2 leading-7">全班一起讀一次，再請一位學生用自己的話解釋。</p></div>
+        <div class="rounded-2xl bg-red-50 p-5"><span class="text-2xl font-black text-red-700">2 看</span><p class="mt-2 leading-7">觀看影片前先預測內容，觀看後找出最重要的一幕。</p></div>
+        <div class="rounded-2xl bg-yellow-50 p-5"><span class="text-2xl font-black text-yellow-700">3 想</span><p class="mt-2 leading-7">兩人互說想法，回答畫面中的老師提問，接受不同答案。</p></div>
+        <div class="rounded-2xl bg-emerald-50 p-5"><span class="text-2xl font-black text-emerald-700">4 做</span><p class="mt-2 leading-7">完成今天的小行動，下次上課用一句話分享實踐結果。</p></div>
+      </div>
+    </section>
+
+    <section id="librarySection" class="no-print mt-7 rounded-3xl border-4 border-amber-200 bg-white p-5 shadow-lg sm:p-7">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p class="text-sm font-black text-amber-700">備課選句庫</p>
+          <h2 class="mt-1 text-3xl font-black text-blue-900">挑一句指定使用</h2>
+        </div>
+        <label class="w-full max-w-sm font-black text-slate-700">搜尋
+          <input id="searchInput" type="search" class="mt-2 w-full rounded-2xl border-2 border-amber-200 bg-amber-50 px-4 py-3 outline-none focus:border-amber-400" placeholder="輸入成語、品格或問題">
+        </label>
+      </div>
+      <div id="wisdomLibrary" class="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3"></div>
+      <p id="emptyMessage" class="mt-5 hidden rounded-2xl bg-slate-100 p-5 text-center font-bold text-slate-500">找不到符合的內容，請換一個關鍵字。</p>
+    </section>
+  </main>
+
+  <script>
+    const wisdomItems = [
+      {
+        category: '靜思語', title: '三好練習', phrase: '口說好話，心想好意，身行好事。',
+        meaning: '好的想法、說法和做法要連在一起，讓善意真的被別人感受到。',
+        prompt: '今天在班上，哪一句話能讓同學更有力量？',
+        action: '主動對一位同學說一句具體的鼓勵，再做一件不求回報的好事。', grades: '1～6 年級',
+        videoId: '5T-irO57rUQ', videoTitle: '【靜思歌選】口說好話｜慈濟慈善基金會',
+        source: '慈濟全球資訊網・靜思語', sourceUrl: 'https://www.tzuchi.org.tw/community?Itemid=200&catid=38%3Ataiwan&id=413&option=com_content&view=article'
+      },
+      {
+        category: '靜思語', title: '把心願化成行動', phrase: '有心就有福，有願就有力。',
+        meaning: '願意開始、願意持續，心願就能一步一步成為真正的力量。',
+        prompt: '你最近最想完成的一件事是什麼？第一小步可以怎麼做？',
+        action: '寫下一個今天就做得到的小步驟，放學前檢查自己有沒有完成。', grades: '3～6 年級',
+        videoId: 'Xkf6AxaPWFk', videoTitle: '【一句好話靜思語】我的靜思語故事｜大愛電視',
+        source: '慈濟全球資訊網・靜思語教學', sourceUrl: 'https://www.tzuchi.org.tw/community?Itemid=377&catid=151%3A2010-01-16-00-43-56&id=41597%3A79B6F41436137D8D48257B100023AB24&option=com_content&view=article'
+      },
+      {
+        category: '靜思語', title: '說話前先想一想', phrase: '一句不恰當的話，就會使人產生排斥的心。',
+        meaning: '同一件事可以有很多說法；先顧及別人的感受，溝通才走得下去。',
+        prompt: '如果不同意同學，你可以怎麼說，既表達自己又不傷人？',
+        action: '今天把一句命令或責怪，改說成「我感到……，我希望……」。', grades: '3～6 年級',
+        videoId: 'TVo3vOQAvpk', videoTitle: '靜思語教學：引導孩子控制情緒｜大愛電視',
+        source: '慈濟全球資訊網・溝通與同理心', sourceUrl: 'https://www.tzuchi.org.tw/community?Itemid=420&catid=177%3A2016-08-30-03-30-53&id=112152%3A328E15101D6811ED9F1329A87BC7D41F&option=com_content&view=article'
+      },
+      {
+        category: '靜思語', title: '把握現在', phrase: '世上有兩件事不能等：行善與孝順。',
+        meaning: '關心與感謝不要只放在心裡，現在能做的，就用行動表達。',
+        prompt: '家人或同學最近為你做了什麼？你想怎麼回應？',
+        action: '今天完成一件貼心小事，並親口說出「謝謝你」。', grades: '1～6 年級',
+        videoId: 'EqH_Rh5Xbyo', videoTitle: '靜思語教學：學期末感恩圓緣｜大愛新聞',
+        source: '慈濟全球資訊網・靜思語', sourceUrl: 'https://www.tzuchi.org.tw/community?Itemid=200&catid=38%3Ataiwan&id=413&option=com_content&view=article'
+      },
+      {
+        category: '成語', title: '杯弓蛇影', phrase: '不要讓猜想變成自己嚇自己。',
+        meaning: '把倒映的弓影誤認為蛇，比喻因疑神疑鬼而感到害怕。',
+        prompt: '遇到不確定的事情時，可以先做什麼再下結論？',
+        action: '說出一個「先查證、再判斷」的方法。', grades: '3～6 年級',
+        videoId: '5ZF0MrvcdE8', videoTitle: '聽聽成語故事 01【杯弓蛇影】｜momokids 親子台',
+        source: '教育部《成語典》・杯弓蛇影', sourceUrl: 'https://dict.idioms.moe.edu.tw/idiomView.jsp?ID=48'
+      },
+      {
+        category: '成語', title: '愚公移山', phrase: '困難很大，也能從一小步開始。',
+        meaning: '比喻做事有毅力、不怕困難，只要持續努力，就有完成的可能。',
+        prompt: '你曾經把哪一件很難的事拆成小步驟完成？',
+        action: '挑一個困難任務，寫下今天要完成的第一步。', grades: '1～6 年級',
+        videoId: '5fAgSKmzNJA', videoTitle: '聽聽成語故事 02【愚公移山】｜momokids 親子台',
+        source: '教育部《成語典》・愚公移山', sourceUrl: 'https://dict.idioms.moe.edu.tw/search.jsp?md=web&la=0&powerMode=0&keyword=%E6%84%9A%E5%85%AC%E7%A7%BB%E5%B1%B1'
+      },
+      {
+        category: '成語', title: '井底之蛙', phrase: '看見的範圍，不一定就是全部。',
+        meaning: '比喻見識狹小的人，把自己知道的一小部分當成全部。',
+        prompt: '兩個人看到同一件事，為什麼可能有不同想法？',
+        action: '今天遇到不同意見時，先問對方：「你為什麼這樣想？」', grades: '3～6 年級',
+        videoId: '6FAsSwJikuU', videoTitle: '聽聽成語故事 03【井底之蛙】｜momokids 親子台',
+        source: '教育部《成語典》・井底之蛙', sourceUrl: 'https://dict.idioms.moe.edu.tw/search.jsp?md=web&la=0&powerMode=0&keyword=%E4%BA%95%E5%BA%95%E4%B9%8B%E8%9B%99'
+      },
+      {
+        category: '成語', title: '對牛彈琴', phrase: '說話要先想一想對方聽不聽得懂。',
+        meaning: '比喻對不懂道理的人講道理，也提醒表達要配合對象。',
+        prompt: '要把一件難事說給低年級同學聽，你會怎麼改變說法？',
+        action: '把一個難詞改成簡單句，再舉一個生活例子。', grades: '3～6 年級',
+        videoId: 'ei3jNCcy9Ck', videoTitle: '聽聽成語故事 04【對牛彈琴】｜momokids 親子台',
+        source: '教育部《成語典》・對牛彈琴', sourceUrl: 'https://dict.idioms.moe.edu.tw/search.jsp?md=web&la=0&powerMode=0&keyword=%E5%B0%8D%E7%89%9B%E5%BD%88%E7%90%B4'
+      },
+      {
+        category: '成語', title: '聞雞起舞', phrase: '把握時間，用行動鍛鍊自己。',
+        meaning: '聽到雞叫就起床練劍，比喻把握時機、勤奮努力。',
+        prompt: '你想培養什麼能力？每天可以練習幾分鐘？',
+        action: '訂一個七天小練習，今天完成第一次。', grades: '3～6 年級',
+        videoId: 'k9NGlOtf3Dk', videoTitle: '聽聽成語故事 09【聞雞起舞】｜momokids 親子台',
+        source: '教育部《成語典》・聞雞起舞', sourceUrl: 'https://dict.idioms.moe.edu.tw/search.jsp?md=web&la=0&powerMode=0&keyword=%E8%81%9E%E9%9B%9E%E8%B5%B7%E8%88%9E'
+      },
+      {
+        category: '成語', title: '塞翁失馬', phrase: '眼前的好壞，不一定就是最後的結果。',
+        meaning: '比喻禍福可能互相轉變，遇事不必立刻過度高興或難過。',
+        prompt: '有沒有一件當時不順利、後來卻讓你學到東西的事？',
+        action: '把今天的一個挫折，改寫成「我可以從中學會……」。', grades: '4～6 年級',
+        videoId: 'oDvVPct0hMY', videoTitle: '聽聽成語故事 13【塞翁失馬】｜momokids 親子台',
+        source: '教育部《成語典》・塞翁失馬', sourceUrl: 'https://dict.idioms.moe.edu.tw/search.jsp?md=web&la=0&powerMode=0&keyword=%E5%A1%9E%E7%BF%81%E5%A4%B1%E9%A6%AC'
+      },
+      {
+        category: '成語', title: '自相矛盾', phrase: '前後說法要能互相配合。',
+        meaning: '比喻言語或行為前後不一致，自己和自己衝突。',
+        prompt: '怎麼檢查自己的說法有沒有前後矛盾？',
+        action: '說一組互相矛盾的句子，再把它改成合理的說法。', grades: '3～6 年級',
+        videoId: 'XD1HCaQXhs4', videoTitle: '聽聽成語故事 14【自相矛盾】｜momokids 親子台',
+        source: '教育部《成語典》・自相矛盾', sourceUrl: 'https://dict.idioms.moe.edu.tw/search.jsp?md=web&la=0&powerMode=0&keyword=%E8%87%AA%E7%9B%B8%E7%9F%9B%E7%9B%BE'
+      },
+      {
+        category: '哲學思考', title: '思考重要嗎？', phrase: '思考不只是找答案，也是學會問更好的問題。',
+        meaning: '願意追問理由、聽不同觀點，我們就能看見原本忽略的地方。',
+        prompt: '如果大家都說同一個答案，它就一定是對的嗎？為什麼？',
+        action: '今天至少問一次「你怎麼知道？」並仔細聽完對方的理由。', grades: '3～6 年級',
+        videoId: 'ZtdBCsblgE4', videoTitle: '【熊星人和地球人】思考重要嗎？｜小公視',
+        source: '小公視・兒童哲學節目', sourceUrl: 'https://www.youtube.com/@PTSKIDS'
+      },
+      {
+        category: '哲學思考', title: '自由與不自由', phrase: '自由是能選擇，也要願意承擔選擇的結果。',
+        meaning: '自由不等於完全不受限制；我的選擇不能任意傷害別人。',
+        prompt: '如果一個人的自由妨礙了別人，還算自由嗎？',
+        action: '舉一個班級規則，說明它限制了什麼，又保護了什麼。', grades: '4～6 年級',
+        videoId: '1Xx_TdPOTlw', videoTitle: '【熊星人和地球人】自由與不自由｜小公視',
+        source: '小公視・兒童哲學節目', sourceUrl: 'https://www.youtube.com/@PTSKIDS'
+      },
+      {
+        category: '哲學思考', title: '什麼是快樂？', phrase: '快樂不只一種，也不一定能用多少來比較。',
+        meaning: '每個人感到快樂的原因不同，理解自己的需要，也尊重別人的選擇。',
+        prompt: '得到想要的東西和幫助別人，哪一種快樂比較久？',
+        action: '記下今天三個小小的快樂，找出其中一個不需要花錢的。', grades: '2～6 年級',
+        videoId: 'IkHtvBBfKN4', videoTitle: '思考洞窟：什麼是快樂？｜小公視',
+        source: '小公視・兒童哲學節目', sourceUrl: 'https://www.youtube.com/@PTSKIDS'
+      },
+      {
+        category: '哲學思考', title: '什麼才是真正的公平？', phrase: '每個人都一樣，和每個人都得到需要的，不一定相同。',
+        meaning: '公平有不同理解；討論時要說明標準，也要想想每個人的處境。',
+        prompt: '三個人身高不同，卻都拿一樣高的椅子，這樣公平嗎？',
+        action: '找一條班級規則，分別從「一樣」和「需要」兩個角度檢查。', grades: '3～6 年級',
+        videoId: 'JP0eoElx_78', videoTitle: '思考洞窟：什麼才是真正的公平？｜小公視',
+        source: '小公視・兒童哲學節目', sourceUrl: 'https://www.youtube.com/@PTSKIDS'
+      }
+    ];
+
+    const $ = id => document.getElementById(id);
+    let activeCategory = '全部';
+    let currentIndex = -1;
+
+    function filteredItems() {
+      return activeCategory === '全部' ? wisdomItems : wisdomItems.filter(item => item.category === activeCategory);
+    }
+
+    function todaySeed() {
+      const formatter = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit' });
+      return formatter.format(new Date()).split('-').join('').split('').reduce((sum, digit) => sum + Number(digit), 0);
+    }
+
+    function renderItem(item) {
+      currentIndex = wisdomItems.indexOf(item);
+      $('categoryBadge').textContent = item.category;
+      $('gradeBadge').textContent = `適合 ${item.grades}`;
+      $('itemTitle').textContent = item.title;
+      $('itemPhrase').textContent = item.phrase;
+      $('itemMeaning').textContent = item.meaning;
+      $('itemPrompt').textContent = item.prompt;
+      $('itemAction').textContent = item.action;
+      $('sourceLabel').textContent = `文字來源：${item.source}`;
+      $('sourceLink').href = item.sourceUrl;
+      $('videoTitle').textContent = item.videoTitle;
+      $('youtubeFrame').src = `https://www.youtube-nocookie.com/embed/${item.videoId}?rel=0`;
+      $('youtubeLink').href = `https://www.youtube.com/watch?v=${item.videoId}`;
+      $('wisdomCard').classList.remove('wisdom-card');
+      void $('wisdomCard').offsetWidth;
+      $('wisdomCard').classList.add('wisdom-card');
+    }
+
+    function drawItem(useDailySeed = false) {
+      const items = filteredItems();
+      if (!items.length) return;
+      let next;
+      if (useDailySeed) {
+        next = items[todaySeed() % items.length];
+      } else if (items.length === 1) {
+        next = items[0];
+      } else {
+        do { next = items[Math.floor(Math.random() * items.length)]; } while (wisdomItems.indexOf(next) === currentIndex);
+      }
+      renderItem(next);
+    }
+
+    function renderLibrary() {
+      const keyword = $('searchInput').value.trim().toLocaleLowerCase('zh-Hant');
+      const matches = filteredItems().filter(item => `${item.title} ${item.phrase} ${item.meaning} ${item.prompt}`.toLocaleLowerCase('zh-Hant').includes(keyword));
+      $('wisdomLibrary').innerHTML = matches.map(item => {
+        const index = wisdomItems.indexOf(item);
+        return `<button type="button" data-item-index="${index}" class="rounded-2xl border-2 border-amber-100 bg-amber-50 p-5 text-left transition hover:-translate-y-1 hover:border-amber-300 hover:shadow-lg">
+          <span class="text-sm font-black text-amber-700">${item.category}｜${item.title}</span>
+          <span class="mt-2 block text-lg font-black leading-7 text-blue-900">${item.phrase}</span>
+          <span class="mt-3 inline-flex font-black text-emerald-700">選這一句並播放影片 →</span>
+        </button>`;
+      }).join('');
+      $('emptyMessage').classList.toggle('hidden', matches.length > 0);
+    }
+
+    document.querySelectorAll('.category-button').forEach(button => {
+      button.addEventListener('click', () => {
+        activeCategory = button.dataset.category;
+        document.querySelectorAll('.category-button').forEach(candidate => candidate.setAttribute('aria-pressed', String(candidate === button)));
+        renderLibrary();
+        drawItem(true);
+      });
+    });
+
+    $('drawButton').addEventListener('click', () => drawItem(false));
+    $('searchInput').addEventListener('input', renderLibrary);
+    $('wisdomLibrary').addEventListener('click', event => {
+      const button = event.target.closest('[data-item-index]');
+      if (!button) return;
+      renderItem(wisdomItems[Number(button.dataset.itemIndex)]);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    $('todayLabel').textContent = new Intl.DateTimeFormat('zh-TW', { timeZone: 'Asia/Taipei', month: 'long', day: 'numeric', weekday: 'short' }).format(new Date());
+    renderLibrary();
+    drawItem(true);
+  </script>
+</body>
+</html>

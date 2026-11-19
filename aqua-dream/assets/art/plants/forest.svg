@@ -1,0 +1,35 @@
+<svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="forest-driftwood" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#78350f"/>
+          <stop offset="50%" stop-color="#451a03"/>
+          <stop offset="100%" stop-color="#1c1917"/>
+        </linearGradient>
+      </defs>
+      <!-- Massive Ancient Driftwood Root Architecture -->
+      <path d="M100 235 L90 140 Q85 90 70 50 Q80 85 95 130 L105 235 Z" fill="url(#forest-driftwood)"/>
+      <path d="M95 130 Q120 80 140 40 Q125 85 105 135" fill="url(#forest-driftwood)"/>
+      <path d="M92 160 Q50 140 30 110 Q55 145 90 175" fill="url(#forest-driftwood)"/>
+      <!-- Background Tall Giant Valisneria / Hairgrass -->
+      <g stroke="#15803d" stroke-width="3.5" stroke-linecap="round" fill="none" opacity="0.85">
+        <path d="M50 235 Q40 120 55 20"/><path d="M65 235 Q55 130 75 15"/>
+        <path d="M140 235 Q155 120 135 20"/><path d="M155 235 Q165 130 145 15"/>
+        <path d="M100 235 Q105 100 95 10"/>
+      </g>
+      <!-- Midground Anubias & Fern Leaves clinging to wood -->
+      <g fill="#16a34a" stroke="#052e16" stroke-width="1">
+        <path d="M70 140 C45 130 30 100 35 85 C45 75 65 95 72 120 Z"/>
+        <path d="M85 110 C70 90 65 60 75 50 C85 45 95 65 90 95 Z"/>
+        <path d="M110 110 C125 90 130 60 120 50 C110 45 100 65 105 95 Z"/>
+        <path d="M125 130 C150 120 165 90 160 75 C150 65 130 85 122 110 Z"/>
+      </g>
+      <!-- Red accent plant in center of forest -->
+      <circle cx="100" cy="155" r="16" fill="#ef4444" opacity="0.9"/>
+      <circle cx="92" cy="150" r="12" fill="#f87171" opacity="0.95"/>
+      <circle cx="108" cy="150" r="12" fill="#dc2626" opacity="0.95"/>
+      <!-- Fore-base lush moss base -->
+      <ellipse cx="100" cy="225" rx="65" ry="18" fill="#22c55e" opacity="0.9"/>
+      <circle cx="70" cy="220" r="15" fill="#4ade80"/>
+      <circle cx="130" cy="220" r="15" fill="#4ade80"/>
+      <circle cx="100" cy="215" r="18" fill="#86efac"/>
+    </svg>

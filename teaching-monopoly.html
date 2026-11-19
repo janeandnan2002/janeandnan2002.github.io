@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>教學大富翁</title>
+  <style>
+    :root {
+      --bg: #fff7e8;
+      --dot: #efc783;
+      --top1: #ffd66b;
+      --top2: #ffb347;
+      --brown: #5a3107;
+      --line: #e4c99b;
+      --red: #ef4b3c;
+      --red-dark: #bf372b;
+      --gold: #f5b800;
+      --blue: #3156c8;
+      --green: #1f7a45;
+      --purple: #7c4bd8;
+      --paper: #fffdf7;
+      --cream: #fff2c2;
+      --shadow: 0 12px 0 rgba(126, 74, 11, .18), 0 20px 36px rgba(96, 54, 10, .14);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: #2f220f;
+      font-family: "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+      background-color: var(--bg);
+      background-image: radial-gradient(var(--dot) 1.5px, transparent 1.5px);
+      background-size: 34px 34px;
+    }
+
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 18px 26px;
+      background: linear-gradient(90deg, var(--top1), var(--top2));
+      border-bottom: 6px solid #e7831b;
+      box-shadow: 0 10px 24px rgba(114, 66, 5, .16);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: var(--brown);
+      font-size: clamp(26px, 4vw, 40px);
+      font-weight: 950;
+      letter-spacing: .03em;
+      white-space: nowrap;
+    }
+
+    .site-home-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 10px 18px;
+      border: 3px solid rgba(255,255,255,.8);
+      border-radius: 999px;
+      color: var(--brown);
+      background: rgba(255, 253, 247, .92);
+      box-shadow: 0 5px 0 rgba(126,74,11,.18);
+      font-weight: 950;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: transform .15s ease, filter .15s ease;
+    }
+
+    .site-home-link:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.03);
+    }
+
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      color: white;
+      background: linear-gradient(135deg, #ff477e, #f59e0b);
+      border: 3px solid rgba(255,255,255,.55);
+      box-shadow: 0 6px 0 rgba(126,74,11,.2);
+      font-size: 22px;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    .nav button, .big-btn, .soft-btn, .danger-btn, .green-btn {
+      border: 3px solid rgba(255,255,255,.8);
+      border-radius: 999px;
+      padding: 13px 24px;
+      font-weight: 950;
+      font-size: 20px;
+      color: var(--brown);
+      background: rgba(255, 244, 220, .9);
+      box-shadow: 0 5px 0 rgba(126,74,11,.18);
+      transition: transform .15s ease, filter .15s ease;
+    }
+
+    .nav button:hover, .big-btn:hover, .soft-btn:hover, .danger-btn:hover, .green-btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.03);
+    }
+
+    .nav button.active {
+      background: #fff;
+      border-color: #fff;
+    }
+
+    .wrap {
+      width: min(1780px, calc(100% - 44px));
+      margin: 0 auto;
+      padding: 26px 0 42px;
+    }
+
+    .view { display: none; }
+    .view.active { display: block; }
+
+    .home-hero {
+      min-height: calc(100vh - 150px);
+      display: grid;
+      place-items: center;
+      text-align: center;
+    }
+
+    .home-card {
+      width: min(920px, 100%);
+      padding: 42px;
+      border-radius: 34px;
+      background: rgba(255, 253, 247, .92);
+      border: 5px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .home-card h1 {
+      margin: 10px 0;
+      color: var(--brown);
+      font-size: clamp(42px, 7vw, 78px);
+      line-height: 1.08;
+    }
+
+    .home-card p {
+      margin: 10px auto 28px;
+      max-width: 760px;
+      color: #8a5d23;
+      font-size: 24px;
+      line-height: 1.7;
+      font-weight: 800;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 18px;
+    }
+
+    .big-btn {
+      border: 0;
+      min-width: 210px;
+      padding: 20px 32px;
+      color: white;
+      background: var(--red);
+      box-shadow: 0 9px 0 var(--red-dark), 0 18px 32px rgba(239,75,60,.28);
+    }
+
+    .big-btn.gold {
+      color: var(--brown);
+      background: var(--gold);
+      box-shadow: 0 9px 0 #c58d00, 0 18px 32px rgba(245,184,0,.24);
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 20px 0 22px;
+      color: var(--brown);
+      font-size: 34px;
+      font-weight: 950;
+    }
+
+    .section-title::before {
+      content: "";
+      width: 12px;
+      height: 48px;
+      border-radius: 999px;
+      background: var(--gold);
+    }
+
+    .rule-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .rule-card, .panel, .board-card, .bank-card {
+      background: rgba(255, 253, 247, .94);
+      border: 4px solid var(--line);
+      border-radius: 26px;
+      box-shadow: 0 6px 0 rgba(126, 74, 11, .12);
+    }
+
+    .rule-card {
+      min-height: 170px;
+      padding: 26px;
+    }
+
+    .rule-card h3 {
+      margin: 0 0 24px;
+      color: #2f220f;
+      font-size: 25px;
+    }
+
+    .rule-card p {
+      margin: 0;
+      color: #9a6a28;
+      font-size: 21px;
+      line-height: 1.7;
+      font-weight: 750;
+    }
+
+    .game-layout {
+      display: grid;
+      grid-template-columns: minmax(820px, 1fr) 440px;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .board-card { padding: 18px; }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .control-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .pill, select, input, textarea {
+      border: 3px solid var(--line);
+      border-radius: 18px;
+      background: #fffdf7;
+      color: var(--brown);
+      padding: 11px 14px;
+      font-weight: 900;
+      outline: none;
+    }
+
+    .pill {
+      border-radius: 999px;
+      background: #fff0c8;
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(94px, 1fr));
+      gap: 10px;
+      padding: 14px;
+      border-radius: 24px;
+      background: #e6bb68;
+      border: 8px solid #d39b3e;
+      box-shadow: inset 0 0 0 4px rgba(255,255,255,.35);
+    }
+
+    .space {
+      position: relative;
+      min-height: 104px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 9px;
+      overflow: hidden;
+      border-radius: 14px;
+      border: 3px solid #ead6b2;
+      background: #fffdf7;
+    }
+
+    .space::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 9px;
+      background: var(--space-color);
+    }
+
+    .space-num {
+      color: #7b6549;
+      font-weight: 950;
+      font-size: 16px;
+    }
+
+    .space-name {
+      color: #143984;
+      font-size: 20px;
+      font-weight: 950;
+      line-height: 1.2;
+      margin-top: 7px;
+    }
+
+    .space-kind {
+      color: #4d5c6e;
+      font-size: 14px;
+      font-weight: 900;
+      line-height: 1.35;
+      margin-top: 6px;
+    }
+
+    .tokens {
+      min-height: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3px;
+    }
+
+    .token {
+      width: 25px;
+      height: 25px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      color: white;
+      font-size: 13px;
+      font-weight: 950;
+      border: 2px solid white;
+      box-shadow: 0 4px 0 rgba(0,0,0,.15);
+    }
+
+    .center {
+      grid-column: 2 / span 5;
+      grid-row: 2 / span 5;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      text-align: center;
+      border-radius: 18px;
+      background: #fff6d7;
+      border: 4px dashed #e0b56a;
+    }
+
+    .center h2 {
+      margin: 0 0 8px;
+      color: var(--brown);
+      font-size: clamp(34px, 5vw, 62px);
+      line-height: 1.08;
+    }
+
+    .center p {
+      max-width: 640px;
+      margin: 0 auto 20px;
+      color: #8a5d23;
+      font-size: 21px;
+      line-height: 1.6;
+      font-weight: 800;
+    }
+
+    .mini-decks {
+      width: min(680px, 100%);
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .deck-button {
+      min-height: 148px;
+      border: 0;
+      border-radius: 18px;
+      color: white;
+      padding: 14px;
+      font-weight: 950;
+      box-shadow: 0 8px 0 rgba(78,47,5,.22);
+    }
+
+    .deck-button .icon { display: block; font-size: 42px; margin-bottom: 8px; }
+    .deck-button small { display: block; margin-top: 8px; font-size: 13px; line-height: 1.35; opacity: .95; }
+    .chance-bg { background: linear-gradient(150deg, #ffcb3d, #f97316); }
+    .destiny-bg { background: linear-gradient(150deg, #8b5cf6, #2563eb); }
+    .mission-bg { background: linear-gradient(150deg, #10b981, #15803d); }
+
+    .panel {
+      padding: 20px;
+      position: sticky;
+      top: 112px;
+    }
+
+    .timer-box, .turn-box, .player-card {
+      border-radius: 24px;
+      border: 3px solid var(--line);
+      background: rgba(255,253,247,.95);
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+
+    .timer-box {
+      text-align: center;
+      color: #a67630;
+      font-weight: 900;
+      font-size: 22px;
+    }
+
+    .timer {
+      color: var(--red);
+      font-size: 48px;
+      font-weight: 950;
+      line-height: 1.2;
+    }
+
+    .turn-box {
+      background: var(--cream);
+      border-color: var(--gold);
+    }
+
+    .now {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 20px;
+      color: #9a6a28;
+      font-weight: 900;
+    }
+
+    .avatar {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      border: 4px solid #ef4b3c;
+      background: #fff;
+      font-size: 30px;
+    }
+
+    .turn-name {
+      margin: 4px 0 0;
+      color: var(--brown);
+      font-size: 30px;
+      font-weight: 950;
+    }
+
+    .dice-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .dice {
+      height: 74px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: #fff;
+      border: 3px solid #e9d1a8;
+      color: var(--brown);
+      font-size: 40px;
+      font-weight: 950;
+    }
+
+    .soft-btn, .green-btn, .danger-btn {
+      border: 0;
+      font-size: 18px;
+      padding: 12px 18px;
+    }
+
+    .soft-btn { background: #fff2c2; }
+    .green-btn { background: #19733e; color: #fff; }
+    .danger-btn { background: var(--red); color: #fff; box-shadow: 0 7px 0 var(--red-dark); }
+
+    .player-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .player-card {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 10px;
+      margin: 0;
+      padding: 12px;
+    }
+
+    .player-card.active {
+      border-color: var(--gold);
+      background: #fff2c2;
+    }
+
+    .player-name { color: var(--brown); font-weight: 950; }
+    .player-detail { color: #9a6a28; font-size: 14px; font-weight: 800; }
+    .score { color: var(--brown); font-size: 24px; font-weight: 950; }
+
+    .log {
+      max-height: 140px;
+      overflow: auto;
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 16px;
+      background: #fff8df;
+      color: #8a5d23;
+      line-height: 1.6;
+      font-weight: 800;
+    }
+
+    .bank-card {
+      margin-top: 24px;
+      padding: 22px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .field { display: grid; gap: 8px; }
+    .field.full { grid-column: 1 / -1; }
+    label { color: var(--brown); font-weight: 950; }
+    textarea { min-height: 86px; resize: vertical; line-height: 1.7; }
+
+    .card-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 26px;
+    }
+
+    .card-tabs button {
+      border: 3px solid var(--line);
+      background: #fffdf7;
+      color: var(--brown);
+      border-radius: 999px;
+      padding: 14px 28px;
+      font-size: 22px;
+      font-weight: 950;
+    }
+
+    .card-tabs button.active { background: var(--gold); }
+
+    .card-gallery {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(220px, 1fr));
+      gap: 24px;
+    }
+
+    .play-card {
+      position: relative;
+      min-height: 360px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border-radius: 22px;
+      border: 5px solid var(--line);
+      background: #fffdf7;
+      box-shadow: 0 7px 0 rgba(126,74,11,.18);
+    }
+
+    .play-card .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 16px;
+      color: white;
+      font-size: 22px;
+      font-weight: 950;
+    }
+
+    .play-card .cost {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      border: 3px solid rgba(255,255,255,.75);
+      background: rgba(255,255,255,.18);
+    }
+
+    .card-body {
+      flex: 1;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 28px 20px;
+    }
+
+    .card-icon { font-size: 64px; margin-bottom: 16px; }
+    .card-body h3 { margin: 0 0 12px; color: var(--brown); font-size: 27px; }
+    .card-body p { margin: 0; color: #6b4a1f; font-size: 19px; line-height: 1.55; font-weight: 750; }
+    .card-foot { padding: 12px; color: white; text-align: center; font-weight: 950; }
+
+    .chance-card .card-head, .chance-card .card-foot { background: #f97316; }
+    .destiny-card .card-head, .destiny-card .card-foot { background: #635bff; }
+    .mission-card .card-head, .mission-card .card-foot { background: #16a34a; }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: none;
+      place-items: center;
+      padding: 20px;
+      background: rgba(69, 39, 6, .55);
+    }
+
+    .modal.show { display: grid; }
+
+    .modal-card {
+      width: min(850px, 100%);
+      max-height: calc(100vh - 40px);
+      overflow: auto;
+      border-radius: 30px;
+      border: 5px solid var(--line);
+      background: #fffdf7;
+      box-shadow: var(--shadow);
+      padding: 28px;
+    }
+
+    .subject-badge {
+      display: inline-flex;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: #fff0c8;
+      color: var(--brown);
+      font-weight: 950;
+    }
+
+    .question-title, .card-event-title {
+      margin: 16px 0;
+      color: var(--brown);
+      font-size: clamp(32px, 5vw, 52px);
+      line-height: 1.25;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .option {
+      padding: 16px;
+      border-radius: 18px;
+      border: 3px solid var(--line);
+      background: #fff8df;
+      font-size: 22px;
+      font-weight: 850;
+      line-height: 1.5;
+    }
+
+    .answer-box {
+      display: none;
+      margin: 16px 0;
+      padding: 18px;
+      border-radius: 18px;
+      background: #e7f8ec;
+      border: 3px solid #8fd3a3;
+      color: #14532d;
+      font-size: 24px;
+      line-height: 1.6;
+      font-weight: 900;
+    }
+    .answer-box.show { display: block; }
+
+    .modal-actions {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .hide { display: none !important; }
+
+    @media (max-width: 1250px) {
+      .game-layout { grid-template-columns: 1fr; }
+      .panel { position: static; }
+      .card-gallery { grid-template-columns: repeat(3, minmax(220px, 1fr)); }
+      .rule-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    }
+
+    @media (max-width: 760px) {
+      .topbar { position: static; align-items: flex-start; flex-direction: column; }
+      .nav { justify-content: flex-start; }
+      .nav button { font-size: 17px; padding: 10px 14px; }
+      .wrap { width: min(100% - 20px, 1780px); }
+      .board { grid-template-columns: repeat(4, minmax(80px, 1fr)); }
+      .center { grid-column: 1 / -1; grid-row: auto; }
+      .mini-decks, .dice-row, .form-grid, .options, .rule-grid, .card-gallery { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-icon">福</span> 教學大富翁</div>
+    <nav class="nav" aria-label="主要導覽">
+      <a class="site-home-link" href="index.html#gameBank">回東衛教學星球</a>
+      <button type="button" data-view="home">首頁</button>
+      <button type="button" data-view="rules">遊戲說明</button>
+      <button type="button" data-view="cards">卡牌圖鑑</button>
+      <button type="button" data-view="game">開始遊戲</button>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <section class="view active" id="homeView">
+      <div class="home-hero">
+        <div class="home-card">
+          <div class="brand-icon" style="margin:0 auto 14px;">福</div>
+          <h1>單科複習大富翁</h1>
+          <p>選一個科目，整局只抽該科題目。擲骰、闖關、抽卡、加分，讓講義複習變成一場桌遊挑戰。</p>
+          <div class="hero-actions">
+            <button class="big-btn" type="button" data-view="game">▶ 開始遊戲</button>
+            <button class="big-btn gold" type="button" data-view="cards">🎴 卡牌圖鑑</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="rulesView">
+      <h2 class="section-title">🎮 怎麼玩</h2>
+      <div class="rule-grid">
+        <article class="rule-card"><h3>1. 選定科目</h3><p>社會課就選社會，閩南語課就選閩南語，整局不混科。</p></article>
+        <article class="rule-card"><h3>2. 擲骰前進</h3><p>輪到的小組擲骰，依點數移動棋子。</p></article>
+        <article class="rule-card"><h3>3. 抽題挑戰</h3><p>走到題目格就抽本局科目題，老師手動判定答對或答錯。</p></article>
+        <article class="rule-card"><h3>4. 抽卡翻轉</h3><p>機會、命運、任務卡會帶來前進、加分、退後或口說挑戰。</p></article>
+        <article class="rule-card"><h3>5. 題庫可自訂</h3><p>可新增題目，也可貼上講義文字快速產生問答題。</p></article>
+        <article class="rule-card"><h3>6. 分數最高勝</h3><p>時間到或回合結束時，分數最高的小組獲勝。</p></article>
+      </div>
+    </section>
+
+    <section class="view" id="cardsView">
+      <h2 class="section-title">🎴 卡牌圖鑑</h2>
+      <div class="card-tabs" id="cardTabs"></div>
+      <div class="card-gallery" id="cardGallery"></div>
+    </section>
+
+    <section class="view" id="gameView">
+      <section class="game-layout">
+        <section class="board-card">
+          <div class="toolbar">
+            <div class="control-row">
+              <span class="pill">本局科目</span>
+              <select id="subjectFilter"></select>
+              <select id="gradeFilter">
+                <option value="all">全部年級</option>
+                <option value="1">一年級</option>
+                <option value="2">二年級</option>
+                <option value="3">三年級</option>
+                <option value="4">四年級</option>
+                <option value="5" selected>五年級</option>
+                <option value="6">六年級</option>
+              </select>
+            </div>
+            <div class="control-row">
+              <select id="playerCount">
+                <option value="2">2 組</option>
+                <option value="3">3 組</option>
+                <option value="4" selected>4 組</option>
+                <option value="5">5 組</option>
+                <option value="6">6 組</option>
+              </select>
+              <button class="soft-btn" id="setupPlayersBtn" type="button">套用玩家</button>
+              <button class="soft-btn" id="newGameBtn" type="button">重新開始</button>
+            </div>
+          </div>
+          <div class="board" id="board"></div>
+        </section>
+
+        <aside class="panel">
+          <div class="timer-box">
+            ⏱ 剩餘時間
+            <div class="timer" id="timer">10:00</div>
+          </div>
+
+          <div class="turn-box">
+            <div class="now"><span class="avatar" id="turnAvatar">🎒</span><div>現在輪到<div class="turn-name" id="turnName">第1組</div></div></div>
+            <button class="danger-btn" id="rollBtn" type="button" style="width:100%;margin-top:16px;">🎲 擲骰</button>
+            <div class="dice-row"><div class="dice" id="diceA">1</div><div class="dice" id="diceB">1</div></div>
+            <button class="soft-btn" id="drawQuestionBtn" type="button" style="width:100%;margin-top:12px;">直接抽本局題</button>
+          </div>
+
+          <h2 class="section-title" style="font-size:26px;margin:10px 0 14px;">玩家狀態</h2>
+          <div class="player-list" id="playerList"></div>
+          <div class="log" id="gameLog"></div>
+        </aside>
+      </section>
+
+      <section class="bank-card" id="teacherTools">
+        <h2 class="section-title" style="font-size:30px;">題庫與講義出題</h2>
+        <form class="form-grid" id="questionForm">
+          <input type="hidden" id="questionId">
+          <div class="field"><label>科目</label><select id="questionSubject"></select></div>
+          <div class="field"><label>年級</label><select id="questionGrade"><option value="1">一年級</option><option value="2">二年級</option><option value="3">三年級</option><option value="4">四年級</option><option value="5" selected>五年級</option><option value="6">六年級</option></select></div>
+          <div class="field"><label>題型</label><select id="questionType"><option value="short">問答題</option><option value="choice">選擇題</option><option value="truefalse">是非題</option></select></div>
+          <div class="field"><label>單元</label><input id="questionUnit" placeholder="例：第1課、澎湖地理"></div>
+          <div class="field full"><label>題目</label><textarea id="questionText" required placeholder="請輸入題目"></textarea></div>
+          <div class="field full"><label>選項，一行一個</label><textarea id="questionOptions" placeholder="A. 選項一&#10;B. 選項二"></textarea></div>
+          <div class="field full"><label>參考答案</label><textarea id="questionAnswer" required placeholder="請輸入答案"></textarea></div>
+          <div class="control-row field full">
+            <button class="green-btn" type="submit" id="saveQuestionBtn">新增題目</button>
+            <button class="soft-btn" type="button" id="cancelEditQuestionBtn" hidden>取消編輯</button>
+          </div>
+        </form>
+
+        <div class="form-grid" style="margin-top:20px;">
+          <div class="field"><label>講義科目</label><select id="generateSubject"></select></div>
+          <div class="field"><label>講義年級</label><select id="generateGrade"><option value="1">一年級</option><option value="2">二年級</option><option value="3">三年級</option><option value="4">四年級</option><option value="5" selected>五年級</option><option value="6">六年級</option></select></div>
+          <div class="field full"><label>貼上講義或教師手冊重點</label><textarea id="sourceText" placeholder="貼上段落後按「產生題目」，系統會依句子產生問答題。"></textarea></div>
+          <div class="control-row field full">
+            <button class="green-btn" type="button" id="generateBtn">從講義產生題目</button>
+            <button class="soft-btn" type="button" id="exportBtn">匯出題庫</button>
+            <button class="soft-btn" type="button" id="importBtn">匯入題庫</button>
+            <button class="soft-btn" type="button" id="syncCourseDataBtn">同步網站課程題庫</button>
+            <button class="soft-btn" type="button" id="loadSampleBtn">載入範例</button>
+            <button class="danger-btn" type="button" id="clearQuestionsBtn">清空題庫</button>
+            <input type="file" id="importFile" accept="application/json,.json" hidden>
+          </div>
+        </div>
+        <div id="questionList" style="margin-top:18px;"></div>
+      </section>
+    </section>
+  </main>
+
+  <section class="modal" id="questionModal">
+    <div class="modal-card">
+      <span class="subject-badge" id="modalMeta">科目</span>
+      <h2 class="question-title" id="modalTitle">題目</h2>
+      <div class="options" id="modalOptions"></div>
+      <div class="answer-box" id="answerBox"></div>
+      <div class="modal-actions">
+        <div class="control-row">
+          <button class="soft-btn" id="showAnswerBtn" type="button">顯示答案</button>
+          <button class="soft-btn" id="replaceQuestionBtn" type="button">換一題</button>
+        </div>
+        <div class="control-row">
+          <button class="danger-btn" id="wrongBtn" type="button">答錯</button>
+          <button class="green-btn" id="correctBtn" type="button">答對</button>
+          <button class="soft-btn" id="closeModalBtn" type="button">關閉</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="modal" id="cardModal">
+    <div class="modal-card">
+      <div id="drawnCardPreview"></div>
+      <div class="modal-actions">
+        <button class="soft-btn" id="cardDrawQuestionBtn" type="button" hidden>依卡片抽題</button>
+        <div class="control-row">
+          <button class="danger-btn" id="cardSkipBtn" type="button">未完成，換下一組</button>
+          <button class="green-btn" id="cardConfirmBtn" type="button">完成，換下一組</button>
+          <button class="soft-btn" id="cardCloseBtn" type="button">先關閉</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="course-data.js"></script>
+  <script>
+    const STORE_KEY = "teaching-monopoly-v3";
+    const subjects = ["國語", "數學", "社會", "自然", "閩南語", "體育", "綜合", "閱讀"];
+    const colors = ["#ef4b3c", "#3156c8", "#16a34a", "#7c4bd8", "#f97316", "#0891b2"];
+    const avatars = ["🎒", "🧢", "⭐", "🚀", "🏆", "🎲"];
+
+    const boardSpaces = [
+      ["起點 GO", "準備出發", "start", "#facc15"], ["基礎題", "抽本局科目題", "question", "#60a5fa"], ["機會", "抽機會卡", "chance", "#f97316"],
+      ["觀念題", "抽本局科目題", "question", "#34d399"], ["補給站", "加1分", "bonus1", "#a7f3d0"], ["應用題", "抽本局科目題", "question", "#fb923c"],
+      ["命運", "抽命運卡", "destiny", "#8b5cf6"], ["搶答題", "抽本局科目題", "question", "#22c55e"], ["小任務", "抽任務卡", "mission", "#14b8a6"],
+      ["口頭說明", "抽本局科目題", "question", "#818cf8"], ["幸運加分", "加2分", "bonus2", "#fde68a"], ["進階題", "抽本局科目題", "question", "#f97316"],
+      ["暫停一下", "換下一組", "skip", "#e2e8f0"], ["合作題", "抽本局科目題", "question", "#14b8a6"], ["機會", "抽機會卡", "chance", "#f97316"],
+      ["重點題", "抽本局科目題", "question", "#38bdf8"], ["挑戰題", "抽本局科目題", "question", "#f0abfc"], ["命運", "抽命運卡", "destiny", "#8b5cf6"],
+      ["生活連結", "抽本局科目題", "question", "#fed7aa"], ["補給站", "加1分", "bonus1", "#a7f3d0"], ["小任務", "抽任務卡", "mission", "#14b8a6"],
+      ["圖像說明", "抽本局科目題", "question", "#93c5fd"], ["終點衝刺", "答對加3分", "final", "#bfdbfe"], ["再擲一次", "機會", "again", "#facc15"]
+    ].map((x, i) => ({ id: i, name: x[0], kind: x[1], type: x[2], color: x[3] }));
+
+    const chanceCards = [
+      { type: "chance", icon: "🌟", title: "好運來", text: "本組加 2 分。", action: "bonus", value: 2 },
+      { type: "chance", icon: "🏃", title: "順風前進", text: "前進 2 格，並執行新格子的效果。", action: "move", value: 2 },
+      { type: "chance", icon: "🔁", title: "再試一次", text: "本組可以再擲一次骰子。", action: "again" },
+      { type: "chance", icon: "🔥", title: "老師加碼", text: "抽一題本局科目題，答對加 3 分。", action: "question", bonus: 3 }
+    ];
+
+    const destinyCards = [
+      { type: "destiny", icon: "⚡", title: "命運考驗", text: "抽一題本局科目題，答對加 2 分，答錯扣 1 分。", action: "question", bonus: 2 },
+      { type: "destiny", icon: "🏠", title: "回到起點", text: "回到起點，但保留目前分數。", action: "setPosition", value: 0 },
+      { type: "destiny", icon: "🔄", title: "交換位置", text: "和目前分數最高的組別交換位置。", action: "swapWithLeader" },
+      { type: "destiny", icon: "⏸️", title: "暫停一下", text: "本組休息，直接換下一組。", action: "skip" }
+    ];
+
+    const missionCards = [
+      { type: "mission", icon: "⏱️", title: "30秒說明", text: "請用 30 秒說明本單元一個重點，完成加 2 分。", action: "manual", value: 2 },
+      { type: "mission", icon: "🤝", title: "全組接力", text: "每位組員各說一個關鍵詞，完成加 2 分。", action: "manual", value: 2 },
+      { type: "mission", icon: "🎨", title: "畫出概念", text: "在小白板畫出題目概念或流程，完成加 2 分。", action: "manual", value: 2 },
+      { type: "mission", icon: "❓", title: "反問一題", text: "本組設計一題問其他組，題目合理加 2 分。", action: "manual", value: 2 }
+    ];
+
+    const sampleQuestions = [
+      { id: "q1", subject: "閩南語", grade: "5", unit: "來媽宮踅街", type: "short", text: "「踅街」的意思是什麼？", options: "", answer: "逛街、到街上走走看看。" },
+      { id: "q2", subject: "社會", grade: "5", unit: "澎湖地理", type: "short", text: "馬公市位於哪一個縣？", options: "", answer: "澎湖縣。" },
+      { id: "q3", subject: "數學", grade: "5", unit: "分數", type: "short", text: "1/2 加 1/4 等於多少？", options: "", answer: "3/4。" },
+      { id: "q4", subject: "自然", grade: "5", unit: "海洋環境", type: "truefalse", text: "保護海洋環境時，垃圾不應該丟進海裡。", options: "O. 正確\nX. 錯誤", answer: "O. 正確" }
+    ];
+
+    function splitPair(line) {
+      const [left, ...rest] = String(line || "").split("=");
+      return { left: left.trim(), right: rest.join("=").trim() };
+    }
+
+    function buildCourseQuestions() {
+      const records = window.DONGWEI_COURSE_DATA?.records || window.DONGWEI_KNSH_115?.records || [];
+      const result = [];
+      const add = (id, subject, grade, unit, text, answer) => {
+        if (!text || !answer) return;
+        result.push({ id, subject, grade, unit, type: "short", text, options: "", answer });
+      };
+
+      records.forEach(r => {
+        const unitLabel = `${r.grade}年級${r.semester}｜${r.unit} ${r.title}`;
+        const subjName = r.subject === '國語文' ? '國語' : (r.subject === '健康與體育' ? '體育' : (r.subject === '綜合活動' ? '綜合' : r.subject));
+        
+        (r.questions || []).forEach(([q, a], idx) => {
+          add(`mono-q-${r.id}-${idx}`, subjName, String(r.grade), unitLabel, q, a);
+        });
+        
+        (r.pairs || []).forEach((p, idx) => {
+          const pair = splitPair(p);
+          if (pair.left && pair.right) {
+            add(`mono-p-${r.id}-${idx}`, subjName, String(r.grade), unitLabel, `請說明「${pair.left}」的概念或意涵。`, pair.right);
+          }
+        });
+      });
+      
+      return result;
+    }
+
+    function syncCourseQuestions({ silent = false } = {}) {
+      const additions = buildCourseQuestions();
+      const existingIds = new Set(state.questions.map(q => q.id));
+      const existingTexts = new Set(state.questions.map(q => `${q.subject}|${q.grade}|${q.text}`));
+      const fresh = additions.filter(q => !existingIds.has(q.id) && !existingTexts.has(`${q.subject}|${q.grade}|${q.text}`));
+      if (fresh.length) state.questions = [...fresh, ...state.questions];
+      saveState();
+      if (!silent) {
+        addLog(`已同步網站課程題庫，新增 ${fresh.length} 題。`);
+        renderAll();
+      }
+      return fresh.length;
+    }
+
+    let state = loadState();
+    let currentQuestion = null;
+    let currentCard = null;
+    let pendingQuestionBonus = 2;
+
+    const $ = id => document.getElementById(id);
+
+    function defaultState() {
+      return { players: makePlayers(4), currentPlayer: 0, questions: sampleQuestions, log: ["遊戲開始！"], seconds: 600 };
+    }
+
+    function loadState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORE_KEY));
+        return normalizeState(saved);
+      } catch {
+        return defaultState();
+      }
+    }
+
+    function normalizeState(s) {
+      const base = defaultState();
+      const next = s && typeof s === "object" ? { ...base, ...s } : base;
+      if (!Array.isArray(next.players) || !next.players.length) next.players = makePlayers(4);
+      next.players = next.players.map((p, i) => ({
+        id: p.id || `p${i + 1}`,
+        name: p.name || `第${i + 1}組`,
+        position: Number.isFinite(Number(p.position)) ? Number(p.position) % boardSpaces.length : 0,
+        score: Number.isFinite(Number(p.score)) ? Number(p.score) : 0,
+        color: p.color || colors[i % colors.length],
+        avatar: p.avatar || avatars[i % avatars.length]
+      }));
+      if (!Array.isArray(next.questions)) next.questions = sampleQuestions;
+      if (!Array.isArray(next.log)) next.log = ["遊戲開始！"];
+      if (next.currentPlayer >= next.players.length) next.currentPlayer = 0;
+      return next;
+    }
+
+    function saveState() { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+    function makePlayers(count) {
+      return Array.from({ length: count }, (_, i) => ({ id: `p${i+1}`, name: `第${i+1}組`, position: 0, score: 0, color: colors[i], avatar: avatars[i] }));
+    }
+    function makeId() { return `q-${Date.now()}-${Math.random().toString(16).slice(2)}`; }
+    function escapeHtml(value) { const d = document.createElement("div"); d.textContent = value || ""; return d.innerHTML; }
+
+    function init() {
+      fillSelects();
+      bindEvents();
+      syncCourseQuestions({ silent: true });
+      renderNav("home");
+      renderCards("all");
+      renderAll();
+      startTimer();
+    }
+
+    function fillSelects() {
+      const options = subjects.map(s => `<option value="${s}">${s}</option>`).join("");
+      ["subjectFilter", "questionSubject", "generateSubject"].forEach(id => $(id).innerHTML = options);
+      $("subjectFilter").value = "社會";
+      $("questionSubject").value = "社會";
+      $("generateSubject").value = "社會";
+    }
+
+    function renderNav(view) {
+      document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+      $(`${view}View`).classList.add("active");
+      document.querySelectorAll("[data-view]").forEach(b => b.classList.toggle("active", b.dataset.view === view));
+    }
+
+    function boardOrder() {
+      if (window.innerWidth <= 760) return boardSpaces.map((_, i) => i);
+      return [0,1,2,3,4,5,6,23,-1,-1,-1,-1,-1,7,22,-1,-1,-1,-1,-1,8,21,-1,-1,-1,-1,-1,9,20,-1,-1,-1,-1,-1,10,19,-1,-1,-1,-1,-1,11,18,17,16,15,14,13,12];
+    }
+
+    function renderBoard() {
+      const html = [];
+      let center = false;
+      boardOrder().forEach(i => {
+        if (i >= 0) html.push(renderSpace(boardSpaces[i], i));
+        else if (!center) { html.push(renderCenter()); center = true; }
+      });
+      $("board").innerHTML = html.join("");
+    }
+
+    function renderSpace(space, index) {
+      const tokens = state.players.filter(p => p.position === index).map(p => `<span class="token" style="background:${p.color}">${p.avatar}</span>`).join("");
+      return `<article class="space" style="--space-color:${space.color}">
+        <div><div class="space-num">${index + 1}</div><div class="space-name">${escapeHtml(space.name)}</div><div class="space-kind">${escapeHtml(space.kind)}</div></div>
+        <div class="tokens">${tokens}</div>
+      </article>`;
+    }
+
+    function renderCenter() {
+      const subject = $("subjectFilter")?.value || "社會";
+      return `<section class="center">
+        <div>
+          <h2>${escapeHtml(subject)}大富翁</h2>
+          <p>本局只會抽「${escapeHtml(subject)}」題目。走到卡牌格可抽機會、命運、任務卡。</p>
+          <div class="mini-decks">
+            <button class="deck-button chance-bg" data-draw-card="chance"><span class="icon">🎁</span>機會卡<small>加分、前進、再擲一次</small></button>
+            <button class="deck-button destiny-bg" data-draw-card="destiny"><span class="icon">🔮</span>命運卡<small>交換、考驗、回到起點</small></button>
+            <button class="deck-button mission-bg" data-draw-card="mission"><span class="icon">🎯</span>任務卡<small>口說、畫圖、全組接力</small></button>
+          </div>
+        </div>
+      </section>`;
+    }
+
+    function renderPlayers() {
+      const current = state.players[state.currentPlayer];
+      $("turnAvatar").textContent = current.avatar;
+      $("turnName").textContent = current.name;
+      $("playerList").innerHTML = state.players.map((p, i) => `<div class="player-card ${i === state.currentPlayer ? "active" : ""}">
+        <span class="avatar" style="width:44px;height:44px;font-size:23px;border-color:${p.color}">${p.avatar}</span>
+        <div><div class="player-name">${p.name}</div><div class="player-detail">${boardSpaces[p.position].name}｜${boardSpaces[p.position].kind}</div></div>
+        <div class="score">${p.score}</div>
+      </div>`).join("");
+      $("gameLog").innerHTML = state.log.slice(-8).map(x => `<div>${escapeHtml(x)}</div>`).join("");
+    }
+
+    function renderQuestionList() {
+      $("questionList").innerHTML = state.questions.slice(0, 12).map(q => `<div class="player-card">
+        <div><div class="player-name">${escapeHtml(q.text)}</div><div class="player-detail">${q.subject}｜${q.grade}年級｜${q.unit || "未分單元"}</div></div>
+        <div class="control-row"><button class="soft-btn" data-edit="${q.id}">編輯</button><button class="danger-btn" data-delete="${q.id}">刪除</button></div>
+      </div>`).join("") || `<div class="player-card">目前沒有題目。</div>`;
+    }
+
+    function renderAll() {
+      renderBoard();
+      renderPlayers();
+      renderQuestionList();
+      saveState();
+    }
+
+    function renderCards(filter) {
+      const all = [...chanceCards, ...destinyCards, ...missionCards];
+      const tabs = [
+        ["all", "全部卡牌"], ["chance", "🎁 機會卡"], ["destiny", "🔮 命運卡"], ["mission", "🎯 任務卡"]
+      ];
+      $("cardTabs").innerHTML = tabs.map(([id, label]) => `<button class="${filter === id ? "active" : ""}" data-card-filter="${id}">${label}</button>`).join("");
+      $("cardGallery").innerHTML = all.filter(c => filter === "all" || c.type === filter).map(renderPlayCard).join("");
+    }
+
+    function renderPlayCard(card) {
+      const klass = card.type === "chance" ? "chance-card" : card.type === "destiny" ? "destiny-card" : "mission-card";
+      const label = card.type === "chance" ? "機會卡" : card.type === "destiny" ? "命運卡" : "任務卡";
+      return `<article class="play-card ${klass}">
+        <div class="card-head"><span>${card.icon} ${label}</span><span class="cost">1</span></div>
+        <div class="card-body"><div><div class="card-icon">${card.icon}</div><h3>${escapeHtml(card.title)}</h3><p>${escapeHtml(card.text)}</p></div></div>
+        <div class="card-foot">${label}</div>
+      </article>`;
+    }
+
+    function addLog(text) {
+      state.log.push(text);
+      if (state.log.length > 50) state.log = state.log.slice(-50);
+    }
+
+    function nextPlayer() { state.currentPlayer = (state.currentPlayer + 1) % state.players.length; }
+
+    function rollDice() {
+      const a = Math.floor(Math.random() * 6) + 1;
+      const b = Math.floor(Math.random() * 6) + 1;
+      $("diceA").textContent = a;
+      $("diceB").textContent = b;
+      const steps = a + b;
+      const player = state.players[state.currentPlayer];
+      player.position = (player.position + steps) % boardSpaces.length;
+      addLog(`${player.name} 擲出 ${steps}，走到「${boardSpaces[player.position].name}」。`);
+      renderAll();
+      handleSpace(boardSpaces[player.position]);
+    }
+
+    function handleSpace(space) {
+      const player = state.players[state.currentPlayer];
+      if (space.type === "bonus1" || space.type === "bonus2") {
+        const point = space.type === "bonus2" ? 2 : 1;
+        player.score += point;
+        addLog(`${player.name} 獲得 ${point} 分。`);
+        nextPlayer();
+        renderAll();
+        return;
+      }
+      if (space.type === "skip") { addLog(`${player.name} 暫停一下，換下一組。`); nextPlayer(); renderAll(); return; }
+      if (space.type === "again") { addLog(`${player.name} 可以再擲一次。`); renderAll(); return; }
+      if (["chance", "destiny", "mission"].includes(space.type)) { drawCard(space.type); return; }
+      pendingQuestionBonus = space.type === "final" ? 3 : 2;
+      drawQuestion();
+    }
+
+    function drawQuestion() {
+      const subject = $("subjectFilter").value;
+      const grade = $("gradeFilter").value;
+      const pool = state.questions.filter(q => q.subject === subject && (grade === "all" || q.grade === grade));
+      if (!pool.length) { alert(`目前沒有「${subject}」題目，請先按「同步網站課程題庫」，或新增／匯入題目。`); return; }
+      currentQuestion = pool[Math.floor(Math.random() * pool.length)];
+      openQuestion(currentQuestion);
+    }
+
+    function openQuestion(q) {
+      $("modalMeta").textContent = `${q.subject}｜${q.grade}年級｜${q.unit || "未分單元"}`;
+      $("modalTitle").textContent = q.text;
+      $("modalOptions").innerHTML = (q.options || "").split(/\r?\n/).filter(Boolean).map(x => `<div class="option">${escapeHtml(x)}</div>`).join("");
+      $("answerBox").innerHTML = `<strong>參考答案：</strong>${escapeHtml(q.answer)}`;
+      $("answerBox").classList.remove("show");
+      $("questionModal").classList.add("show");
+    }
+
+    function answerResult(ok) {
+      if (!currentQuestion) return;
+      const player = state.players[state.currentPlayer];
+      if (ok) {
+        player.score += pendingQuestionBonus;
+        addLog(`${player.name} 答對，獲得 ${pendingQuestionBonus} 分。`);
+      } else {
+        player.score = Math.max(0, player.score - 1);
+        addLog(`${player.name} 答錯，扣 1 分。`);
+      }
+      currentQuestion = null;
+      pendingQuestionBonus = 2;
+      $("questionModal").classList.remove("show");
+      nextPlayer();
+      renderAll();
+    }
+
+    function drawCard(type) {
+      const deck = type === "chance" ? chanceCards : type === "destiny" ? destinyCards : missionCards;
+      currentCard = deck[Math.floor(Math.random() * deck.length)];
+      $("drawnCardPreview").innerHTML = renderPlayCard(currentCard);
+      $("cardDrawQuestionBtn").hidden = currentCard.action !== "question";
+      $("cardModal").classList.add("show");
+      addLog(`${state.players[state.currentPlayer].name} 抽到「${currentCard.title}」。`);
+      renderAll();
+    }
+
+    function confirmCard() {
+      if (!currentCard) return closeCard();
+      const p = state.players[state.currentPlayer];
+      if (currentCard.action === "bonus") p.score += currentCard.value;
+      if (currentCard.action === "manual") p.score += currentCard.value;
+      if (currentCard.action === "move") { p.position = (p.position + currentCard.value + boardSpaces.length) % boardSpaces.length; closeCard(); renderAll(); return handleSpace(boardSpaces[p.position]); }
+      if (currentCard.action === "setPosition") p.position = currentCard.value;
+      if (currentCard.action === "swapWithLeader") {
+        const leader = [...state.players].sort((a,b) => b.score - a.score)[0];
+        if (leader && leader.id !== p.id) [p.position, leader.position] = [leader.position, p.position];
+      }
+      if (currentCard.action === "again") { addLog(`${p.name} 可以再擲一次。`); closeCard(); renderAll(); return; }
+      addLog(`${p.name} 完成「${currentCard.title}」。`);
+      closeCard();
+      nextPlayer();
+      renderAll();
+    }
+
+    function closeCard() {
+      currentCard = null;
+      $("cardModal").classList.remove("show");
+    }
+
+    function skipCard() {
+      if (currentCard) addLog(`${state.players[state.currentPlayer].name} 未完成「${currentCard.title}」。`);
+      closeCard();
+      nextPlayer();
+      renderAll();
+    }
+
+    function drawQuestionFromCard() {
+      pendingQuestionBonus = currentCard?.bonus || 2;
+      closeCard();
+      drawQuestion();
+    }
+
+    function saveQuestion(e) {
+      e.preventDefault();
+      const id = $("questionId").value || makeId();
+      const q = { id, subject: $("questionSubject").value, grade: $("questionGrade").value, type: $("questionType").value, unit: $("questionUnit").value.trim(), text: $("questionText").value.trim(), options: $("questionOptions").value.trim(), answer: $("questionAnswer").value.trim() };
+      state.questions = $("questionId").value ? state.questions.map(x => x.id === id ? q : x) : [q, ...state.questions];
+      e.target.reset();
+      $("questionId").value = "";
+      $("saveQuestionBtn").textContent = "新增題目";
+      $("cancelEditQuestionBtn").hidden = true;
+      renderAll();
+    }
+
+    function editQuestion(id) {
+      const q = state.questions.find(x => x.id === id);
+      if (!q) return;
+      $("questionId").value = q.id; $("questionSubject").value = q.subject; $("questionGrade").value = q.grade; $("questionType").value = q.type;
+      $("questionUnit").value = q.unit || ""; $("questionText").value = q.text; $("questionOptions").value = q.options || ""; $("questionAnswer").value = q.answer;
+      $("saveQuestionBtn").textContent = "儲存修改"; $("cancelEditQuestionBtn").hidden = false;
+    }
+
+    function generateQuestions() {
+      const text = $("sourceText").value.trim();
+      if (!text) return alert("請先貼上講義文字。");
+      const subject = $("generateSubject").value;
+      const grade = $("generateGrade").value;
+      const items = text.split(/[。！？\n]/).map(x => x.trim()).filter(x => x.length >= 8).slice(0, 20);
+      const made = items.map(x => ({ id: makeId(), subject, grade, unit: "講義自動產生", type: "short", text: `根據講義內容，請說明：「${x.slice(0, 42)}${x.length > 42 ? "……" : ""}」的重點。`, options: "", answer: x }));
+      state.questions = [...made, ...state.questions];
+      $("sourceText").value = "";
+      addLog(`已從講義產生 ${made.length} 題。`);
+      renderAll();
+    }
+
+    function startTimer() {
+      setInterval(() => {
+        if (state.seconds > 0) state.seconds -= 1;
+        const m = String(Math.floor(state.seconds / 60)).padStart(2, "0");
+        const s = String(state.seconds % 60).padStart(2, "0");
+        $("timer").textContent = `${m}:${s}`;
+      }, 1000);
+    }
+
+    function bindEvents() {
+      document.querySelectorAll("[data-view]").forEach(b => b.addEventListener("click", () => renderNav(b.dataset.view)));
+      $("rollBtn").addEventListener("click", rollDice);
+      $("drawQuestionBtn").addEventListener("click", () => { pendingQuestionBonus = 2; drawQuestion(); });
+      $("setupPlayersBtn").addEventListener("click", () => { state.players = makePlayers(Number($("playerCount").value)); state.currentPlayer = 0; renderAll(); });
+      $("newGameBtn").addEventListener("click", () => { state.players = makePlayers(state.players.length); state.currentPlayer = 0; state.log = ["重新開始！"]; state.seconds = 600; renderAll(); });
+      $("subjectFilter").addEventListener("change", renderAll);
+      $("gradeFilter").addEventListener("change", renderAll);
+      $("board").addEventListener("click", e => { const btn = e.target.closest("[data-draw-card]"); if (btn) drawCard(btn.dataset.drawCard); });
+      $("cardTabs").addEventListener("click", e => { const btn = e.target.closest("[data-card-filter]"); if (btn) renderCards(btn.dataset.cardFilter); });
+      $("showAnswerBtn").addEventListener("click", () => $("answerBox").classList.add("show"));
+      $("replaceQuestionBtn").addEventListener("click", drawQuestion);
+      $("correctBtn").addEventListener("click", () => answerResult(true));
+      $("wrongBtn").addEventListener("click", () => answerResult(false));
+      $("closeModalBtn").addEventListener("click", () => $("questionModal").classList.remove("show"));
+      $("cardConfirmBtn").addEventListener("click", confirmCard);
+      $("cardSkipBtn").addEventListener("click", skipCard);
+      $("cardCloseBtn").addEventListener("click", closeCard);
+      $("cardDrawQuestionBtn").addEventListener("click", drawQuestionFromCard);
+      $("questionForm").addEventListener("submit", saveQuestion);
+      $("cancelEditQuestionBtn").addEventListener("click", e => { $("questionForm").reset(); $("questionId").value = ""; e.target.hidden = true; $("saveQuestionBtn").textContent = "新增題目"; });
+      $("generateBtn").addEventListener("click", generateQuestions);
+      $("syncCourseDataBtn").addEventListener("click", () => syncCourseQuestions());
+      $("questionList").addEventListener("click", e => {
+        const edit = e.target.closest("[data-edit]"); const del = e.target.closest("[data-delete]");
+        if (edit) editQuestion(edit.dataset.edit);
+        if (del && confirm("確定刪除這題嗎？")) { state.questions = state.questions.filter(q => q.id !== del.dataset.delete); renderAll(); }
+      });
+      $("loadSampleBtn").addEventListener("click", () => { state.questions = [...sampleQuestions.map(q => ({ ...q, id: makeId() })), ...state.questions]; renderAll(); });
+      $("clearQuestionsBtn").addEventListener("click", () => { if (confirm("確定清空題庫嗎？")) { state.questions = []; renderAll(); } });
+      $("exportBtn").addEventListener("click", () => {
+        const blob = new Blob([JSON.stringify(state.questions, null, 2)], { type: "application/json" });
+        const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "教學大富翁題庫.json"; a.click(); URL.revokeObjectURL(a.href);
+      });
+      $("importBtn").addEventListener("click", () => $("importFile").click());
+      $("importFile").addEventListener("change", e => {
+        const file = e.target.files[0]; if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => { try { state.questions = JSON.parse(reader.result); renderAll(); } catch { alert("匯入失敗，請確認檔案格式。"); } };
+        reader.readAsText(file); e.target.value = "";
+      });
+      window.addEventListener("resize", renderBoard);
+    }
+
+    try { init(); } catch (error) {
+      document.body.innerHTML = `<main style="max-width:760px;margin:40px auto;padding:24px;line-height:1.8;font-family:'Microsoft JhengHei',sans-serif"><h1>教學大富翁暫時無法開啟</h1><p>請清除舊資料後重新整理。</p><button onclick="localStorage.removeItem('${STORE_KEY}');location.reload()">清除舊資料並重新整理</button><pre>${escapeHtml(error.message)}</pre></main>`;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,2025 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>東衛教學星球</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #eff6ff;
+      background-image:
+        radial-gradient(circle at 12% 10%, rgba(253, 224, 71, .45) 0 110px, transparent 111px),
+        radial-gradient(circle at 88% 12%, rgba(96, 165, 250, .28) 0 150px, transparent 151px),
+        radial-gradient(circle at 80% 92%, rgba(244, 114, 182, .18) 0 145px, transparent 146px);
+    }
+    .card-in { animation: cardIn .45s ease-out both; }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(14px) scale(.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @media print {
+      body { background: #fff; }
+      .no-print { display: none !important; }
+      .print-block { box-shadow: none !important; border: 1px solid #ddd !important; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-700">
+  <a href="#top" aria-label="回到首頁最上方" class="no-print fixed bottom-5 right-5 z-50 rounded-full bg-blue-600 px-5 py-4 text-lg font-black text-white shadow-xl shadow-blue-200 transition hover:-translate-y-1 hover:bg-blue-500 focus:outline-none focus:ring-4 focus:ring-yellow-300">回首頁 ↑</a>
+  <main id="top" class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:py-12">
+    <header class="mb-8 text-center">
+      <div class="mb-3 inline-flex rounded-full bg-yellow-300 px-5 py-2 font-bold text-yellow-900 shadow-md">東衛國小科任教學工具箱</div>
+      <h1 class="text-4xl font-black text-blue-700 sm:text-6xl">東衛教學星球</h1>
+      <p class="mt-3 text-lg font-medium text-slate-600">備課、出題、遊戲、學習單、抽人分組與星光獎勵，一頁完成。</p>
+    </header>
+
+    <nav class="no-print mb-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-7">
+      <a href="#lessonLab" class="rounded-3xl bg-blue-600 px-5 py-4 text-center text-lg font-black text-white shadow-lg shadow-blue-200 hover:bg-blue-500">一鍵課堂包</a>
+      <a href="#randomTools" class="rounded-3xl bg-yellow-400 px-5 py-4 text-center text-lg font-black text-yellow-950 shadow-lg shadow-yellow-200 hover:bg-yellow-300">抽人分組</a>
+      <a href="#rewardSystem" class="rounded-3xl bg-pink-400 px-5 py-4 text-center text-lg font-black text-pink-950 shadow-lg shadow-pink-200 hover:bg-pink-300">星光獎勵</a>
+      <a href="#missionReading" class="rounded-3xl bg-orange-400 px-5 py-4 text-center text-lg font-black text-orange-950 shadow-lg shadow-orange-200 hover:bg-orange-300">任務閱讀</a>
+      <a href="#gameBank" class="rounded-3xl bg-emerald-500 px-5 py-4 text-center text-lg font-black text-white shadow-lg shadow-emerald-200 hover:bg-emerald-400">遊戲庫</a>
+      <a href="minnan-songs.html" class="rounded-3xl bg-rose-500 px-5 py-4 text-center text-lg font-black text-white shadow-lg shadow-rose-200 hover:bg-rose-400">臺語歌單</a>
+      <a href="#worksheetOutput" class="rounded-3xl bg-violet-500 px-5 py-4 text-center text-lg font-black text-white shadow-lg shadow-violet-200 hover:bg-violet-400">列印學習單</a>
+    </nav>
+
+    <section id="lessonLab" class="print-block rounded-3xl border-4 border-blue-300 bg-white p-5 shadow-xl shadow-blue-100 sm:p-7">
+      <div class="mb-5 flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p class="text-sm font-bold text-blue-500">一鍵生成</p>
+          <h2 class="text-3xl font-black text-blue-800">課堂包產生器</h2>
+          <p class="mt-2 text-sm font-medium text-slate-500">先用內建模板產生雛形。之後你補教師手冊，我們再把每個單元改成更精準的版本。</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 no-print">
+          <button id="generateLessonButton" type="button" class="rounded-2xl bg-blue-600 px-5 py-3 font-black text-white shadow hover:bg-blue-500">生成教案、遊戲、學習單</button>
+          <button id="printLessonButton" type="button" class="rounded-2xl bg-slate-200 px-5 py-3 font-black text-slate-700 hover:bg-slate-300">列印</button>
+          <span id="lessonStatus" class="text-sm font-bold text-blue-600"></span>
+        </div>
+      </div>
+
+      <div class="grid gap-4 lg:grid-cols-6">
+        <label class="rounded-2xl bg-blue-50 p-4 font-bold text-blue-900">
+          科目
+          <select id="lessonSubject" class="mt-2 w-full rounded-xl border-2 border-blue-200 bg-white px-3 py-2 font-black outline-none">
+            <option value="閩南語">閩南語</option>
+            <option value="體育">體育</option>
+            <option value="社會">社會</option>
+            <option value="綜合活動">綜合活動</option>
+            <option value="一年級閱讀">一年級閱讀</option>
+          </select>
+        </label>
+        <label class="rounded-2xl bg-yellow-50 p-4 font-bold text-yellow-900">
+          年級
+          <select id="lessonGrade" class="mt-2 w-full rounded-xl border-2 border-yellow-200 bg-white px-3 py-2 font-black outline-none">
+            <option>1 年級</option><option>2 年級</option><option>3 年級</option><option>4 年級</option><option>5 年級</option><option>6 年級</option>
+          </select>
+        </label>
+        <label class="rounded-2xl bg-pink-50 p-4 font-bold text-pink-900">
+          課次
+          <select id="lessonNumber" class="mt-2 w-full rounded-xl border-2 border-pink-200 bg-white px-3 py-2 font-black outline-none">
+            <option value="第 1 課">第 1 課</option>
+            <option value="第 2 課">第 2 課</option>
+            <option value="第 3 課">第 3 課</option>
+            <option value="第 4 課">第 4 課</option>
+            <option value="第 5 課">第 5 課</option>
+            <option value="第 6 課">第 6 課</option>
+            <option value="複習一">複習一</option>
+            <option value="複習二">複習二</option>
+            <option value="自訂課程">自訂課程</option>
+          </select>
+        </label>
+        <label class="rounded-2xl bg-pink-50 p-4 font-bold text-pink-900">
+          自訂主題 / 課名
+          <input id="lessonTopic" class="mt-2 w-full rounded-xl border-2 border-pink-200 bg-white px-3 py-2 font-black outline-none" value="" placeholder="可留空，或輸入課名、語詞主題">
+        </label>
+        <label class="rounded-2xl bg-emerald-50 p-4 font-bold text-emerald-900">
+          時間
+          <select id="lessonMinutes" class="mt-2 w-full rounded-xl border-2 border-emerald-200 bg-white px-3 py-2 font-black outline-none">
+            <option value="40">40 分鐘</option>
+            <option value="80">80 分鐘</option>
+          </select>
+        </label>
+        <label class="rounded-2xl bg-violet-50 p-4 font-bold text-violet-900">
+          分組
+          <select id="lessonGroups" class="mt-2 w-full rounded-xl border-2 border-violet-200 bg-white px-3 py-2 font-black outline-none">
+            <option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option>
+          </select>
+        </label>
+      </div>
+
+      <label id="minnanManualBox" class="mt-4 block rounded-2xl bg-orange-50 p-4 font-bold text-orange-900">
+        閩南語教師手冊來源
+        <select id="minnanManual" class="mt-2 w-full rounded-xl border-2 border-orange-200 bg-white px-3 py-2 font-black outline-none">
+          <option value="g1a">1 年級上學期教師手冊</option>
+          <option value="g1b">1 年級下學期教師手冊</option>
+          <option value="g2a">2 年級上學期教師手冊</option>
+          <option value="g2b">2 年級下學期教師手冊</option>
+          <option value="g3a">3 年級上學期教師手冊</option>
+          <option value="g3b">3 年級下學期教師手冊</option>
+          <option value="g4a">4 年級上學期教師手冊</option>
+          <option value="g4b">4 年級下學期教師手冊</option>
+          <option value="g5a">5 年級上學期教師手冊</option>
+          <option value="g5b">5 年級下學期教師手冊</option>
+          <option value="g6a">6 年級上學期教師手冊</option>
+          <option value="g6b">6 年級下學期教師手冊</option>
+        </select>
+        <p class="mt-2 text-sm text-orange-700">已讀取 1～6 年級上下學期手冊，會依選擇的冊別與課次顯示語詞、句型與手冊入口。</p>
+      </label>
+
+      <label id="socialManualBox" class="mt-4 hidden rounded-2xl bg-sky-50 p-4 font-bold text-sky-900">
+        社會教師手冊來源
+        <select id="socialManual" class="mt-2 w-full rounded-xl border-2 border-sky-200 bg-white px-3 py-2 font-black outline-none">
+          <option value="s4a-1-1">4 上 1-1 家鄉在哪裡</option>
+          <option value="s4a-1-2">4 上 1-2 家鄉的地形</option>
+          <option value="s4a-1-3">4 上 1-3 氣候、水資源與生活</option>
+          <option value="s4a-2-1">4 上 2-1 傳統住屋與生活</option>
+          <option value="s4a-2-2">4 上 2-2 器物與生活</option>
+          <option value="s4a-3-1">4 上 3-1 信仰與生活</option>
+          <option value="s4a-3-2">4 上 3-2 老街與生活</option>
+          <option value="s4a-4-1">4 上 4-1 生活的作息</option>
+          <option value="s4a-4-2">4 上 4-2 傳統的節慶</option>
+          <option value="s4a-4-3">4 上 4-3 現代的節日</option>
+        </select>
+        <p class="mt-2 text-sm text-sky-700">已讀取四上社會教師手冊 1-1～4-3，會依選擇的課次帶入學習目標、教學活動與手冊入口。</p>
+      </label>
+
+      <label id="comprehensiveManualBox" class="mt-4 hidden rounded-2xl bg-emerald-50 p-4 font-bold text-emerald-900">
+        綜合活動教師手冊來源
+        <select id="comprehensiveManual" class="mt-2 w-full rounded-xl border-2 border-emerald-200 bg-white px-3 py-2 font-black outline-none">
+          <option value="c4a-u1-a1">4 上 單元1 活動1 任務新安排</option>
+          <option value="c4a-u1-a2">4 上 單元1 活動2 團隊的規範</option>
+          <option value="c4a-u1-a3">4 上 單元1 活動3 愛班與合作</option>
+          <option value="c4a-u2-a1">4 上 單元2 活動1 同心協力</option>
+          <option value="c4a-u2-a2">4 上 單元2 活動2 友愛同伴</option>
+          <option value="c4a-u2-a3">4 上 單元2 活動3 合作無間</option>
+          <option value="c4a-u3-a1">4 上 單元3 活動1 生活中的志工</option>
+          <option value="c4a-u3-a2">4 上 單元3 活動2 齊心服務去</option>
+          <option value="c4a-u3-a3">4 上 單元3 活動3 社區服務樂</option>
+          <option value="c4b-u1-a1">4 下 單元1 活動1 文化大觀園</option>
+          <option value="c4b-u1-a2">4 下 單元1 活動2 在地文化生活家</option>
+          <option value="c4b-u1-a3">4 下 單元1 活動3 文化推推推</option>
+          <option value="c4b-u2-a1">4 下 單元2 活動1 工作與我們</option>
+          <option value="c4b-u2-a2">4 下 單元2 活動2 工作小學堂</option>
+          <option value="c4b-u2-a3">4 下 單元2 活動3 有你真好</option>
+          <option value="c4b-u3-a1">4 下 單元3 活動1 美無所不在</option>
+          <option value="c4b-u3-a2">4 下 單元3 活動2 美探索發現</option>
+          <option value="c4b-u3-a3">4 下 單元3 活動3 美改變生活</option>
+        </select>
+        <p class="mt-2 text-sm text-emerald-700">已接入 4 上、4 下綜合活動教師手冊與學習單資料夾。</p>
+      </label>
+
+      <label class="mt-4 block rounded-2xl bg-slate-50 p-4 font-bold text-slate-700">
+        本堂課希望學生學會什麼？
+        <textarea id="lessonGoal" rows="2" class="mt-2 w-full rounded-xl border-2 border-slate-200 bg-white px-3 py-2 font-bold outline-none" placeholder="例如：能說出重點詞語、能合作完成任務、能表達自己的想法。">能理解本堂課重點，透過小組任務練習表達、合作與回饋。</textarea>
+      </label>
+
+      <div id="lessonOutput" class="mt-6 grid gap-5 lg:grid-cols-2 xl:grid-cols-4"></div>
+    </section>
+
+    <section id="randomTools" class="mt-8 grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+      <div class="rounded-3xl border-4 border-yellow-300 bg-white p-5 shadow-xl shadow-blue-100 sm:p-7">
+        <div class="mb-4 flex items-center justify-between gap-3">
+          <div>
+            <p class="text-sm font-bold text-blue-500">學生名單</p>
+            <h2 class="text-2xl font-black text-blue-800">選擇或編輯名單</h2>
+          </div>
+          <div id="studentCount" class="rounded-2xl bg-blue-100 px-4 py-2 text-sm font-black text-blue-700"></div>
+        </div>
+        <label class="mb-4 block rounded-2xl bg-yellow-50 p-4 font-bold text-yellow-900">
+          <span class="mb-2 block text-sm">從「全校加分表.xlsx」載入名單</span>
+          <select id="presetRoster" class="w-full rounded-xl border-2 border-yellow-300 bg-white px-4 py-3 font-black text-blue-800 outline-none focus:border-blue-500">
+            <option value="grade1">1 年級（17 人）</option>
+            <option value="grade2">2 年級（12 人）</option>
+            <option value="grade3">3 年級（13 人）</option>
+            <option value="grade4">4 年級（11 人）</option>
+            <option value="grade5">5 年級（20 人）</option>
+            <option value="grade6">6 年級（10 人）</option>
+            <option value="all">全校 1～6 年級（83 人）</option>
+          </select>
+        </label>
+        <textarea id="nameList" rows="12" class="w-full resize-y rounded-2xl border-2 border-blue-200 bg-blue-50/60 p-4 text-lg font-semibold leading-8 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100" placeholder="每行一個名字"></textarea>
+        <div class="mt-3 flex flex-wrap items-center justify-between gap-3 text-sm font-medium text-slate-500">
+          <span>每行一個名字，可直接修改。星光資料依「年級＋姓名」保存。</span>
+          <button id="clearButton" class="rounded-xl px-3 py-2 font-bold hover:bg-slate-100">清空名單</button>
+        </div>
+      </div>
+
+      <div class="space-y-6">
+        <section class="rounded-3xl border-4 border-blue-300 bg-white p-5 shadow-xl shadow-blue-100 sm:p-7">
+          <p class="text-sm font-bold text-yellow-600">互動工具</p>
+          <h2 class="mb-5 text-2xl font-black text-blue-800">隨機抽取一人</h2>
+          <div id="winnerBox" class="flex min-h-40 items-center justify-center rounded-3xl border-4 border-dashed border-yellow-300 bg-yellow-50 px-4 text-center">
+            <p id="winnerName" class="text-3xl font-black text-yellow-700 sm:text-5xl">準備好了嗎？</p>
+          </div>
+          <button id="pickButton" class="mt-5 w-full rounded-2xl bg-yellow-400 px-5 py-4 text-xl font-black text-yellow-950 shadow-lg shadow-yellow-200 transition hover:-translate-y-1 hover:bg-yellow-300 disabled:opacity-60">隨機抽取一人</button>
+        </section>
+
+        <section class="rounded-3xl border-4 border-blue-300 bg-white p-5 shadow-xl shadow-blue-100 sm:p-7">
+          <h2 class="mb-5 text-2xl font-black text-blue-800">隨機分組</h2>
+          <div class="flex flex-col gap-3 sm:flex-row">
+            <label class="flex flex-1 items-center justify-between rounded-2xl bg-blue-50 px-4 py-3 font-bold text-blue-800">
+              分組數量
+              <select id="groupCount" class="rounded-xl border-2 border-blue-200 bg-white px-4 py-2 font-black text-blue-700">
+                <option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option>
+              </select>
+            </label>
+            <button id="groupButton" class="rounded-2xl bg-blue-600 px-7 py-3 text-lg font-black text-white shadow-lg shadow-blue-200 transition hover:-translate-y-1 hover:bg-blue-500">開始隨機分組</button>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section id="groupSection" class="mt-8 hidden">
+      <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <p class="text-sm font-bold text-yellow-600">分組結果</p>
+          <h2 class="text-3xl font-black text-blue-800">今天的夢幻隊伍</h2>
+        </div>
+        <p id="groupSummary" class="rounded-full bg-white px-4 py-2 font-bold text-blue-600 shadow"></p>
+      </div>
+      <div id="groupResults" class="grid gap-5 sm:grid-cols-2 xl:grid-cols-4"></div>
+    </section>
+
+    <section id="rewardSystem" class="mt-8 rounded-3xl border-4 border-pink-300 bg-white p-5 shadow-xl shadow-pink-100 sm:p-7">
+      <div class="mb-5 flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p class="text-sm font-bold text-pink-500">星光成長獎勵系統</p>
+          <h2 class="text-3xl font-black text-blue-800">全校星光記錄</h2>
+          <p class="mt-2 max-w-2xl text-sm font-medium text-slate-500">10 個星光點換 1 張星光卡，10 張星光卡換 1 張星耀卡，3 張星耀卡換 1 張星冠證書，3 張星冠證書換 1 座星光獎盃。</p>
+        </div>
+        <div class="flex flex-wrap gap-2 no-print">
+          <button id="exportButton" class="rounded-2xl bg-emerald-500 px-4 py-2 font-black text-white shadow hover:bg-emerald-400">匯出紀錄</button>
+          <button id="resetButton" class="rounded-2xl bg-slate-200 px-4 py-2 font-black text-slate-700 hover:bg-slate-300">重設全部星光點</button>
+        </div>
+      </div>
+
+      <div class="grid gap-5 lg:grid-cols-[0.75fr_1.25fr]">
+        <div class="rounded-3xl bg-blue-50 p-4">
+          <label class="mb-3 block text-sm font-black text-blue-800">選擇學生</label>
+          <select id="rewardStudent" class="mb-4 w-full rounded-2xl border-2 border-blue-200 bg-white px-4 py-3 font-black text-blue-800 outline-none focus:border-blue-500"></select>
+          <div class="rounded-3xl bg-white p-4 text-center shadow">
+            <p class="text-sm font-bold text-slate-500">目前選取</p>
+            <h3 id="selectedStudentName" class="mt-1 text-3xl font-black text-blue-700">-</h3>
+            <div class="mt-4 grid grid-cols-2 gap-3">
+              <div class="rounded-2xl bg-yellow-100 p-3"><p class="text-xs font-bold text-yellow-700">可用星光點</p><p id="currentPoints" class="text-3xl font-black text-yellow-700">0</p></div>
+              <div class="rounded-2xl bg-pink-100 p-3"><p class="text-xs font-bold text-pink-700">累積星光</p><p id="totalEarned" class="text-3xl font-black text-pink-700">0</p></div>
+            </div>
+          </div>
+          <div class="mt-4 grid grid-cols-2 gap-2">
+            <button data-delta="1" class="pointButton rounded-2xl bg-yellow-400 px-4 py-3 font-black text-yellow-950 shadow hover:bg-yellow-300">好表現 +1</button>
+            <button data-delta="2" class="pointButton rounded-2xl bg-orange-400 px-4 py-3 font-black text-orange-950 shadow hover:bg-orange-300">很棒 +2</button>
+            <button data-delta="3" class="pointButton rounded-2xl bg-pink-400 px-4 py-3 font-black text-pink-950 shadow hover:bg-pink-300">超優秀 +3</button>
+            <button data-delta="-1" class="pointButton rounded-2xl bg-slate-700 px-4 py-3 font-black text-white shadow hover:bg-slate-600">提醒扣 1</button>
+          </div>
+          <button id="bonusAllButton" class="mt-3 w-full rounded-2xl bg-emerald-500 px-4 py-3 font-black text-white shadow hover:bg-emerald-400">目前名單全體 +1 星光點</button>
+        </div>
+
+        <div>
+          <div class="grid gap-3 sm:grid-cols-5">
+            <div class="rounded-3xl border-2 border-yellow-200 bg-yellow-50 p-4 text-center"><p class="text-xs font-black text-yellow-700">星光點</p><p id="bearProgress" class="mt-1 text-2xl font-black text-yellow-800">0 / 10</p></div>
+            <div class="rounded-3xl border-2 border-pink-200 bg-pink-50 p-4 text-center"><p class="text-xs font-black text-pink-700">星光卡</p><p id="circleCards" class="mt-1 text-2xl font-black text-pink-800">0</p></div>
+            <div class="rounded-3xl border-2 border-blue-200 bg-blue-50 p-4 text-center"><p class="text-xs font-black text-blue-700">星耀卡</p><p id="honorCards" class="mt-1 text-2xl font-black text-blue-800">0</p></div>
+            <div class="rounded-3xl border-2 border-emerald-200 bg-emerald-50 p-4 text-center"><p class="text-xs font-black text-emerald-700">星冠證書</p><p id="certificates" class="mt-1 text-2xl font-black text-emerald-800">0</p></div>
+            <div class="rounded-3xl border-2 border-orange-200 bg-orange-50 p-4 text-center"><p class="text-xs font-black text-orange-700">星光獎盃</p><p id="trophies" class="mt-1 text-2xl font-black text-orange-800">0</p></div>
+          </div>
+          <div class="mt-4 overflow-hidden rounded-3xl border-2 border-slate-200">
+            <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-50 px-4 py-3">
+              <h3 class="text-lg font-black text-blue-800">目前名單星光表</h3>
+              <input id="searchStudent" class="rounded-xl border-2 border-slate-200 px-3 py-2 text-sm font-bold outline-none focus:border-blue-400" placeholder="搜尋姓名">
+            </div>
+            <div class="max-h-96 overflow-auto">
+              <table class="w-full text-left text-sm">
+                <thead class="sticky top-0 bg-blue-600 text-white">
+                  <tr><th class="px-4 py-3">學生</th><th class="px-4 py-3">星光點</th><th class="px-4 py-3">星光卡</th><th class="px-4 py-3">星耀卡</th><th class="px-4 py-3">星冠證書</th><th class="px-4 py-3">星光獎盃</th></tr>
+                </thead>
+                <tbody id="rewardTable" class="divide-y divide-slate-100 bg-white"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="missionReading" class="mt-8 rounded-3xl border-4 border-orange-300 bg-white p-5 shadow-xl shadow-orange-100 sm:p-7">
+      <div class="mb-5 flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p class="text-sm font-bold text-orange-500">任務與閱讀認證</p>
+          <h2 class="text-3xl font-black text-blue-800">東衛任務閱讀存摺</h2>
+          <p class="mt-2 max-w-3xl text-sm font-medium text-slate-500">改自家事閱讀技能：把「家事」轉成課堂任務，把「手機時間」轉成獎勵時間。紀錄依「學生＋週次」保存，方便追蹤學生任務、閱讀與點數兌換。</p>
+        </div>
+        <div class="flex flex-wrap gap-2 no-print">
+          <button id="missionSaveButton" class="rounded-2xl bg-orange-500 px-4 py-2 font-black text-white shadow hover:bg-orange-400">儲存任務紀錄</button>
+          <button id="missionLoadButton" class="rounded-2xl bg-blue-500 px-4 py-2 font-black text-white shadow hover:bg-blue-400">讀取紀錄</button>
+          <button id="missionClearButton" class="rounded-2xl bg-slate-200 px-4 py-2 font-black text-slate-700 hover:bg-slate-300">清除本筆</button>
+        </div>
+      </div>
+
+      <div class="grid gap-5 xl:grid-cols-[0.8fr_1.2fr]">
+        <div class="rounded-3xl bg-orange-50 p-4">
+          <div class="grid gap-3 sm:grid-cols-2">
+            <label class="block text-sm font-black text-orange-900">
+              學生
+              <select id="missionStudent" class="mt-2 w-full rounded-2xl border-2 border-orange-200 bg-white px-4 py-3 font-black text-orange-900 outline-none focus:border-orange-400"></select>
+            </label>
+            <label class="block text-sm font-black text-orange-900">
+              週次 / 單元
+              <input id="missionWeek" class="mt-2 w-full rounded-2xl border-2 border-orange-200 bg-white px-4 py-3 font-black outline-none focus:border-orange-400" value="第 1 週" placeholder="例如：第 1 週、四上社會 1-1">
+            </label>
+          </div>
+
+          <div class="mt-4 rounded-3xl bg-white p-4 shadow">
+            <h3 class="text-lg font-black text-blue-800">本週任務設定</h3>
+            <p class="mt-1 text-sm font-medium text-slate-500">每項每天可記 0～3 次，儲存時會自動換算任務點。</p>
+            <div id="missionTaskGrid" class="mt-4 space-y-4"></div>
+          </div>
+        </div>
+
+        <div class="grid gap-5 lg:grid-cols-2">
+          <div class="rounded-3xl border-2 border-blue-200 bg-blue-50 p-4">
+            <h3 class="text-lg font-black text-blue-800">閱讀認證</h3>
+            <label class="mt-3 block text-sm font-black text-blue-900">
+              書名 / 篇名
+              <input id="readingTitle" class="mt-2 w-full rounded-2xl border-2 border-blue-200 bg-white px-4 py-3 font-bold outline-none focus:border-blue-400" placeholder="例如：澎湖的故事、國語日報一篇文章">
+            </label>
+            <label class="mt-3 block text-sm font-black text-blue-900">
+              1. 這篇主要在說什麼？
+              <textarea id="readingQ1" rows="2" class="mt-2 w-full rounded-2xl border-2 border-blue-200 bg-white px-4 py-3 font-bold outline-none focus:border-blue-400"></textarea>
+            </label>
+            <label class="mt-3 block text-sm font-black text-blue-900">
+              2. 我最有感覺的一句話或一個畫面
+              <textarea id="readingQ2" rows="2" class="mt-2 w-full rounded-2xl border-2 border-blue-200 bg-white px-4 py-3 font-bold outline-none focus:border-blue-400"></textarea>
+            </label>
+            <label class="mt-3 block text-sm font-black text-blue-900">
+              3. 這本書 / 文章和我的生活有什麼關係？
+              <textarea id="readingQ3" rows="2" class="mt-2 w-full rounded-2xl border-2 border-blue-200 bg-white px-4 py-3 font-bold outline-none focus:border-blue-400"></textarea>
+            </label>
+            <label class="mt-3 flex items-center gap-3 rounded-2xl bg-white p-3 font-black text-blue-900 shadow-sm">
+              <input id="readingCertified" type="checkbox" class="h-5 w-5 rounded border-blue-300">
+              閱讀認證通過，加 5 點
+            </label>
+          </div>
+
+          <div class="rounded-3xl border-2 border-emerald-200 bg-emerald-50 p-4">
+            <h3 class="text-lg font-black text-emerald-800">獎勵時間兌換</h3>
+            <p class="mt-1 text-sm font-medium text-slate-500">預設 10 點可換 30 分鐘，適合換自由閱讀、教具遊戲、協助老師或其他班級獎勵。</p>
+            <div class="mt-4 grid grid-cols-2 gap-3">
+              <div class="rounded-2xl bg-white p-4 text-center shadow-sm"><p class="text-xs font-black text-emerald-700">本週任務點</p><p id="missionTaskPoints" class="text-3xl font-black text-emerald-700">0</p></div>
+              <div class="rounded-2xl bg-white p-4 text-center shadow-sm"><p class="text-xs font-black text-blue-700">可換獎勵時間</p><p id="missionRewardMinutes" class="text-3xl font-black text-blue-700">0 分</p></div>
+            </div>
+            <label class="mt-4 block text-sm font-black text-emerald-900">
+              已兌換 / 使用分鐘數
+              <input id="rewardMinutesUsed" type="number" min="0" step="5" class="mt-2 w-full rounded-2xl border-2 border-emerald-200 bg-white px-4 py-3 font-black outline-none focus:border-emerald-400" value="0">
+            </label>
+            <label class="mt-3 block text-sm font-black text-emerald-900">
+              備註
+              <textarea id="missionNote" rows="3" class="mt-2 w-full rounded-2xl border-2 border-emerald-200 bg-white px-4 py-3 font-bold outline-none focus:border-emerald-400" placeholder="例如：體育課主動協助收器材；閱讀分享清楚。"></textarea>
+            </label>
+            <div class="mt-4 rounded-2xl bg-white p-4 shadow-sm">
+              <p class="text-sm font-black text-slate-500">儲存狀態</p>
+              <p id="missionStatus" class="mt-1 font-black text-orange-700">尚未儲存</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-5 overflow-hidden rounded-3xl border-2 border-slate-200">
+        <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-50 px-4 py-3">
+          <h3 class="text-lg font-black text-blue-800">任務閱讀紀錄</h3>
+          <input id="missionSearch" class="rounded-xl border-2 border-slate-200 px-3 py-2 text-sm font-bold outline-none focus:border-blue-400" placeholder="搜尋學生或週次">
+        </div>
+        <div class="max-h-80 overflow-auto">
+          <table class="w-full text-left text-sm">
+            <thead class="sticky top-0 bg-orange-500 text-white">
+              <tr><th class="px-4 py-3">學生</th><th class="px-4 py-3">週次</th><th class="px-4 py-3">任務點</th><th class="px-4 py-3">閱讀</th><th class="px-4 py-3">獎勵時間</th><th class="px-4 py-3">更新時間</th></tr>
+            </thead>
+            <tbody id="missionRecordTable" class="divide-y divide-slate-100 bg-white"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="gameBank" class="mt-8 rounded-3xl border-4 border-emerald-300 bg-white p-5 shadow-xl shadow-emerald-100 sm:p-7">
+      <div class="mb-5 flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p class="text-sm font-bold text-emerald-600">可搭配各科使用</p>
+          <h2 class="text-3xl font-black text-blue-800">教學遊戲庫</h2>
+          <p class="mt-2 text-sm font-medium text-slate-500">首頁只保留入口，點選後會開啟獨立遊戲頁面，畫面更清楚。</p>
+        </div>
+        <a id="openGameToolsLink" href="game-tools.html" class="no-print rounded-2xl bg-emerald-500 px-4 py-2 font-black text-white shadow hover:bg-emerald-400">開啟完整遊戲頁</a>
+      </div>
+
+      <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <a data-game-anchor="wheel" href="game-tools.html#wheel" class="block rounded-3xl bg-yellow-50 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+          <h3 class="text-xl font-black text-yellow-800">幸運轉盤</h3>
+          <p class="mt-3 text-sm leading-6 text-slate-600">抽目前名單學生，適合暖身、複習、抽答與課堂互動。</p>
+          <span class="mt-5 inline-flex rounded-2xl bg-yellow-400 px-4 py-2 font-black text-yellow-950">開啟轉盤</span>
+        </a>
+        <a data-game-anchor="quiz" href="game-tools.html#quiz" class="block rounded-3xl bg-blue-50 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+          <h3 class="text-xl font-black text-blue-800">搶答挑戰</h3>
+          <p class="mt-3 text-sm leading-6 text-slate-600">小組看題搶答，答對加分，可搭配各科複習。</p>
+          <span class="mt-5 inline-flex rounded-2xl bg-blue-600 px-4 py-2 font-black text-white">開啟搶答</span>
+        </a>
+        <a data-game-anchor="match" href="game-tools.html#match" class="block rounded-3xl bg-pink-50 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+          <h3 class="text-xl font-black text-pink-800">配對翻牌</h3>
+          <p class="mt-3 text-sm leading-6 text-slate-600">詞語配意思、圖片配名稱、概念配例子。</p>
+          <span class="mt-5 inline-flex rounded-2xl bg-pink-500 px-4 py-2 font-black text-white">開啟翻牌</span>
+        </a>
+        <a data-game-anchor="pe" href="game-tools.html#pe" class="block rounded-3xl bg-emerald-50 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+          <h3 class="text-xl font-black text-emerald-800">體育闖關</h3>
+          <p class="mt-3 text-sm leading-6 text-slate-600">用目前名單分組輪站，兼顧合作與活動量。</p>
+          <span class="mt-5 inline-flex rounded-2xl bg-emerald-500 px-4 py-2 font-black text-white">開啟闖關</span>
+        </a>
+      </div>
+    </section>
+
+    <section id="worksheetOutput" class="mt-8"></section>
+
+    <div id="toast" class="pointer-events-none fixed bottom-6 left-1/2 z-50 -translate-x-1/2 translate-y-24 rounded-2xl bg-slate-800 px-5 py-3 font-bold text-white opacity-0 shadow-xl transition-all"></div>
+  </main>
+
+  <script src="drive-links.js"></script>
+  <script>
+    const rosters = {
+      grade1: ['成劭哲', '林禹和', '薛浩介', '陳俊睿', '呂胤安', '尤瑞騰', '呂銄洋', '洪博彥', '陳星宇', '吳家樂', '陳浤鈞', '顏子淯', '顏子喨', '薛詠仁', '呂品賢', '蔡沛玟', '呂侑甯'],
+      grade2: ['林柏暟', '吳恩佑', '戴佑庭', '王天助', '呂佑恩', '莊又睿', '呂芝均', '葉芯瑜', '陳語芯', '蕭禹馨', '陳禹彤', '徐尉綸'],
+      grade3: ['陳品佑', '葉冠宏', '林酉居', '呂宇恩', '許軒禾', '許允睿', '尹辰元', '呂雨璇', '胡詠晳', '翁若媞', '莊雅淳', '邵恩', '陳浚棛'],
+      grade4: ['洪杰廷', '呂曜廷', '許淳智', '羅宇揚', '呂貞邑', '蔡沛晴', '洪咏箖', '盧品妍', '蔡馨郁', '林柏諺', '戴玟妡'],
+      grade5: ['洪定群', '尹辰熙', '鄭易新', '尤瑞禮', '薛宸光', '洪丞佑', '呂政諭', '呂胤宏', '許靚蕾', '葉奕希', '賴聖棠', '呂雅欣', '涂芯妍', '薛名姝', '呂佳琪', '許書嫚', '呂若歆', '吳若薰', '戴安婕', '林子喬'],
+      grade6: ['呂丞翊', '王彥綸', '王楷翔', '薛右盛', '楊錫元', '王歆曈', '蔡佳臻', '王珮珊', '陳善育', '涂心恬']
+    };
+    rosters.all = Object.keys(rosters).flatMap(key => rosters[key]);
+
+    const minnanManuals = {
+      g1a: { label: '1 年級上學期教師手冊', grade: '1 年級', semester: '上學期', pages: 48, file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\閩南語教材-教師手冊\\1年級上學期.pdf' },
+      g1b: { label: '1 年級下學期教師手冊', grade: '1 年級', semester: '下學期', pages: 50, file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\閩南語教材-教師手冊\\1年級下學期.pdf' },
+      g2a: { label: '2 年級上學期教師手冊', grade: '2 年級', semester: '上學期', pages: 49, file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\閩南語教材-教師手冊\\2年級上學期.pdf.crdownload' },
+      g2b: { label: '2 年級下學期教師手冊', grade: '2 年級', semester: '下學期', pages: 50, file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\閩南語教材-教師手冊\\2年級下學期.pdf' },
+      g3a: { label: '3 年級上學期教師手冊', grade: '3 年級', semester: '上學期', pages: 91, file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\閩南語教材-教師手冊\\3年級上學期.pdf.crdownload' },
+      g3b: { label: '3 年級下學期教師手冊', grade: '3 年級', semester: '下學期', pages: 81, file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\閩南語教材-教師手冊\\3年級下學期.pdf' },
+      g4a: { label: '4 年級上學期教師手冊', grade: '4 年級', semester: '上學期', pages: 64, file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\閩南語教材-教師手冊\\4年級上學期.pdf.crdownload' },
+      g4b: { label: '4 年級下學期教師手冊', grade: '4 年級', semester: '下學期', pages: 48, file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\閩南語教材-教師手冊\\4年級下學期.pdf' },
+      g5a: { label: '5 年級上學期教師手冊', grade: '5 年級', semester: '上學期', pages: 80, file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\閩南語教材-教師手冊\\5年級上學期.pdf.crdownload' },
+      g5b: { label: '5 年級下學期教師手冊', grade: '5 年級', semester: '下學期', pages: 60, file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\閩南語教材-教師手冊\\5年級下學期.pdf' },
+      g6a: { label: '6 年級上學期教師手冊', grade: '6 年級', semester: '上學期', pages: 96, file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\閩南語教材-教師手冊\\6年級上學期.pdf.crdownload' },
+      g6b: { label: '6 年級下學期教師手冊', grade: '6 年級', semester: '下學期', pages: 80, file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\閩南語教材-教師手冊\\6年級下學期.pdf' }
+    };
+
+    const socialManuals = {
+      's4a-1-1': { label: '4 上 1-1 家鄉在哪裡', grade: '4 年級', semester: '上學期', pages: 20, file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\四上社會教材-教師手冊\\01_國小社會4上教冊(教學篇)_1-1_(教).pdf' },
+      's4a-1-2': { label: '4 上 1-2 家鄉的地形', grade: '4 年級', semester: '上學期', pages: 8, file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\四上社會教材-教師手冊\\02_國小社會4上教冊(教學篇)_1-2_(教).pdf' },
+      's4a-1-3': { label: '4 上 1-3 氣候、水資源與生活', grade: '4 年級', semester: '上學期', pages: 14, file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\四上社會教材-教師手冊\\03_國小社會4上教冊(教學篇)_1-3_(教).pdf' },
+      's4a-2-1': { label: '4 上 2-1 傳統住屋與生活', grade: '4 年級', semester: '上學期', pages: 16, file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\四上社會教材-教師手冊\\04_國小社會4上教冊(教學篇)_2-1_(教).pdf' },
+      's4a-2-2': { label: '4 上 2-2 器物與生活', grade: '4 年級', semester: '上學期', pages: 14, file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\四上社會教材-教師手冊\\05_國小社會4上教冊(教學篇)_2-2_(教).pdf' },
+      's4a-3-1': { label: '4 上 3-1 信仰與生活', grade: '4 年級', semester: '上學期', pages: 18, file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\四上社會教材-教師手冊\\06_國小社會4上教冊(教學篇)_3-1_(教).pdf' },
+      's4a-3-2': { label: '4 上 3-2 老街與生活', grade: '4 年級', semester: '上學期', pages: 18, file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\四上社會教材-教師手冊\\07_國小社會4上教冊(教學篇)_3-2_(教).pdf' },
+      's4a-4-1': { label: '4 上 4-1 生活的作息', grade: '4 年級', semester: '上學期', pages: 14, file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\四上社會教材-教師手冊\\08_國小社會4上教冊(教學篇)_4-1_(教).pdf' },
+      's4a-4-2': { label: '4 上 4-2 傳統的節慶', grade: '4 年級', semester: '上學期', pages: 16, file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\四上社會教材-教師手冊\\09_國小社會4上教冊(教學篇)_4-2_(教).pdf' },
+      's4a-4-3': { label: '4 上 4-3 現代的節日', grade: '4 年級', semester: '上學期', pages: 24, file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\四上社會教材-教師手冊\\10_國小社會4上教冊(教學篇)_4-3_(教).pdf' }
+    };
+    const socialLessonOrder = ['s4a-1-1', 's4a-1-2', 's4a-1-3', 's4a-2-1', 's4a-2-2', 's4a-3-1', 's4a-3-2', 's4a-4-1', 's4a-4-2', 's4a-4-3'];
+
+    const socialLessonBank = {
+      's4a-1-1': {
+        code: '1-1',
+        title: '家鄉在哪裡',
+        concepts: ['家鄉的位置與特色', '不同種類地圖的用途', '地圖四要素：圖名、方向標、比例尺、圖例', '電子地圖的搜尋、縮放與模式切換'],
+        objectives: ['透過圖像觀察與討論，認識家鄉的位置與特色，並了解不同種類地圖的特性與用途。', '了解地圖四要素的內容與用途，並能實際進行操作與應用。', '探究電子地圖的使用方法，覺察在不同模式中呈現的內容與差異。'],
+        activities: ['從地圖找家鄉：閱讀行政區圖或電子地圖，指出家鄉所在縣市。', '家鄉與地圖：比較交通路線圖、行政區圖、觀光導覽圖、地形圖的資訊差異。', '地圖要素小偵探：找出圖名、方向標、比例尺與圖例。', '電子地圖實作：搜尋家鄉位置、縮放範圍並切換不同模式。'],
+        game: '家鄉地圖任務賽：小組抽任務卡，在地圖上找到指定縣市、方向標、圖例或交通路線，最快完成且能說明理由的小組得分。',
+        worksheet: ['我的家鄉在＿＿＿＿縣市。', '請寫出地圖四要素。', '哪一種地圖最適合查交通路線？為什麼？', '使用電子地圖時，我發現＿＿＿＿。'],
+        questions: ['地圖四要素包含哪些？', '不同種類的地圖為什麼會顯示不同資訊？', '電子地圖可以怎樣幫助我們認識家鄉？']
+      },
+      's4a-1-2': {
+        code: '1-2',
+        title: '家鄉的地形',
+        concepts: ['地形是地表高低起伏的型態', '平原、盆地、台地、丘陵、山地', '地形會影響居民活動與生活方式', '居民活動也會改變地表景觀'],
+        objectives: ['透過各種方式觀察，認識家鄉不同的地形與景觀，並了解各種地形的特色與差異。', '探究不同地形對居民生活的影響，覺察自然環境與居民生活相互影響的現象。'],
+        activities: ['家鄉地形大不同：觀察立體地圖或衛星影像，辨識地形起伏。', '地形種類討論：比較平原、盆地、台地、丘陵與山地的特色。', '人體地形圖：分組用身體排出五種地形外觀並說明。', '地形與生活：討論不同地形適合的活動、產業與景觀。'],
+        game: '人體地形圖挑戰：各組抽一種地形，用隊形排出高低起伏，再讓其他組猜地形並說明居民可能從事的活動。',
+        worksheet: ['請畫出一種家鄉常見地形。', '平原、盆地、台地、丘陵、山地中，我的家鄉較接近＿＿＿＿。', '這種地形會影響居民哪些生活？', '居民活動可能如何改變地表景觀？'],
+        questions: ['地形是什麼？', '地形較平坦的地方可能形成哪些景觀？', '丘陵或山地的居民活動可能受到哪些限制？']
+      },
+      's4a-1-3': {
+        code: '1-3',
+        title: '氣候、水資源與生活',
+        concepts: ['氣候是一地長時間的天氣平均狀況', '氣候影響建築、作物與休閒活動', '河川、湖泊、地下水、海洋都是水資源', '保護水資源是居民與政府共同責任'],
+        objectives: ['了解不同居住地方的氣候特色，以及生活方式的差異。', '探究自然與人文環境相互影響，並發展出不同生活方式。', '了解居住地方的水文特色，體認水資源對生活的重要性。', '認識家鄉常見的水資源，並能表達對環境的關懷，珍惜資源。'],
+        activities: ['家鄉的氣候：說明家鄉氣候特色與生活影響。', '氣候與居民生活：用概念圖整理建築、作物、休閒活動與氣候的關係。', '家鄉的水資源：辨識河川、湖泊、地下水、海洋等水資源。', '水資源與生活：討論用水、汙染與保護水資源的方法。'],
+        game: '氣候水資源配對：學生抽氣候卡、水資源卡與生活卡，配對後說明彼此關係。',
+        worksheet: ['我的家鄉氣候特色是＿＿＿＿。', '氣候可能影響居民的建築、作物或休閒活動，請舉一例。', '請列出兩種家鄉水資源。', '我可以用＿＿＿＿的方法珍惜水資源。'],
+        questions: ['氣候和天氣有什麼不同？', '水資源對居民生活有哪些用途？', '為什麼保護水資源是大家的責任？']
+      },
+      's4a-2-1': {
+        code: '2-1',
+        title: '傳統住屋與生活',
+        concepts: ['原住民族傳統住屋受自然環境影響', '漢人傳統住屋常就地取材', '一條龍、單伸手、三合院', '傳統住屋的轉變、維護與保存'],
+        objectives: ['覺察原住民族有不同的傳統建築形式。', '了解漢人以就地取材的方式建造不同傳統住屋。', '透過資料蒐集與討論，深入了解三合院的居住形式。', '從傳統住屋的轉變、維護與保存中，體認保護傳統住屋的重要性。'],
+        activities: ['眼明手快：辨認原住民族傳統住屋圖片與名稱。', '原住民族傳統住屋：認識石板屋、地下屋、泰雅族傳統住屋。', '漢人傳統住屋：比較一條龍、單伸手、三合院。', '傳統住屋保存討論：思考轉變、維護與保存的意義。'],
+        game: '傳統住屋建築師：小組用圖卡把建材、環境與住屋形式配對，說明為什麼這樣蓋。',
+        worksheet: ['請寫出一種原住民族傳統住屋。', '漢人傳統住屋常見形式有＿＿＿＿。', '傳統住屋的材料可能來自哪裡？', '保存傳統住屋有什麼重要性？'],
+        questions: ['自然環境如何影響傳統住屋？', '三合院的居住形式有什麼特色？', '為什麼要維護與保存傳統住屋？']
+      },
+      's4a-2-2': {
+        code: '2-2',
+        title: '器物與生活',
+        concepts: ['生活器物與自然環境有關', '早期器物反映居民生活需求', '科技與材料改變器物樣貌', '珍惜資源與尊重多元文化'],
+        objectives: ['透過圖像觀察與討論，覺察生活器物與自然環境間的關係。', '認識原住民族與漢人的傳統生活器物，理解器物與生活需求的關聯。', '比較傳統器物與現代器物的功能與變化。', '從器物變遷中理解環境、科技與生活方式的互動。'],
+        activities: ['器物猜猜看：觀察早期器物，推測用途與材料。', '傳統器物分類：整理原住民族與漢人的傳統生活器物。', '器物功能比較：找出傳統器物與現代器物的相似功能。', '生活器物小探究：蒐集家中或社區常見器物，說明它與生活的關係。'],
+        game: '古今器物配對：將傳統器物卡與現代器物卡配對，說出材料、用途與改變原因。',
+        worksheet: ['我認識的傳統器物是＿＿＿＿。', '它的用途是＿＿＿＿。', '現在生活中功能相似的器物是＿＿＿＿。', '器物改變和哪些因素有關？'],
+        questions: ['傳統器物如何反映居民的生活？', '器物材料和自然環境有什麼關係？', '科技進步如何改變生活器物？']
+      },
+      's4a-3-1': {
+        code: '3-1',
+        title: '信仰與生活',
+        concepts: ['原住民族傳統信仰中的神靈與祖靈', '漢人廟宇與神明對生活的影響', '廟前廣場可作為休閒聚會空間', '尊重不同信仰並促進社會祥和'],
+        objectives: ['了解原住民族傳統信仰中的各種神靈，在生活中扮演重要角色。', '了解漢人傳統信仰中的廟宇與神明對心靈的影響，以及廟宇的多功能性。', '能從生活中覺察信仰的存在，理解信仰功能並尊重信仰差異。'],
+        activities: ['原住民族神話故事：聆聽或觀看故事，認識信仰與生活。', '漢人信仰與廟宇：討論土地公、媽祖、廟宇與生活的關係。', '信仰中心觀察：思考廟前廣場、祭典、聚會功能。', '尊重與包容：討論面對不同信仰應有的態度。'],
+        game: '信仰功能九宮格：小組把「祈求平安、休閒聚會、行善助人、環保減香」等卡片放入九宮格並說明。',
+        worksheet: ['原住民族傳統信仰可能和＿＿＿＿有關。', '漢人廟宇在生活中可能有什麼功能？', '面對不同信仰，我可以＿＿＿＿。', '請寫出一個家鄉信仰活動。'],
+        questions: ['信仰為什麼會影響居民生活？', '廟宇除了祭拜還有哪些功能？', '我們應該如何尊重不同信仰？']
+      },
+      's4a-3-2': {
+        code: '3-2',
+        title: '老街與生活',
+        concepts: ['老街形成與居民生活有關', '老街可保留先民生活記憶', '老街會隨社會與經濟發展轉變', '現代街道呈現多元文化風貌'],
+        objectives: ['透過圖像觀察與討論，覺察老街形成與居民生活之間的關聯。', '了解老街發展會受到社會與經濟發展而改變，也會產生新的街道型態。', '探訪家鄉老街，了解老街發展與現況，感受家鄉老街的文化之美。'],
+        activities: ['老街遊樂趣：分享去過的老街照片與經驗。', '老街的發展：閱讀課文並整理廟宇、人潮、攤販、店鋪與住家的關係。', '老街轉變與多元風貌：討論人潮、商店與新住民文化。', '老街采風一日遊：規畫觀察路線、記錄方式與安全注意事項。'],
+        game: '老街導覽員：小組設計一條家鄉特色街道導覽路線，介紹建築、商店、文化與注意事項。',
+        worksheet: ['我想介紹的家鄉街道是＿＿＿＿。', '這條街道的特色是＿＿＿＿。', '老街可能因什麼原因形成？', '我們可以如何維護老街文化？'],
+        questions: ['老街的形成常和哪些因素有關？', '老街為什麼會轉變？', '探訪老街時要注意哪些安全與禮節？']
+      },
+      's4a-4-1': {
+        code: '4-1',
+        title: '生活的作息',
+        concepts: ['傳統生活作息常配合自然變化', '漢人與原住民族有不同作息依據', '現代作息受科技、陽曆、星期制影響', '可依個人需求規畫生活作息'],
+        objectives: ['觀察圖像或影片內容，了解傳統生活作息的樣貌及形成原因。', '理解影響傳統生活作息的因素及安排依據，體認並尊重不同族群的生活安排。', '觀察照片或圖表，了解現代生活作息的安排方式，並運用在日常生活中。'],
+        activities: ['照片說一說：觀察農民或族群生活照片，推測作息安排。', '傳統生活作息：討論日出而作、日入而息與季節變化。', '現代生活作息：認識陽曆、星期制與週休二日。', '我的作息規畫：依個人需求安排工作日與休息日活動。'],
+        game: '作息時間軸：小組把傳統與現代活動卡排在一天或一年時間軸上，說明安排依據。',
+        worksheet: ['傳統作息常配合＿＿＿＿。', '現代作息常使用＿＿＿＿和星期制。', '我的一天作息中，最需要調整的是＿＿＿＿。', '不同族群作息安排為什麼需要被尊重？'],
+        questions: ['傳統生活作息如何受到自然環境影響？', '現代作息和傳統作息有什麼不同？', '如何安排健康且合適的生活作息？']
+      },
+      's4a-4-2': {
+        code: '4-2',
+        title: '傳統的節慶',
+        concepts: ['原住民族祭典配合環境、季節與信仰', '漢人節慶包含除夕、春節、元宵、清明、端午、中元、中秋', '節慶凝聚家族向心力並豐富生活', '尊重不同族群祭典與節慶'],
+        objectives: ['透過圖文資料閱讀與影片觀賞，認識不同族群各自擁有不同祭典與節慶，了解活動意義。', '感受臺灣各族群文化的豐富，欣賞與尊重各自的文化。'],
+        activities: ['原住民族祭典短片欣賞：觀察族群、時間、地點與目的。', '祭典資料蒐集：整理播種祭、招魚祭、豐年祭、感恩祭、大獵祭等。', '漢人的節慶：找出一年中的重要節慶與活動特色。', '家鄉節慶介紹：製作節慶主題海報並分享。'],
+        game: '節慶快問快答：抽節慶卡，說出時間、活動、意義或相關食物，答對可得分。',
+        worksheet: ['請寫出一個原住民族祭典。', '請寫出一個漢人傳統節慶與活動。', '這些節慶和季節或信仰有什麼關係？', '面對不同族群節慶，我應該＿＿＿＿。'],
+        questions: ['原住民族祭典常見目的有哪些？', '漢人傳統節慶有哪些？', '為什麼要尊重不同族群的祭典與節慶？']
+      },
+      's4a-4-3': {
+        code: '4-3',
+        title: '現代的節日',
+        concepts: ['人生不同階段有不同節日與角色責任', '各行各業有代表節日並值得尊重', '國家重要節日幫助了解國家發展歷史', '外來文化與國際議題節日反映多元文化'],
+        objectives: ['覺察不同階段所扮演的身分，說明判斷理由及這個時期應盡責任。', '小組合力製作現代節日不同主題海報並上臺發表。', '說出各職業代表節日名稱及所需具備的專業。', '說出外來文化節日名稱並發表參與經驗。', '發表國際議題節日的主旨內涵，並規畫實踐行動。'],
+        activities: ['人生各階段身分拼圖：討論兒童節、母親節、父親節等意義。', '職業的祕密：認識教師節、警察節、勞動節等職業節日。', '國家重要節日：討論開國紀念日、和平紀念日、國慶日等。', '外來文化與議題節日：認識耶誕節、潑水節、世界地球日、世界閱讀日並規畫行動。'],
+        game: '比手畫腳猜職業節日：學生模仿職業動作，各組搶答職業名稱與相關節日。',
+        worksheet: ['我知道的現代節日是＿＿＿＿。', '這個節日提醒我們＿＿＿＿。', '請寫出一個職業節日與它代表的專業。', '我可以用＿＿＿＿行動響應世界地球日或世界閱讀日。'],
+        questions: ['現代節日和傳統節慶有什麼不同？', '為什麼各行各業都值得尊敬？', '國際議題節日可以如何落實在生活中？']
+      }
+    };
+
+    const socialWorksheetFiles = [
+      { type: '素養學習單', lesson: '1-1', unit: '1', title: '1-1 看地圖玩透透', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\社會4上學習單\\01_國小社會4上素養學習單_1-1_看地圖玩透透(學).pdf' },
+      { type: '素養學習單', lesson: '2-1', unit: '2', title: '2-1 傳統住屋解謎大冒險', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\社會4上學習單\\02_國小社會4上素養學習單_2-1_傳統住屋解謎大冒險(學).pdf' },
+      { type: '素養學習單', lesson: '3-2', unit: '3', title: '3-2 老街漫遊', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\社會4上學習單\\03_國小社會4上素養學習單_3-2_老街漫遊(學).pdf' },
+      { type: '素養學習單', lesson: '4-1', unit: '4', title: '4-1 一日活動計畫書', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\社會4上學習單\\04_國小社會4上素養學習單_4-1_一日活動計畫書(學).pdf' },
+      { type: '隨堂練習', unit: '1', title: '第 1 單元 第 1 回', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\社會4上學用隨堂練習單\\01_國小社會4上隨堂練習單_第01單元_第01回(學).pdf' },
+      { type: '隨堂練習', unit: '2', title: '第 2 單元 第 2 回', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\社會4上學用隨堂練習單\\02_國小社會4上隨堂練習單_第02單元_第02回(學).pdf' },
+      { type: '隨堂練習', unit: '3', title: '第 3 單元 第 3 回', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\社會4上學用隨堂練習單\\03_國小社會4上隨堂練習單_第03單元_第03回(學).pdf' },
+      { type: '隨堂練習', unit: '4', title: '第 4 單元 第 4 回', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\社會4上學用隨堂練習單\\04_國小社會4上隨堂練習單_第04單元_第04回(學).pdf' },
+      { type: '學習成果評量', unit: '評量', title: '期中評量 1', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\社會4上學用隨堂練習單\\05_國小社會4上隨堂練習單_學習成果評量(期中)-1_第05回(學).pdf' },
+      { type: '學習成果評量', unit: '評量', title: '期中評量 2', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\社會4上學用隨堂練習單\\06_國小社會4上隨堂練習單_學習成果評量(期中)-2_第06回(學).pdf' },
+      { type: '學習成果評量', unit: '評量', title: '期末評量 1', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\社會4上學用隨堂練習單\\07_國小社會4上隨堂練習單_學習成果評量(期末)-1_第07回(學).pdf' },
+      { type: '學習成果評量', unit: '評量', title: '期末評量 2', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\社會4上學用隨堂練習單\\08_國小社會4上隨堂練習單_學習成果評量(期末)-2_第08回(學).pdf' },
+      { type: '學習成果評量', unit: '評量', title: '學習成果評量 一', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\社會4上學用隨堂練習單\\09_國小社會4上隨堂練習單_學習成果評量(一)_第09回(學).pdf' },
+      { type: '學習成果評量', unit: '評量', title: '學習成果評量 二', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\社會4上學用隨堂練習單\\10_國小社會4上隨堂練習單_學習成果評量(二)_第10回(學).pdf' },
+      { type: '學習成果評量', unit: '評量', title: '學習成果評量 三', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\社會4上學用隨堂練習單\\11_國小社會4上隨堂練習單_學習成果評量(三)_第11回(學).pdf' }
+    ];
+
+    const socialExamFiles = [
+      { type: '月考卷', range: '期中', units: ['1', '2'], title: '期中考 A 卷（第 1～2 單元）', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\社會4上二次月考卷\\01_國小社會4上期中考A卷_第01單元至第02單元_(學).pdf' },
+      { type: '月考卷', range: '期中', units: ['1', '2'], title: '期中考 B 卷（第 1～2 單元）', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\社會4上二次月考卷\\02_國小社會4上期中考B卷_第01單元至第02單元_(學).pdf' },
+      { type: '月考卷', range: '期末', units: ['3', '4'], title: '期末考 A 卷（第 3～4 單元）', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\社會4上二次月考卷\\03_國小社會4上期末考A卷_第03單元至第04單元_(學).pdf' },
+      { type: '月考卷', range: '期末', units: ['3', '4'], title: '期末考 B 卷（第 3～4 單元）', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\社會4上二次月考卷\\04_國小社會4上期末考B卷_第03單元至第04單元_(學).pdf' }
+    ];
+
+    const comprehensiveLessonBank = {
+      'c4a-u1-a1': { subject: '綜合活動', semester: '上學期', unit: '1', activity: '1', unitTitle: '團隊勳章', title: '任務新安排', manual: 'c4a-u1', concepts: ['班級任務', '責任分工', '團隊規範', '自我貢獻'], objectives: ['覺察班級活動中的任務與責任。', '能說出自己可承擔的角色與貢獻。', '能與同學討論任務分工。'], activities: ['觀察班級任務：列出教室、外掃區與活動中的工作。', '任務分工討論：依能力與意願安排角色。', '反思調整：說出自己可改進的合作方式。'], game: '班級任務指揮官：小組抽任務卡，討論誰負責、怎麼完成、遇到困難怎麼求助。', worksheet: ['我在班級活動中可以負責的任務是什麼？', '完成任務時，我需要遵守哪些規範？', '我可以為團隊做出的貢獻是什麼？'], questions: ['班級任務為什麼需要分工？', '負責任的表現有哪些？', '遇到任務衝突時可以怎麼溝通？'] },
+      'c4a-u1-a2': { subject: '綜合活動', semester: '上學期', unit: '1', activity: '2', unitTitle: '團隊勳章', title: '團隊的規範', manual: 'c4a-u1', concepts: ['團隊規範', '民主討論', '尊重意見', '秩序'], objectives: ['能討論團隊活動需要的規範。', '能尊重不同意見並參與決定。', '能在活動中遵守共同規範。'], activities: ['好團隊觀察：找出團隊成功的規範。', '規範共創：小組提出可執行的約定。', '情境演練：練習不同意見時的回應。'], game: '規範拍賣會：各組用有限點數購買最重要的團隊規範，並說明理由。', worksheet: ['我認為團隊最重要的三項規範。', '當同學意見不同時，我可以怎麼做？', '我的團隊規範實踐紀錄。'], questions: ['規範對團隊有什麼幫助？', '尊重不同意見可以怎麼表現？', '如果有人沒遵守規範，團隊可以怎麼提醒？'] },
+      'c4a-u1-a3': { subject: '綜合活動', semester: '上學期', unit: '1', activity: '3', unitTitle: '團隊勳章', title: '愛班與合作', manual: 'c4a-u1', concepts: ['愛班行動', '合作態度', '班級認同', '共同目標'], objectives: ['能覺察班級需要被照顧的地方。', '能提出愛班與合作行動。', '能省思自己在團隊中的表現。'], activities: ['班級需要調查：觀察教室與班級活動。', '愛班方案設計：提出可執行的合作任務。', '行動分享：說出實踐後的收穫。'], game: '愛班任務賽：各組抽取班級問題，設計一個可在一週內完成的改善行動。', worksheet: ['我想改善的班級問題。', '我們小組的愛班行動計畫。', '行動後，我的感受與下一步。'], questions: ['愛班可以有哪些具體行動？', '合作時最需要哪一種態度？', '我如何讓班級變得更好？'] },
+      'c4a-u2-a1': { subject: '綜合活動', semester: '上學期', unit: '2', activity: '1', unitTitle: '攜手向前行', title: '同心協力', manual: 'c4a-u2', concepts: ['團隊合作', '溝通', '分工', '互相支援'], objectives: ['能分享團隊合作經驗。', '能覺察合作中的態度與技巧。', '能提出下次合作可調整的做法。'], activities: ['合作經驗回顧。', '合作態度分類。', '下次合作策略設計。'], game: '同心任務塔：小組完成限時合作任務，結束後回饋溝通與分工表現。', worksheet: ['我的合作經驗。', '我展現的合作態度與技巧。', '下次我可以調整的地方。'], questions: ['合作成功需要哪些條件？', '溝通不清楚時會發生什麼事？', '我可以怎麼支持同伴？'] },
+      'c4a-u2-a2': { subject: '綜合活動', semester: '上學期', unit: '2', activity: '2', unitTitle: '攜手向前行', title: '友愛同伴', manual: 'c4a-u2', concepts: ['關懷同伴', '同理心', '溝通技巧', '互動調整'], objectives: ['能覺察同伴的需求。', '能使用適切方式關懷同伴。', '能觀察並學習同學的互動技巧。'], activities: ['關懷經驗分享。', '小天使行動演練。', '互動方式調整。'], game: '暖心行動劇場：抽情境卡演出合適與不合適的關懷方式。', worksheet: ['我關懷同伴的經驗。', '對方的反應與我的發現。', '我想學習的關懷高手技巧。'], questions: ['關懷同伴前要注意什麼？', '同理心可以怎麼表現？', '如果關懷方式不適合，可以怎麼調整？'] },
+      'c4a-u2-a3': { subject: '綜合活動', semester: '上學期', unit: '2', activity: '3', unitTitle: '攜手向前行', title: '合作無間', manual: 'c4a-u2', concepts: ['合作任務', '互動技巧', '團隊溝通', '共同完成'], objectives: ['能在生活情境中運用合作技巧。', '能和同學完成合作任務。', '能檢核自己的合作表現。'], activities: ['合作情境分析。', '任務分工與執行。', '合作表現檢核。'], game: '合作解鎖任務：完成三個需要分工、溝通、互助的挑戰關卡。', worksheet: ['我可以展現的三項合作技巧。', '小組任務分工表。', '合作後的自評與回饋。'], questions: ['合作任務中分工為什麼重要？', '如何讓每個人都有參與？', '我今天做了哪一件幫助團隊的事？'] },
+      'c4a-u3-a1': { subject: '綜合活動', semester: '上學期', unit: '3', activity: '1', unitTitle: '服務「心」體驗', title: '生活中的志工', manual: 'c4a-u3', concepts: ['志工服務', '服務內容', '服務能力', '服務態度'], objectives: ['能認識生活中的志工服務。', '能說出志工需要的能力與態度。', '能規畫訪問志工的問題。'], activities: ['志工服務觀察。', '服務能力與態度分類。', '訪問志工計畫。'], game: '志工能力配對：把不同志工工作和所需能力配對。', worksheet: ['我認識的志工服務。', '志工需要具備的能力。', '志工服務時應有的態度。'], questions: ['志工為什麼願意服務？', '不同志工需要哪些能力？', '服務態度為什麼重要？'] },
+      'c4a-u3-a2': { subject: '綜合活動', semester: '上學期', unit: '3', activity: '2', unitTitle: '服務「心」體驗', title: '齊心服務去', manual: 'c4a-u3', concepts: ['服務需求', '服務計畫', '分工合作', '校園觀察'], objectives: ['能觀察校園或社區的服務需求。', '能和同學討論可行的服務內容。', '能擬定服務學習計畫。'], activities: ['校園需求觀察。', '服務內容討論。', '服務計畫擬定。'], game: '服務任務偵探：在校園地圖上找出需要協助的地點並提出服務方案。', worksheet: ['我觀察到需要協助的地方。', '我能幫忙的事。', '我們的服務學習計畫。'], questions: ['什麼樣的事情需要服務？', '服務前要做哪些準備？', '分工時要注意什麼？'] },
+      'c4a-u3-a3': { subject: '綜合活動', semester: '上學期', unit: '3', activity: '3', unitTitle: '服務「心」體驗', title: '社區服務樂', manual: 'c4a-u3', concepts: ['社區服務', '服務實踐', '服務反思', '感謝與回饋'], objectives: ['能參與服務實踐。', '能記錄服務過程與心得。', '能欣賞他人的服務表現。'], activities: ['社區服務準備。', '服務實踐紀錄。', '成果慶賀與反思。'], game: '服務成果展：各組用一張海報分享服務內容、收穫與想感謝的人。', worksheet: ['我的服務內容與時間地點。', '服務過程中的收穫。', '我想感謝的服務夥伴。'], questions: ['服務後自己有什麼改變？', '服務時遇到困難可以怎麼處理？', '我欣賞哪一位同學的服務表現？'] },
+      'c4b-u1-a1': { subject: '綜合活動', semester: '下學期', unit: '1', activity: '1', unitTitle: '文化大觀園', title: '文化大觀園', manual: 'c4b-u1', concepts: ['文化活動', '參與禮儀', '文化特色', '尊重多元'], objectives: ['能分享參與文化活動的經驗。', '能覺察文化活動的特色。', '能說出參與文化活動的禮儀。'], activities: ['文化活動經驗分享。', '文化特色觀察。', '參與禮儀檢核。'], game: '文化活動猜猜看：看圖片或線索猜文化活動，並說出參與時要注意的禮儀。', worksheet: ['我參加過的文化活動。', '參與時的禮儀與注意事項。', '我做到與需要改進的地方。'], questions: ['文化活動有哪些特色？', '參與文化活動要注意哪些禮儀？', '尊重不同文化可以怎麼做？'] },
+      'c4b-u1-a2': { subject: '綜合活動', semester: '下學期', unit: '1', activity: '2', unitTitle: '文化大觀園', title: '在地文化生活家', manual: 'c4b-u1', concepts: ['在地文化', '資料蒐集', '文化意義', '摘要記錄'], objectives: ['能蒐集文化活動資料。', '能整理文化活動的內容與意義。', '能連結澎湖在地文化生活。'], activities: ['選定文化主題。', '蒐集與摘要資料。', '分享文化意義。'], game: '在地文化小記者：小組抽澎湖文化主題，完成三個採訪問題與摘要。', worksheet: ['文化活動名稱。', '文化活動進行方式。', '相關資料與我的發現。'], questions: ['資料可以從哪些地方蒐集？', '文化活動對居民有什麼意義？', '澎湖有哪些值得介紹的文化？'] },
+      'c4b-u1-a3': { subject: '綜合活動', semester: '下學期', unit: '1', activity: '3', unitTitle: '文化大觀園', title: '文化推推推', manual: 'c4b-u1', concepts: ['文化保存', '文化推廣', '創意行動', '在地認同'], objectives: ['能覺察文化保存的重要。', '能提出文化推廣行動。', '能用創意方式介紹文化。'], activities: ['文化危機討論。', '推廣方案設計。', '文化推廣發表。'], game: '文化推廣大賽：設計一張文化推廣任務卡，說服同學一起參與。', worksheet: ['我想推廣的文化。', '我能做到的文化保存行動。', '我的推廣方式。'], questions: ['哪些文化需要被保存？', '推廣文化可以有哪些方法？', '我能為在地文化做什麼？'] },
+      'c4b-u2-a1': { subject: '綜合活動', semester: '下學期', unit: '2', activity: '1', unitTitle: '工作與生活', title: '工作與我們', manual: 'c4b-u2', concepts: ['工作者', '工作意義', '生活影響', '家人角色'], objectives: ['能探索生活中的工作者。', '能說出工作對生活的影響。', '能訪問家人的工作內容。'], activities: ['生活工作者觀察。', '家人工作訪問。', '工作影響分享。'], game: '工作者賓果：找出校園、社區、家庭中的工作者與服務內容。', worksheet: ['我接觸過的工作者。', '工作者對我的生活影響。', '家人工作訪問紀錄。'], questions: ['工作對生活有什麼幫助？', '家人可能同時有哪些角色？', '我想了解哪一種工作？'] },
+      'c4b-u2-a2': { subject: '綜合活動', semester: '下學期', unit: '2', activity: '2', unitTitle: '工作與生活', title: '工作小學堂', manual: 'c4b-u2', concepts: ['職業探索', '工作甘苦', '個人興趣', '資料整理'], objectives: ['能探索自己感興趣的工作。', '能說出工作的開心與辛苦。', '能整理工作探索資料。'], activities: ['興趣工作選擇。', '工作條件與甘苦探究。', '工作探索紀錄分享。'], game: '職業探索卡：抽職業卡，說出工作內容、需要能力、辛苦與收穫。', worksheet: ['我感興趣的工作。', '感興趣的原因。', '工作開心與辛苦的地方。'], questions: ['選擇工作可以考慮哪些因素？', '每份工作可能有哪些辛苦？', '我有哪些能力可以慢慢培養？'] },
+      'c4b-u2-a3': { subject: '綜合活動', semester: '下學期', unit: '2', activity: '3', unitTitle: '工作與生活', title: '有你真好', manual: 'c4b-u2', concepts: ['感謝工作者', '尊重職業', '感恩行動', '生活支持'], objectives: ['能覺察工作者對生活的貢獻。', '能表達對工作者的感謝與尊重。', '能規畫感恩行動。'], activities: ['工作者貢獻討論。', '感謝與尊重方式設計。', '感恩行動實踐。'], game: '感恩行動接力：各組抽工作者，設計一句感謝話與一個具體行動。', worksheet: ['生活周遭的工作者。', '感謝與尊重的表現。', '我的感恩行動計畫。'], questions: ['為什麼要尊重不同工作？', '感謝可以有哪些具體做法？', '哪一位工作者讓你印象深刻？'] },
+      'c4b-u3-a1': { subject: '綜合活動', semester: '下學期', unit: '3', activity: '1', unitTitle: '讓生活充滿美', title: '美無所不在', manual: 'c4b-u3', concepts: ['生活中的美', '感受表達', '欣賞差異', '美感觀察'], objectives: ['能覺察生活中的美。', '能說出自己覺得美的原因。', '能尊重同學不同的美感經驗。'], activities: ['生活美感觀察。', '美的原因分享。', '同學觀點回饋。'], game: '美感偵探：在教室或校園找出三個美的人、事、物並說明原因。', worksheet: ['我覺得美的人。', '我覺得美的事。', '我覺得美的物與原因。'], questions: ['美一定每個人看法都一樣嗎？', '生活中哪裡可以發現美？', '如何欣賞不同的美？'] },
+      'c4b-u3-a2': { subject: '綜合活動', semester: '下學期', unit: '3', activity: '2', unitTitle: '讓生活充滿美', title: '美探索發現', manual: 'c4b-u3', concepts: ['美感探索', '家庭生活', '校園觀察', '紀錄表達'], objectives: ['能探索家裡或校園中的美。', '能用圖文記錄美的畫面。', '能分享自己的美感發現。'], activities: ['我的照相機觀察。', '美的畫面圖文紀錄。', '美感發現分享。'], game: '美的快門：小組輪流描述一個美的畫面，其他人猜地點或情境。', worksheet: ['我家裡的美。', '我覺得最美的畫面。', '我為什麼覺得它美。'], questions: ['你最近看到的美是什麼？', '同一個畫面可以有不同感受嗎？', '我可以怎麼記錄美？'] },
+      'c4b-u3-a3': { subject: '綜合活動', semester: '下學期', unit: '3', activity: '3', unitTitle: '讓生活充滿美', title: '美改變生活', manual: 'c4b-u3', concepts: ['美感創意', '生活改造', '問題解決', '行動實踐'], objectives: ['能發現生活中可改善的地方。', '能結合創意與美感提出改造計畫。', '能反思美感行動對生活的影響。'], activities: ['生活問題觀察。', '創意改造計畫。', '執行結果分享。'], game: '美的改造提案：小組設計一個教室或校園美化方案，說明材料、分工與期待改變。', worksheet: ['我生活中遇到的問題。', '我的美感改造計畫。', '執行後的結果與反思。'], questions: ['美感可以怎麼改善生活？', '創意改造前要先觀察什麼？', '我能從小地方做出什麼改變？'] }
+    };
+
+    const comprehensiveManuals = {
+      'c4a-u1': { label: '4 上 單元一 團隊勳章', pages: 30, file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\4上綜合教師手冊\\01_國小綜合4上教冊_單元一_(教).pdf' },
+      'c4a-u2': { label: '4 上 單元二 攜手向前行', pages: 30, file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\4上綜合教師手冊\\02_國小綜合4上教冊_單元二_(教).pdf' },
+      'c4a-u3': { label: '4 上 單元三 服務「心」體驗', pages: 31, file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\4上綜合教師手冊\\03_國小綜合4上教冊_單元三_(教).pdf' },
+      'c4a-ref': { label: '4 上 綜合活動資料篇', pages: 14, file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\4上綜合教師手冊\\04_國小綜合4上教冊_資料篇_(教).pdf' },
+      'c4b-u1': { label: '4 下 單元一 文化大觀園', pages: 19, file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\4下綜合教師手冊\\01_國小綜合4下教冊_單元1(教).pdf' },
+      'c4b-u2': { label: '4 下 單元二 工作與生活', pages: 25, file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\4下綜合教師手冊\\02_國小綜合4下教冊_單元2(教).pdf' },
+      'c4b-u3': { label: '4 下 單元三 讓生活充滿美', pages: 28, file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\4下綜合教師手冊\\03_國小綜合4下教冊_單元3(教).pdf' },
+      'c4b-ref': { label: '4 下 綜合活動資料篇', pages: 16, file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\4下綜合教師手冊\\04_國小綜合4下教冊_資料篇(教).pdf' }
+    };
+
+    const comprehensiveWorksheetFiles = [
+      { semester: '上學期', unit: '1', activity: '1', title: '任務新安排', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\綜合活動4上學習單\\01_國小綜合4上學習單_單元1活動1_任務新安排(學).pdf' },
+      { semester: '上學期', unit: '1', activity: '2', title: '團隊的規範', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\綜合活動4上學習單\\02_國小綜合4上學習單_單元1活動2_團隊的規範(學).pdf' },
+      { semester: '上學期', unit: '1', activity: '3', title: '愛班與合作', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\綜合活動4上學習單\\03_國小綜合4上學習單_單元1活動3_愛班與合作(學).pdf' },
+      { semester: '上學期', unit: '2', activity: '1', title: '同心協力', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\綜合活動4上學習單\\10_國小綜合4上學習單_單元2活動1_同心協力(學).pdf' },
+      { semester: '上學期', unit: '2', activity: '2', title: '友愛同伴', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\綜合活動4上學習單\\11_國小綜合4上學習單_單元2活動2_友愛同伴(學).pdf' },
+      { semester: '上學期', unit: '2', activity: '3', title: '合作無間', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\綜合活動4上學習單\\12_國小綜合4上學習單_單元2活動3_合作無間(學).pdf' },
+      { semester: '上學期', unit: '3', activity: '1', title: '生活中的志工', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\綜合活動4上學習單\\18_國小綜合4上學習單_單元3活動1_生活中的志工(學).pdf' },
+      { semester: '上學期', unit: '3', activity: '2', title: '齊心服務去', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\綜合活動4上學習單\\19_國小綜合4上學習單_單元3活動2_齊心服務去(學).pdf' },
+      { semester: '上學期', unit: '3', activity: '3', title: '社區服務樂', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\綜合活動4上學習單\\20_國小綜合4上學習單_單元3活動3_社區服務樂(學).pdf' },
+      { semester: '下學期', unit: '1', activity: '1', title: '文化大觀園', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\綜合活動4下學習單\\01_國小綜合4下學習單_單元1活動1_文化大觀園(學).pdf' },
+      { semester: '下學期', unit: '1', activity: '2', title: '在地文化生活家', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\綜合活動4下學習單\\02_國小綜合4下學習單_單元1活動2_在地文化生活家(學).pdf' },
+      { semester: '下學期', unit: '1', activity: '3', title: '文化推推推', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\綜合活動4下學習單\\03_國小綜合4下學習單_單元1活動3_文化推推推(學).pdf' },
+      { semester: '下學期', unit: '2', activity: '1', title: '工作與我們', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\綜合活動4下學習單\\07_國小綜合4下學習單_單元2活動1_工作與我們(學).pdf' },
+      { semester: '下學期', unit: '2', activity: '2', title: '工作小學堂', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\綜合活動4下學習單\\08_國小綜合4下學習單_單元2活動2_工作小學堂(學).pdf' },
+      { semester: '下學期', unit: '2', activity: '3', title: '有你真好', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\綜合活動4下學習單\\09_國小綜合4下學習單_單元2活動3_有你真好(學).pdf' },
+      { semester: '下學期', unit: '3', activity: '1', title: '美無所不在', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\綜合活動4下學習單\\13_國小綜合4下學習單_單元3活動1_美無所不在(學).pdf' },
+      { semester: '下學期', unit: '3', activity: '2', title: '美探索發現', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\綜合活動4下學習單\\14_國小綜合4下學習單_單元3活動2_美探索發現(學).pdf' },
+      { semester: '下學期', unit: '3', activity: '3', title: '美改變生活', file: 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\綜合活動4下學習單\\15_國小綜合4下學習單_單元3活動3_美改變生活(學).pdf' }
+    ];
+
+    const minnanLessonBank = {
+      'g1a|第 1 課': {
+        title: '汝佮我',
+        vocabulary: ['汝', '我', '欲', '佗位', '菜宅', '創啥物', '行行看看', '咱', '汝', '恁', '伊', '個'],
+        patterns: [
+          { phrase: '汝欲去佗位？', sentence: '汝欲去佗位？我欲去菜宅。' }
+        ],
+        imageKeywords: ['菜宅 澎湖', '澎湖 菜宅', '人稱代名詞 圖卡'],
+        videoKeywords: ['閩南語 汝 我 教學', '閩南語 人稱代名詞', '澎湖 菜宅 介紹']
+      },
+      'g1a|第 2 課': {
+        title: '阿公是討海人',
+        vocabulary: ['阿公', '阿媽', '阿爸', '阿母', '討海', '作穡', '老師', '護士', '阿伯', '阿叔', '阿姑', '阿舅', '阿姨'],
+        patterns: [
+          { phrase: '稱謂 + 是 + 職業', sentence: '阿公是討海人。' }
+        ],
+        imageKeywords: ['討海人 澎湖', '家庭成員 圖卡', '職業 圖卡'],
+        videoKeywords: ['閩南語 家庭稱謂', '閩南語 職業 教學', '澎湖 討海人']
+      },
+      'g1a|第 3 課': {
+        title: '坐船真趣味',
+        vocabulary: ['飛機', '澎湖', '吉貝', '坐船', '迌迌', '趣味', '歡喜', '坐船', '坐飛機', '坐牛車', '駛車', '騎跤踏車'],
+        patterns: [
+          { phrase: '交通工具 + 地名', sentence: '阿姨坐飛機去馬公。' }
+        ],
+        imageKeywords: ['澎湖 交通工具', '吉貝 船', '馬公 機場'],
+        videoKeywords: ['澎湖 吉貝 船', '閩南語 交通工具 教學', '澎湖 交通 介紹']
+      },
+      'g1a|第 4 課': {
+        title: '去菜市買菜',
+        vocabulary: ['菜市', '三尾', '二條', '菜瓜', '這把', '頭家', '蔥', '一粒金含仔', '二杯香薷茶', '三隻小管', '四盒鹹餅', '五塊烏糖粿'],
+        patterns: [
+          { phrase: '量詞 + 物產', sentence: '買三尾魚佮二條菜瓜。' }
+        ],
+        imageKeywords: ['澎湖 菜市場', '小管 澎湖', '烏糖粿 澎湖'],
+        videoKeywords: ['閩南語 菜市場', '閩南語 量詞 教學', '澎湖 小管 烏糖粿']
+      },
+      'g1a|第 5 課': {
+        title: '穿衫褲',
+        vocabulary: ['熱天', '日頭', '短衫', '短褲', '定定', '寒天', '熱天', '寒天', '烏陰天', '落雨天'],
+        patterns: [
+          { phrase: '氣候 + 穿著', sentence: '熱天愛穿短衫、短褲。' }
+        ],
+        imageKeywords: ['天氣 圖卡', '衣服 圖卡', '雨天 雨衣 圖片'],
+        videoKeywords: ['閩南語 天氣 教學', '閩南語 衣服 教學', '閩南語 穿衫褲']
+      },
+      'g1a|第 6 課': {
+        title: '阿兄足歡喜',
+        vocabulary: ['笑微微', '今仔日', '欲去', '放風星', '昨日', '昨昏', '明仔載', '後日'],
+        patterns: [
+          { phrase: '時間副詞 + 活動', sentence: '阿兄昨日去放風星。' }
+        ],
+        imageKeywords: ['放風箏 圖片', '日曆 圖片', '時間副詞 圖卡'],
+        videoKeywords: ['閩南語 時間 教學', '閩南語 昨日 今仔日 明仔載', '放風箏 教學']
+      },
+      'g1b|第 1 課': {
+        title: '菜豆開花',
+        vocabulary: ['菜豆', '蝶婆', '密密', '硞硞', '姑婆', '呵咾', '土豆', '敏豆', '紅豆', '綠豆'],
+        patterns: [
+          { phrase: '愛食', sentence: '姑婆愛食菜豆。' },
+          { phrase: '若食若呵咾', sentence: '舅公食紅豆若食若呵咾。' }
+        ],
+        imageKeywords: ['菜豆 花', '豆類 圖卡', '澎湖 菜豆'],
+        videoKeywords: ['閩南語 菜豆開花', '閩南語 豆類 教學']
+      },
+      'g1b|第 2 課': {
+        title: '好食的物件',
+        vocabulary: ['袂穡', '好食', '物件', '幼幼', '報汝知', '笑哈哈', '嘉寶瓜', '金瓜', '丁香', '海鱺', '九孔'],
+        patterns: [
+          { phrase: '真好食', sentence: '嘉寶瓜真好食。' },
+          { phrase: '涼涼的 + 食物 + 真好食', sentence: '涼涼的嘉寶瓜真好食。' }
+        ],
+        imageKeywords: ['嘉寶瓜 澎湖', '澎湖 食物', '九孔 海鱺'],
+        videoKeywords: ['閩南語 食物 教學', '澎湖 嘉寶瓜']
+      },
+      'g1b|第 3 課': {
+        title: '煎甜粿',
+        vocabulary: ['煎', '甜粿', '臭焦', '熥火', '煮', '炊', '烘'],
+        patterns: [
+          { phrase: '煎 + 數量 + 食物', sentence: '阿母煎一尾魚。' }
+        ],
+        imageKeywords: ['甜粿', '煎魚 圖片', '烹調 圖卡'],
+        videoKeywords: ['閩南語 烹調 教學', '甜粿 做法']
+      },
+      'g1b|第 4 課': {
+        title: '釣沙鰑',
+        vocabulary: ['揮', '釣竿', '沙鰑', '光光光', '金金金', '齊齊齊', '滿滿滿'],
+        patterns: [
+          { phrase: '食甲 + 狀態', sentence: '物件食甲光光光。' },
+          { phrase: '形容詞疊字', sentence: '這欉樹青青青。' }
+        ],
+        imageKeywords: ['沙鰑', '釣竿', '澎湖 釣魚'],
+        videoKeywords: ['閩南語 釣魚', '澎湖 釣魚']
+      },
+      'g1b|第 5 課': {
+        title: '天烏烏',
+        vocabulary: ['天烏烏', '趕緊', '沃', '澹糊糊', '焦涸涸', '燒燙燙', '冷吱吱'],
+        patterns: [
+          { phrase: '摸起來 + 狀態', sentence: '阿母的手摸起來燒燙燙。' }
+        ],
+        imageKeywords: ['天烏烏', '下雨 圖卡', '天氣 圖卡'],
+        videoKeywords: ['閩南語 天氣 教學', '天烏烏 童謠']
+      },
+      'g1b|第 6 課': {
+        title: '十二生肖',
+        vocabulary: ['鳥鼠', '牛', '虎', '粉鳥', '水雞', '龜鱉', '生肖'],
+        patterns: [
+          { phrase: '這有一隻...', sentence: '這有一隻鳥鼠。' }
+        ],
+        imageKeywords: ['十二生肖 圖卡', '鳥鼠 牛 虎', '生肖 圖片'],
+        videoKeywords: ['閩南語 十二生肖', '生肖 教學']
+      },
+      'g2a|第 1 課': {
+        title: '澎湖的瓜',
+        vocabulary: ['喂', '啥貨', '菜瓜', '金瓜', '嘉寶瓜', '香瓜', '紅龍', '楊梅'],
+        patterns: [
+          { phrase: '是澎湖的瓜', sentence: '嘉寶瓜是澎湖的瓜。' }
+        ],
+        imageKeywords: ['澎湖 嘉寶瓜', '澎湖 菜瓜 金瓜', '瓜類 圖卡'],
+        videoKeywords: ['澎湖 嘉寶瓜', '閩南語 瓜類 教學']
+      },
+      'g2a|第 2 課': {
+        title: '食土豆',
+        vocabulary: ['上出名', '愛食', '囡仔兄', '巧巧巧', '老大人', '老老老', '大人囡仔', '查埔查某', '先生學生', '醫生病人', '少年人', '討海人', '作穡人'],
+        patterns: [
+          { phrase: '攏愛食', sentence: '大人囡仔攏愛食。' },
+          { phrase: '食甲...', sentence: '老大人食土豆，食甲老老老。' }
+        ],
+        imageKeywords: ['澎湖 土豆', '土豆 花生 圖卡', '澎湖農產'],
+        videoKeywords: ['澎湖 土豆', '閩南語 食物 教學']
+      },
+      'g2a|第 3 課': {
+        title: '香薷茶',
+        vocabulary: ['香薷茶', '啉', '觀光客', '牛奶', '豆漿', '烏龍茶', '紅茶', '冬瓜茶', '咖啡', '蘋果汁', '杯', '罐', '甌', '碗'],
+        patterns: [
+          { phrase: '上愛啉', sentence: '阿公上愛啉香薷茶，一杯啉了閣一杯。' }
+        ],
+        imageKeywords: ['香薷茶 澎湖', '飲料 圖卡', '杯 罐 甌 碗'],
+        videoKeywords: ['香薷茶 澎湖', '閩南語 飲料 教學']
+      },
+      'g2a|第 4 課': {
+        title: '放風星',
+        vocabulary: ['風星', '天邊', '海墘', '景緻', '詩篇', '竹田蛉', '雞仔', '紙飛機', '雪文沫'],
+        patterns: [
+          { phrase: '飛過...', sentence: '風星飛過樹頂。' }
+        ],
+        imageKeywords: ['風箏 澎湖', '竹蜻蜓 紙飛機', '海邊 童玩'],
+        videoKeywords: ['閩南語 童玩', '放風箏 澎湖']
+      },
+      'g2a|第 5 課': {
+        title: '我有一對寶',
+        vocabulary: ['白矸', '貯', '烏棗', '暗時', '鎖', '攏有', '這對寶', '臆', '做伙耍', '做伙泅', '做伙讀', '做伙食'],
+        patterns: [
+          { phrase: '咱來做伙...', sentence: '咱來做伙臆，好毋好？' }
+        ],
+        imageKeywords: ['做伙 活動 圖卡', '閩南語 動作 圖卡', '學生合作活動'],
+        videoKeywords: ['閩南語 做伙', '閩南語 好毋好']
+      },
+      'g2a|第 6 課': {
+        title: '我是澎湖人',
+        vocabulary: ['阮兜', '蹛', '所在', '風景', '海產', '歡迎', '鬥陣', '澎湖縣', '台北市', '新竹市', '高雄市', '貢丸', '愛河', '海景', '動物園'],
+        patterns: [
+          { phrase: '我是...人，阮兜蹛佇...', sentence: '我是澎湖人，阮兜蹛佇澎湖縣。' },
+          { phrase: '實在真袂䆀', sentence: '澎湖的海景實在真袂䆀！' }
+        ],
+        imageKeywords: ['澎湖 風景 海產', '澎湖縣 地圖', '澎湖海景'],
+        videoKeywords: ['澎湖介紹', '閩南語 我是澎湖人']
+      },
+      'g3a|第 1 課': {
+        title: '中秋團圓暝',
+        vocabulary: ['嫦娥', '玉兔', '賞月', '柚', '當著時', '團圓', '有影媠', '親友', '攏到位', '心花開'],
+        patterns: [
+          { phrase: '真好啉', sentence: '阿男：香薷茶真好啉。阿滿：嗯，香薷茶有影真好啉。' }
+        ],
+        imageKeywords: ['中秋節 團圓', '嫦娥 玉兔', '賞月 柚子'],
+        videoKeywords: ['閩南語 中秋節', '中秋 團圓 教學']
+      },
+      'g3a|第 2 課': {
+        title: '澎湖的魚上蓋鮮',
+        vocabulary: ['上蓋鮮', '鮸', '嘉鱲', '貪俗', '狗鯊', '巴鱺', '竹鮓', '魟', '虎魚', '沙毛', '枋鮮', '艱苦'],
+        patterns: [
+          { phrase: '借問...上蓋...', sentence: '借問佗位的查某上蓋媠？澎湖的查某上蓋媠。' }
+        ],
+        imageKeywords: ['澎湖 魚類', '鮸魚 嘉鱲', '澎湖海鮮'],
+        videoKeywords: ['澎湖 魚類 介紹', '閩南語 魚類']
+      },
+      'g3a|第 3 課': {
+        title: '討海行船三分命',
+        vocabulary: ['日頭', '落山', '代誌', '討海行船三分命', '風湧', '跋', '小貪', '險險', '好年冬', '磅魚'],
+        patterns: [
+          { phrase: '若是...就會...', sentence: '若是滿載駛入港，就會當過一个好年冬。' }
+        ],
+        imageKeywords: ['澎湖 討海', '漁船 港口', '澎湖漁業'],
+        videoKeywords: ['澎湖 討海文化', '閩南語 討海']
+      },
+      'g3a|第 4 課': {
+        title: '冬節圓圓圓圓',
+        vocabulary: ['睏袂天光', '物配', '挲圓', '菜繭', '雞母狗仔', '牲禮', '祭祖'],
+        patterns: [
+          { phrase: '冬節暝...', sentence: '冬節暝，暝上長，予阮睏袂天光。' }
+        ],
+        imageKeywords: ['冬至 搓湯圓', '冬節 澎湖', '祭祖 牲禮'],
+        videoKeywords: ['閩南語 冬至', '冬節 搓圓']
+      },
+      'g3a|第 5 課': {
+        title: '過新年真歡喜',
+        vocabulary: ['弄獅', '佮意', '乒乒砰砰', '報喜', '親情', '五十', '恭喜', '弄龍', '大大細細'],
+        patterns: [
+          { phrase: '真歡喜', sentence: '歡喜、歡喜，真歡喜，逐家感覺真歡喜。' }
+        ],
+        imageKeywords: ['過年 弄獅', '春節 放炮', '恭喜 新年'],
+        videoKeywords: ['閩南語 過年', '過新年 真歡喜']
+      },
+      'g3a|第 6 課': {
+        title: '乞龜飼大豬',
+        vocabulary: ['上元', '乞龜', '米龜', '金龜', '媽祖宮', '臆燈猜', '弄龍', '平安橋', '豬母水'],
+        patterns: [
+          { phrase: '有...閣有...', sentence: '媽祖宮有足大隻的米龜，閣有真濟人咧過平安橋。' }
+        ],
+        imageKeywords: ['澎湖 元宵 乞龜', '媽祖宮 米龜', '平安橋'],
+        videoKeywords: ['澎湖 乞龜', '元宵節 閩南語']
+      },
+      'g2b|第 1 課': {
+        title: '臭臊成',
+        vocabulary: ['唸歌唱曲', '逐家', '鬥陣', '相招', '恁知', '臭臊', '成', '鹹菜', '阮'],
+        patterns: [
+          { phrase: '這是 + 形容 + 名詞', sentence: '這是上等的澎湖菜。' }
+        ],
+        imageKeywords: ['澎湖菜', '鹹菜', '閩南語 唸歌唱曲'],
+        videoKeywords: ['閩南語 臭臊成', '閩南語 形容詞 教學']
+      },
+      'g2b|第 2 課': {
+        title: '澎湖菜瓜',
+        vocabulary: ['上等', '上迷人', '上蓋讚', '上好食', '上有名', '踅踅唸', '喙恬恬', '赫'],
+        patterns: [
+          { phrase: '我的 + 身體部位 + 狀況', sentence: '我的耳仔發炎。' }
+        ],
+        imageKeywords: ['澎湖菜瓜', '菜瓜', '身體部位 圖卡'],
+        videoKeywords: ['閩南語 身體部位', '閩南語 菜瓜']
+      },
+      'g2b|第 3 課': {
+        title: '一塊烏趖趖',
+        vocabulary: ['早慢', '一日到晚', '予人嫌', '耳仔', '鼻孔', '目睭', '指甲', '軟膏膏', '宵夜', '烏趖趖'],
+        patterns: [
+          { phrase: '食起來 + 狀態', sentence: '烏糖粿食起來閣軟閣甜。' }
+        ],
+        imageKeywords: ['烏糖粿', '五官 圖卡', '指甲 圖片'],
+        videoKeywords: ['閩南語 五官', '澎湖 烏糖粿']
+      },
+      'g2b|第 4 課': {
+        title: '錢鰻',
+        vocabulary: ['這嘛', '臆', '斟酌', '一項', '名產', '烏糖粿', '土豆糖', '海菜酥', '小管絲', '鹹餅', '冬瓜膏', '身軀', '滑溜溜'],
+        patterns: [
+          { phrase: '身軀 + 狀態', sentence: '錢鰻身軀滑溜溜。' }
+        ],
+        imageKeywords: ['錢鰻', '澎湖 名產', '海菜酥 小管絲 鹹餅'],
+        videoKeywords: ['澎湖 名產 介紹', '閩南語 澎湖名產']
+      },
+      'g2b|第 5 課': {
+        title: '偷硓',
+        vocabulary: ['藏', '勼', '枸杞', '目睭', '甘休', '暗暝', '暗眠', '摸', '田園', '四界', '挽菜'],
+        patterns: [
+          { phrase: '人物 + 動作', sentence: '少年朋友踅玲瓏。' }
+        ],
+        imageKeywords: ['田園 挽菜', '枸杞', '澎湖 田園'],
+        videoKeywords: ['閩南語 田園', '閩南語 動作 教學']
+      },
+      'g2b|第 6 課': {
+        title: '澎湖查某',
+        vocabulary: ['翁婿', '硓𥑮', '某囝婿', '新婦', '風飛沙', '日頭大', '戴笠', '虛花', '掩面', '硩蕃薯', '掖肥料', '耙蛤仔', '炤小管', '挽紫菜', '掘土'],
+        patterns: [
+          { phrase: '做工課的人 + 不怕...', sentence: '做工課的人毋驚風飛沙。' }
+        ],
+        imageKeywords: ['澎湖查某', '澎湖 挽紫菜', '澎湖 風飛沙'],
+        videoKeywords: ['澎湖 挽紫菜', '澎湖 女性 勞動']
+      },
+      'g3b|第 1 課': {
+        title: '搰力食粟',
+        vocabulary: ['搰力', '食粟', '貧惰', '菜宅', '草蜢', '無閒', '重重疊疊', '炰蕃薯'],
+        patterns: [
+          { phrase: '若欲有收成，攏是愛...', sentence: '每一項代誌，若欲有收成，攏是愛流汗的。' }
+        ],
+        imageKeywords: ['菜宅', '草蜢', '蕃薯'],
+        videoKeywords: ['閩南語 農事 教學', '澎湖 菜宅']
+      },
+      'g3b|第 2 課': {
+        title: '喝變就變',
+        vocabulary: ['頭殼膨椅', '雄雄狂狂', '喝變就變', '身軀漉漉', '透早', '這暫', '帶雨傘', '寒著'],
+        patterns: [
+          { phrase: '喝變就變', sentence: '這是啥物怪天，喝變就變，害我規身軀沃甲澹漉漉。' }
+        ],
+        imageKeywords: ['天氣變化', '雨傘', '身軀漉漉'],
+        videoKeywords: ['閩南語 天氣變化', '閩南語 喝變就變']
+      },
+      'g3b|第 3 課': {
+        title: '清明',
+        vocabulary: ['灶跤', '上愛食', '潤餅', '公婆', '盡看', '清明', '七月半', '拍拚', '腥臊', '上墓', '食果子', '拜樹頭', '講頭就知尾'],
+        patterns: [
+          { phrase: '若無...哪有...', sentence: '若無祖先辛苦拍拚，哪有咱這嘛的好生活。' }
+        ],
+        imageKeywords: ['清明 潤餅', '拜祖先', '澎湖 清明'],
+        videoKeywords: ['閩南語 清明', '清明 潤餅 教學']
+      },
+      'g3b|第 4 課': {
+        title: '嘉寶瓜',
+        vocabulary: ['歹勢', '嘉寶瓜', '青踜踜', '滑溜溜', '長株', '媠妍妍', '厝邊頭尾'],
+        patterns: [
+          { phrase: '形容詞 + 的 + 名詞', sentence: '挽青踜踜的嘉寶瓜。' }
+        ],
+        imageKeywords: ['嘉寶瓜', '澎湖 嘉寶瓜', '瓜果 圖卡'],
+        videoKeywords: ['澎湖 嘉寶瓜', '閩南語 水果 教學']
+      },
+      'g3b|第 5 課': {
+        title: '五月節',
+        vocabulary: ['滴滴滴', '沙綿綿', '透心涼', '五月節', '扒龍船', '衫褲', '天公伯仔', '透風', '破裘', '毋甘'],
+        patterns: [
+          { phrase: '若...若...', sentence: '若看扒龍船比賽，若摺冬天的衫褲。' }
+        ],
+        imageKeywords: ['五月節', '扒龍船', '端午節 澎湖'],
+        videoKeywords: ['閩南語 端午節', '扒龍船 澎湖']
+      },
+      'g3b|第 6 課': {
+        title: '六月天七月火',
+        vocabulary: ['歇熱', '無聊', '虱母', '釣魚', '離島', '沬水', '水族館', '觀音亭', '四孔井', '訂機票'],
+        patterns: [
+          { phrase: '會使...閣會使...', sentence: '咱會使去海墘釣魚，閣會使去水族館參觀。' }
+        ],
+        imageKeywords: ['澎湖 水族館', '觀音亭', '四孔井'],
+        videoKeywords: ['澎湖 觀音亭', '澎湖 四孔井', '閩南語 暑假']
+      },
+      'g4a|第 1 課': {
+        title: '出外條條難，在家日日好',
+        vocabulary: ['故鄉', '台灣錢淹腳目', '頭路', '在家日日好', '出外條條難', '較早', '聲聲句句', '遮雨', '雞跤爪', '拐仔'],
+        patterns: [
+          { phrase: '為著...為著...', sentence: '本課句型：為著……，為著……。' }
+        ],
+        imageKeywords: ['澎湖 離鄉', '故鄉 家庭', '出外 工作'],
+        videoKeywords: ['閩南語 故鄉', '澎湖 離鄉']
+      },
+      'g4a|第 2 課': {
+        title: '雙手抱孩兒，才知父母時',
+        vocabulary: ['嬰仔', '面紅', '睏', '無閒', '食飯', '歇睏', '雙手抱孩兒', '才知父母時', '有孝', '序大人'],
+        patterns: [
+          { phrase: '目睭仔...目睭仔...', sentence: '本課句型：目睭仔……目睭仔……。' }
+        ],
+        imageKeywords: ['照顧嬰兒', '孝順 父母', '家庭倫理'],
+        videoKeywords: ['閩南語 父母 孝順', '雙手抱孩兒 才知父母時']
+      },
+      'g4a|第 3 課': {
+        title: '一枝草，一點露',
+        vocabulary: ['欣羨', '怨妒', '曝鹽', '法度', '頭路', '飼', '生人', '一樣米', '撇步', '仝款', '梅花', '姊妹', '查埔人', '山林'],
+        patterns: [
+          { phrase: '一枝草，一點露', sentence: '本課句型：一枝草，一點露。' }
+        ],
+        imageKeywords: ['職業 圖卡', '努力 工作', '一枝草一點露'],
+        videoKeywords: ['閩南語 俗諺', '一枝草 一點露']
+      },
+      'g4a|第 4 課': {
+        title: '睛瞑牛，不識半字',
+        vocabulary: ['內底', '實統統', '相遇', '阿雄叔仔', '睛瞑牛', '不識半字', '囡仔', '枝仔冰', '聘書'],
+        patterns: [
+          { phrase: '睛瞑牛，不識半字', sentence: '睛瞑牛，不識半字。' }
+        ],
+        imageKeywords: ['郵局 圖片', '識字 教育', '文盲 生活不便'],
+        videoKeywords: ['閩南語 郵局', '閩南語 識字']
+      },
+      'g4a|第 5 課': {
+        title: '無好地基，就起無好茨',
+        vocabulary: ['逐工', '屈', '踏予在', '歇睏', '殠少年', '歸身軀', '咇咇掣', '地基', '午時水', '濛霧'],
+        patterns: [
+          { phrase: '無好地基，就起無好茨', sentence: '無好地基，就起無好茨。' }
+        ],
+        imageKeywords: ['地基 房子', '蹲馬步', '九二一地震 教材'],
+        videoKeywords: ['閩南語 地基', '蹲馬步 教學']
+      },
+      'g4a|第 6 課': {
+        title: '魚食流水，人食嘴水',
+        vocabulary: ['春風滿面', '歡喜', '金含仔', '魚食流水', '人食嘴水', '佗位', '得人疼', '鹹魚', '蕃薯簽'],
+        patterns: [
+          { phrase: '行到佗位...攏嘛會...', sentence: '本課句型：行到佗位……攏嘛會……。' }
+        ],
+        imageKeywords: ['說好話', '人際溝通', '閩南語 俗諺'],
+        videoKeywords: ['魚食流水 人食嘴水', '閩南語 說好話']
+      },
+      'g5a|第 1 課': {
+        title: '來馬公踅街路',
+        vocabulary: ['世俗', '雜事五事', '大灣', '桶盤', '觀音', '望夫石', '捎', '威風凜凜', '氣勢十足', '氣派', '無外遠', '雙心石滬', '上港有名聲、下港有出名', '九孔', '枸杞', '觸舌'],
+        patterns: [
+          { phrase: '無...哪有算...', sentence: '本課句型：無……，哪有算……。' },
+          { phrase: '汝一定無敢相信', sentence: '汝一定無敢相信。' }
+        ],
+        imageKeywords: ['馬公 中正路', '澎湖 馬公港', '馬公市 景點'],
+        videoKeywords: ['馬公市 介紹', '澎湖 馬公港']
+      },
+      'g5a|第 2 課': {
+        title: '來西嶼識地名',
+        vocabulary: ['加繹', '並網', '船在垵，人在山', '緝馬灣', '蒙古軍', '閃避', '老人無講古，少年不識寶', '若講恁汝識，嘴鬚就打結', '呿呿仔'],
+        patterns: [
+          { phrase: '為著...就共...', sentence: '本課句型：為著……，就共……。' }
+        ],
+        imageKeywords: ['澎湖 西嶼', '西嶼 地名', '澎湖地名'],
+        videoKeywords: ['西嶼 介紹', '澎湖 地名']
+      },
+      'g5a|第 3 課': {
+        title: '來七美看風景',
+        vocabulary: ['趁街', '歸大堆', '頂下街', '青青草原', '軍艦', '載客', '閃閃爍爍'],
+        patterns: [
+          { phrase: '遠遠看去實在...', sentence: '遠遠看去實在……。' }
+        ],
+        imageKeywords: ['七美 雙心石滬', '七美 青青草原', '七美 景點'],
+        videoKeywords: ['七美 介紹', '雙心石滬']
+      },
+      'g5a|第 4 課': {
+        title: '來湖西行海腳',
+        vocabulary: ['燦爛', '海路', '繹繹飛', '飛天趁海', '沙墘', '豬媽', '暗頭', '走揣', '鼓湧聲'],
+        patterns: [
+          { phrase: '有時...有時...', sentence: '有時唱歌有時跳舞，有時透風有時落雨。' },
+          { phrase: '食...配...', sentence: '食糜配芥菜，食飯配滷蛋。' }
+        ],
+        imageKeywords: ['湖西 海岸', '澎湖 湖西', '海腳 景觀'],
+        videoKeywords: ['湖西鄉 介紹', '澎湖海岸']
+      },
+      'g5a|第 5 課': {
+        title: '來望安掠大魚',
+        vocabulary: ['湊起來', '倚山食山', '倚海食海', '膏膏黏黏', '南勢', '歸陣', '浮', '一航海', '流勢', '價數', '綿爛', '敽珊瑚', '浮鮏魠魚'],
+        patterns: [
+          { phrase: '有時陣...有時陣...', sentence: '本課句型：有時陣……有時陣……。' }
+        ],
+        imageKeywords: ['望安 掠魚', '澎湖 望安', '澎湖漁業'],
+        videoKeywords: ['望安 介紹', '澎湖 掠魚']
+      },
+      'g5a|第 6 課': {
+        title: '來白沙知地理',
+        vocabulary: ['北山嶼', '無倚海', '海參', '風車輾', '賴賴泅', '時行', '攢手', '燈樓'],
+        patterns: [
+          { phrase: '汝敢知', sentence: '汝敢知，赤崁丁香上出名！' }
+        ],
+        imageKeywords: ['白沙鄉 澎湖', '澎湖 海參', '澎湖 燈塔'],
+        videoKeywords: ['白沙鄉 介紹', '澎湖地理']
+      },
+      'g6a|第 1 課': {
+        title: '咱的故鄉－澎湖',
+        vocabulary: ['開拓館', '草寮', '勾結', '強制', '反清復明', '糧草', '透吱吱', '苦楚', '流血流汗'],
+        patterns: [
+          { phrase: '...就予...', sentence: '本課句型：……就予……。' }
+        ],
+        imageKeywords: ['澎湖 開拓館', '澎湖 歷史', '澎湖故鄉'],
+        videoKeywords: ['澎湖 開拓館', '澎湖歷史']
+      },
+      'g6a|第 2 課': {
+        title: '回鄉的心情',
+        vocabulary: ['天涯海角', '山珍海味', '目頭結結', '明月光', '地上霜', '少小', '老大', '鄉音', '鬢毛催', '相識', '何處'],
+        patterns: [
+          { phrase: '猶是...較...', sentence: '本課句型：猶是……較……。' },
+          { phrase: '這就是...，對無？', sentence: '本課句型：這就是……，對無？' }
+        ],
+        imageKeywords: ['回鄉 思鄉', '澎湖 遊子', '唐詩 明月光'],
+        videoKeywords: ['閩南語 思鄉', '澎湖 回鄉']
+      },
+      'g6a|第 3 課': {
+        title: '愛的花火在澎湖',
+        vocabulary: ['微微仔', '斡頭', '人山人海', '湞滿滿', '這爿', '觀光警察', '煙火', '西瀛虹橋', '五彩繽紛', '光焱焱'],
+        patterns: [
+          { phrase: '這爿...彼爿...', sentence: '本課句型：這爿……彼爿……。' }
+        ],
+        imageKeywords: ['澎湖 花火節', '西瀛虹橋', '澎湖 煙火'],
+        videoKeywords: ['澎湖花火節', '西瀛虹橋']
+      },
+      'g6a|第 4 課': {
+        title: '海上迎媽祖',
+        vocabulary: ['三月肖媽祖', '祈安求福', '神轎', '童乩', '鑼鼓吹', '四聲', '陣頭', '破癖', '差教', '報更'],
+        patterns: [
+          { phrase: '...會...袂...', sentence: '汝導我來宮口看鬧熱，好無？' }
+        ],
+        imageKeywords: ['澎湖 海上迎媽祖', '媽祖宮', '陣頭 神轎'],
+        videoKeywords: ['澎湖 海上迎媽祖', '媽祖宮 活動']
+      },
+      'g6a|第 5 課': {
+        title: '澎湖四寶',
+        vocabulary: ['鹹水湮', '廟埕', '拖磨', '嬌豔', '奢颺', '妝', '鱠仔魚', '網仔斑', '熗鹹', '勇健'],
+        patterns: [
+          { phrase: '真...復真...', sentence: '歸澎湖山攏開佫真奢颺，共澎湖妝佫媠噹噹。' },
+          { phrase: '真...攏...', sentence: '大家食佫真勇健。' }
+        ],
+        imageKeywords: ['澎湖四寶', '澎湖 物產', '澎湖 海鮮'],
+        videoKeywords: ['澎湖四寶', '澎湖物產']
+      },
+      'g6a|第 6 課': {
+        title: '澎湖島心石',
+        vocabulary: ['烏心石', '一線天', '一四界', '名望', '干但', '石筆', '石硯', '海翁洞', '百襇裙', '轟動'],
+        patterns: [
+          { phrase: '一四界...干但...', sentence: '一四界行透透，干但咱的澎湖才有。' }
+        ],
+        imageKeywords: ['澎湖 烏心石', '一線天 澎湖', '海翁洞'],
+        videoKeywords: ['澎湖 地質', '澎湖 烏心石']
+      },
+      'g4b|第 1 課': {
+        title: '澎湖第一進士',
+        vocabulary: ['蔡廷蘭', '進士', '欽佩', '進士第', '出脫', '不識', '後次'],
+        patterns: [
+          { phrase: '就...就...', sentence: '本課句型：...就...就...' }
+        ],
+        imageKeywords: ['蔡廷蘭', '澎湖 第一進士', '進士第'],
+        videoKeywords: ['蔡廷蘭 澎湖', '澎湖 第一進士']
+      },
+      'g4b|第 2 課': {
+        title: '豬母落水',
+        vocabulary: ['細膩', '泅水', '土婆', '四界', '驚惶', '歹聽'],
+        patterns: [
+          { phrase: '真...', sentence: '本課句型：...真...' },
+          { phrase: '亦煞...予...', sentence: '本課句型：...亦煞...予...' }
+        ],
+        imageKeywords: ['豬母落水 澎湖', '海墘 泅水', '澎湖 傳說'],
+        videoKeywords: ['豬母落水 澎湖', '澎湖 傳說']
+      },
+      'g4b|第 3 課': {
+        title: '二龍海',
+        vocabulary: ['展風神', '刁工', '填海', '拚輸贏', '吼門', '範勢', '輸人不輸陣', '偷食步', '到落尾', '做銃打家己'],
+        patterns: [
+          { phrase: '到落尾...猶原...', sentence: '本課句型：...到落尾...猶原...' }
+        ],
+        imageKeywords: ['二龍海 澎湖', '澎湖 傳說', '填海'],
+        videoKeywords: ['二龍海 澎湖', '澎湖 傳說']
+      },
+      'g4b|第 4 課': {
+        title: '天台的腳跡',
+        vocabulary: ['臨時臨要', '便所', '呂洞賓', '天台山', '正腳', '倒腳', '腳跡', '不爾', '復在'],
+        patterns: [
+          { phrase: '不爾...復在...', sentence: '本課句型：不爾...復在...' }
+        ],
+        imageKeywords: ['澎湖 天台山', '呂洞賓 澎湖', '天台的腳跡'],
+        videoKeywords: ['澎湖 天台山', '澎湖 天台的腳跡']
+      },
+      'g4b|第 5 課': {
+        title: '七美人七欉樹',
+        vocabulary: ['姊妹仔伴', '尖腳幼手', '海賊', '侮辱', '恩情', '媠姑娘', '天不從人願', '無惡不作', '化身'],
+        patterns: [
+          { phrase: '甘願...亦不...', sentence: '本課句型：甘願...亦不...' }
+        ],
+        imageKeywords: ['七美人塚', '七美人七欉樹', '澎湖 七美 傳說'],
+        videoKeywords: ['七美人塚', '澎湖 七美 傳說']
+      },
+      'g4b|第 6 課': {
+        title: '望早歸',
+        vocabulary: ['大嶼', '賢慧', '翁婿', '逐工', '一嶺一嶺', '海湧', '目睭金金', '青狂', '日落西山', '袂食袂會睏', '海墘腳'],
+        patterns: [
+          { phrase: '不管...攏...', sentence: '不管是透風抑是落雨。' },
+          { phrase: '袂食袂會睏', sentence: '袂食袂會睏。' }
+        ],
+        imageKeywords: ['望夫石 澎湖', '海湧', '澎湖 海邊'],
+        videoKeywords: ['望早歸 澎湖', '澎湖 傳說 望夫石']
+      },
+      'g5b|第 1 課': {
+        title: '雙心相疼痛',
+        vocabulary: ['疼痛', '淹水', '洘', '巡滬', '保存', '心心相印', '地標', '環保', '智慧'],
+        patterns: [
+          { phrase: '實在...無怪...', sentence: '這個石滬實在世界無地找，無怪澎湖人欲選伊做新地標。' }
+        ],
+        imageKeywords: ['雙心石滬', '澎湖 石滬', '七美 雙心'],
+        videoKeywords: ['雙心石滬 介紹', '澎湖 石滬']
+      },
+      'g5b|第 2 課': {
+        title: '天后宮',
+        vocabulary: ['香火相傳', '保庇', '萬軍井', '甘甜', '風櫃洞', '囥在土腳', '斲邊出去'],
+        patterns: [
+          { phrase: '的時陣', sentence: '本課句型：...的時陣...' }
+        ],
+        imageKeywords: ['澎湖 天后宮', '萬軍井', '風櫃洞'],
+        videoKeywords: ['澎湖 天后宮', '澎湖 萬軍井']
+      },
+      'g5b|第 3 課': {
+        title: '烏糖粿',
+        vocabulary: ['烏糖粿', '土豆糖', '海菜酥', '小管絲', '鹹餅', '冬瓜膏', '膨紗', '軟膏膏'],
+        patterns: [
+          { phrase: '真...亦真...', sentence: '伊的個性真溫純，亦真閉思。' }
+        ],
+        imageKeywords: ['澎湖 烏糖粿', '澎湖 土豆糖', '澎湖 鹹餅'],
+        videoKeywords: ['澎湖 烏糖粿', '澎湖 名產']
+      },
+      'g5b|第 4 課': {
+        title: '相招拍寸子',
+        vocabulary: ['拍寸子', '寸槌', '撇步', '有勢有面'],
+        patterns: [
+          { phrase: '用...復舉...', sentence: '我用寸槌去斲寸子，復舉寸槌共寸子邊出去。' }
+        ],
+        imageKeywords: ['拍寸子', '澎湖 童玩', '寸子 遊戲'],
+        videoKeywords: ['拍寸子 玩法', '澎湖 童玩']
+      },
+      'g5b|第 5 課': {
+        title: '坐牛車掘土豆',
+        vocabulary: ['坐牛車', '掘土豆', '土豆藤', '耙仔', '向望', '蔭後代', '腳手扭', '掠', '埋罾', '跙倒'],
+        patterns: [
+          { phrase: '本來...目睭仔就...', sentence: '本來出日頭，目睭仔就落大雨。' }
+        ],
+        imageKeywords: ['坐牛車', '掘土豆', '澎湖 土豆'],
+        videoKeywords: ['掘土豆', '澎湖 牛車']
+      },
+      'g5b|第 6 課': {
+        title: '掠丁香挽紫菜',
+        vocabulary: ['掠丁香', '煠丁香', '曝丁香', '紩手橐', '挽紫菜', '丁手', '向望', '幼復'],
+        patterns: [
+          { phrase: '出產...佮...', sentence: '白沙出產丁香佮紫菜。' }
+        ],
+        imageKeywords: ['澎湖 丁香', '澎湖 紫菜', '挽紫菜'],
+        videoKeywords: ['澎湖 挽紫菜', '澎湖 丁香魚']
+      },
+      'g6b|第 1 課': {
+        title: '古早味的府城－台南',
+        vocabulary: ['府城', '小食', '度小月擔仔麵', '擋袂牢', '續嘴', '續力', '揳嘴齒縫', '講著食就破額', '食巧不食飽', '棺材板', '鼎邊趖', '鱔魚麵', '軟黕'],
+        patterns: [
+          { phrase: '若是...猶閣較...', sentence: '本課句型：若是...猶閣較...' }
+        ],
+        imageKeywords: ['台南 度小月擔仔麵', '台南 棺材板', '鱔魚麵'],
+        videoKeywords: ['台南 小吃 介紹', '閩南語 台南 小吃']
+      },
+      'g6b|第 2 課': {
+        title: '難忘的好所在－台中',
+        vocabulary: ['逝數念', '心適', '蠓罩', '烏仁', '嘴角全泡', '小鬼仔毋識看過大豬頭', '闔家', '外甥女'],
+        patterns: [
+          { phrase: '汝一定想未到...竟然是...', sentence: '本課句型：汝一定想未到，...竟然是...' },
+          { phrase: '一款...一款...', sentence: '本課句型：一款...一款...' }
+        ],
+        imageKeywords: ['台中 日月潭 溪頭', '台中 旅遊', '台中景點'],
+        videoKeywords: ['台中 景點 介紹', '閩南語 台中']
+      },
+      'g6b|第 3 課': {
+        title: '科技的重鎮－新竹',
+        vocabulary: ['一遍', '科學園區', '先進', '外銷', '電信', '生物科技', '黃砂埔'],
+        patterns: [
+          { phrase: '是...嘛是...', sentence: '本課句型：是...嘛是...' }
+        ],
+        imageKeywords: ['新竹 科學園區', '新竹 黃砂埔', '生物科技'],
+        videoKeywords: ['新竹 科學園區 介紹', '閩南語 新竹']
+      },
+      'g6b|第 4 課': {
+        title: '國際化的都市－台北',
+        vocabulary: ['大範', '地標', '娛樂', '不夜城', '捷運', '烏麻薯', '無尾熊', '木柵', '罕得看', '正港'],
+        patterns: [
+          { phrase: '上愛...無免...', sentence: '我上愛坐捷運，無免等青紅燈。' }
+        ],
+        imageKeywords: ['台北 捷運', '台北 木柵動物園', '台北 地標'],
+        videoKeywords: ['台北 捷運 介紹', '台北 木柵動物園']
+      },
+      'g6b|第 5 課': {
+        title: '後山的花園－花蓮',
+        vocabulary: ['太魯閣', '九曲洞', '九彎十八斡', '秀姑巒溪', '泛舟', '海翁', '開闊', '大理石', '扁食湯', '鬆鬆綿綿', '阿美族', '豐年祭'],
+        patterns: [
+          { phrase: '有山有水', sentence: '花蓮有山有水，風景上蓋媠。' }
+        ],
+        imageKeywords: ['花蓮 太魯閣', '秀姑巒溪 泛舟', '阿美族 豐年祭'],
+        videoKeywords: ['花蓮 太魯閣 介紹', '秀姑巒溪 泛舟']
+      },
+      'g6b|第 6 課': {
+        title: '繁華的港都－高雄',
+        vocabulary: ['猶未燒', '隔工', '渡船', '人面闊', '輕尻川', '上快活', '做袂煞', '跴壽山', '猴山仔', '狡怪', '倚護', '溼溼鹹鹹'],
+        patterns: [
+          { phrase: '猶未...就...', sentence: '本課句型：猶未...就...' }
+        ],
+        imageKeywords: ['高雄 港都', '壽山 猴山仔', '高雄 渡船'],
+        videoKeywords: ['高雄 港都 介紹', '壽山 猴子']
+      }
+    };
+
+    const rosterLabels = { grade1: '1 年級', grade2: '2 年級', grade3: '3 年級', grade4: '4 年級', grade5: '5 年級', grade6: '6 年級', all: '全校' };
+    const storeKey = 'schoolRewardPoints.v2';
+    const missionStoreKey = 'dongweiMissionReading.v1';
+    const missionTasks = [
+      { key: 'classFocus', label: '專心參與課堂', points: 1 },
+      { key: 'teamwork', label: '小組合作完成任務', points: 2 },
+      { key: 'helper', label: '主動協助收納與服務', points: 2 },
+      { key: 'speaking', label: '勇敢發表或口說練習', points: 2 },
+      { key: 'cleanup', label: '保持座位、器材與場地整潔', points: 1 }
+    ];
+    const missionDays = ['一', '二', '三', '四', '五'];
+    const $ = id => document.getElementById(id);
+    const nameList = $('nameList');
+    const presetRoster = $('presetRoster');
+    const winnerName = $('winnerName');
+    let rewardData = loadRewardData();
+    let missionData = loadMissionData();
+
+    function getNames() { return nameList.value.split(/\r?\n/).map(name => name.trim()).filter(Boolean); }
+    function getActiveStudentNames() {
+      const typedNames = getNames();
+      if (typedNames.length) return typedNames;
+      return rosters[presetRoster.value] || [];
+    }
+    function escapeHtml(value) { const element = document.createElement('div'); element.textContent = value; return element.innerHTML; }
+    function localFileUrl(path) {
+      const sourcePath = String(path || '');
+      const webPath = sourcePath.split('\\').join('/');
+      const pathParts = webPath.split('/').filter(Boolean);
+      const knownFolderIndex = pathParts.findIndex(part => window.DRIVE_FOLDER_IDS && window.DRIVE_FOLDER_IDS[part]);
+      const relativePath = knownFolderIndex >= 0
+        ? pathParts.slice(knownFolderIndex).join('/')
+        : webPath.replace(/^\.\//, '');
+      const fileId = window.DRIVE_FILE_IDS && window.DRIVE_FILE_IDS[relativePath];
+      if (fileId) return `https://drive.google.com/file/d/${fileId}/view?usp=drive_link`;
+
+      const folderId = window.DRIVE_FOLDER_IDS && window.DRIVE_FOLDER_IDS[relativePath];
+      if (folderId) return `https://drive.google.com/drive/folders/${folderId}`;
+
+      return encodeURI(`file:///${webPath}`);
+    }
+    function searchUrl(type, query) {
+      const encoded = encodeURIComponent(query);
+      if (type === 'image') return `https://www.google.com/search?tbm=isch&q=${encoded}`;
+      return `https://www.youtube.com/results?search_query=${encoded}`;
+    }
+    function getMinnanLessonData(manualKey, lessonNumber, topic) {
+      const data = minnanLessonBank[`${manualKey}|${lessonNumber}`];
+      if (data) return data;
+      return null;
+    }
+    function getSocialLessonData(manualKey) {
+      return socialLessonBank[manualKey] || null;
+    }
+    function getComprehensiveLessonData(key) {
+      return comprehensiveLessonBank[key] || null;
+    }
+    function lessonNumberToIndex(value) {
+      const match = String(value || '').match(/\d+/);
+      return match ? Number(match[0]) - 1 : -1;
+    }
+    function syncSocialManualFromLessonNumber() {
+      if ($('lessonSubject').value !== '社會') return;
+      const index = lessonNumberToIndex($('lessonNumber').value);
+      const key = socialLessonOrder[index];
+      if (key && $('socialManual').value !== key) $('socialManual').value = key;
+    }
+    function syncLessonNumberFromSocialManual() {
+      if ($('lessonSubject').value !== '社會') return;
+      const index = socialLessonOrder.indexOf($('socialManual').value);
+      if (index >= 0) $('lessonNumber').value = `第 ${index + 1} 課`;
+    }
+    function currentGameCourseParams() {
+      const subject = $('lessonSubject').value;
+      const params = new URLSearchParams();
+      if (subject === '閩南語') {
+        params.set('subject', '閩南語');
+        params.set('course', `minnan-${$('minnanManual').value}|${$('lessonNumber').value}`);
+      } else if (subject === '社會') {
+        syncSocialManualFromLessonNumber();
+        params.set('subject', '社會');
+        params.set('course', $('socialManual').value);
+      } else if (subject === '綜合活動') {
+        params.set('subject', '綜合活動');
+        params.set('course', $('comprehensiveManual').value);
+      } else if (subject === '資訊') {
+        params.set('subject', '資訊');
+        params.set('course', 'info-custom');
+      }
+      return params.toString();
+    }
+    function gameToolsUrl(anchor = '') {
+      const query = currentGameCourseParams();
+      return `game-tools.html${query ? `?${query}` : ''}${anchor ? `#${anchor}` : ''}`;
+    }
+    function updateGameLinks() {
+      const openLink = $('openGameToolsLink');
+      if (openLink) openLink.href = gameToolsUrl('templateLab');
+      document.querySelectorAll('[data-game-anchor]').forEach(link => {
+        link.href = gameToolsUrl(link.dataset.gameAnchor);
+      });
+    }
+    function showToast(message) {
+      const toast = $('toast');
+      toast.textContent = message;
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.add('translate-y-24', 'opacity-0'), 2200);
+    }
+    function shuffle(items) {
+      const result = [...items];
+      for (let i = result.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [result[i], result[j]] = [result[j], result[i]];
+      }
+      return result;
+    }
+    function makeGroups(names, count) {
+      const groups = Array.from({ length: count }, () => []);
+      shuffle(names).forEach((name, index) => groups[index % count].push(name));
+      return groups;
+    }
+
+    function syncMinnanManualBox() {
+      const subject = $('lessonSubject').value;
+      const isMinnan = subject === '閩南語';
+      const isSocial = subject === '社會';
+      const isComprehensive = subject === '綜合活動';
+      $('minnanManualBox').classList.toggle('hidden', !isMinnan);
+      $('socialManualBox').classList.toggle('hidden', !isSocial);
+      $('comprehensiveManualBox').classList.toggle('hidden', !isComprehensive);
+      const gradeNumber = ($('lessonGrade').value.match(/\d/) || ['1'])[0];
+      const currentManual = minnanManuals[$('minnanManual').value];
+      if (isMinnan && currentManual && currentManual.grade === `${gradeNumber} 年級`) return;
+      const preferred = `g${gradeNumber}a`;
+      if (isMinnan && minnanManuals[preferred]) $('minnanManual').value = preferred;
+      if (isSocial && gradeNumber !== '4') $('lessonGrade').value = '4 年級';
+      if (isSocial) syncSocialManualFromLessonNumber();
+    }
+
+    function loadRewardData() {
+      try { return JSON.parse(localStorage.getItem(storeKey)) || {}; } catch { return {}; }
+    }
+    function saveRewardData() { localStorage.setItem(storeKey, JSON.stringify(rewardData)); }
+    function loadMissionData() {
+      try { return JSON.parse(localStorage.getItem(missionStoreKey)) || {}; } catch { return {}; }
+    }
+    function saveMissionData() { localStorage.setItem(missionStoreKey, JSON.stringify(missionData)); }
+    function findGradeByName(name) { return Object.keys(rosters).find(key => key !== 'all' && rosters[key].includes(name)) || 'custom'; }
+    function getStudentKey(name) {
+      const grade = presetRoster.value === 'all' ? findGradeByName(name) : presetRoster.value;
+      return `${grade}:${name}`;
+    }
+    function getStudentRecord(name) {
+      const key = getStudentKey(name);
+      if (!rewardData[key]) rewardData[key] = { points: 0, earned: 0 };
+      return rewardData[key];
+    }
+    function progressFromPoints(points) {
+      const safe = Math.max(0, points);
+      return { bears: safe % 10, circles: Math.floor(safe / 10) % 10, honors: Math.floor(safe / 100) % 3, certificates: Math.floor(safe / 300) % 3, trophies: Math.floor(safe / 900) };
+    }
+    function updateCount() { $('studentCount').textContent = `${getNames().length} 位學生`; }
+    function loadRoster() {
+      nameList.value = rosters[presetRoster.value].join('\n');
+      $('groupSection').classList.add('hidden');
+      winnerName.textContent = '準備好了嗎？';
+      updateCount();
+      syncRewardStudentList();
+      syncMissionStudentList();
+      renderRewardPanel();
+      renderMissionRecords();
+    }
+    function syncRewardStudentList() {
+      const selected = $('rewardStudent').value;
+      $('rewardStudent').innerHTML = getNames().map(name => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('');
+      if (getNames().includes(selected)) $('rewardStudent').value = selected;
+    }
+    function renderRewardPanel() {
+      const names = getNames();
+      if (!names.length) return;
+      syncRewardStudentList();
+      const selected = $('rewardStudent').value || names[0];
+      const record = getStudentRecord(selected);
+      const progress = progressFromPoints(record.points);
+      $('selectedStudentName').textContent = selected;
+      $('currentPoints').textContent = record.points;
+      $('totalEarned').textContent = record.earned;
+      $('bearProgress').textContent = `${progress.bears} / 10`;
+      $('circleCards').textContent = progress.circles;
+      $('honorCards').textContent = progress.honors;
+      $('certificates').textContent = progress.certificates;
+      $('trophies').textContent = progress.trophies;
+      renderRewardTable();
+    }
+    function renderRewardTable() {
+      const keyword = $('searchStudent').value.trim();
+      $('rewardTable').innerHTML = getNames().filter(name => !keyword || name.includes(keyword)).map(name => {
+        const record = getStudentRecord(name);
+        const p = progressFromPoints(record.points);
+        return `<tr class="hover:bg-yellow-50"><td class="px-4 py-3 font-black text-blue-700">${escapeHtml(name)}</td><td class="px-4 py-3 font-bold">${record.points}</td><td class="px-4 py-3">${p.circles}</td><td class="px-4 py-3">${p.honors}</td><td class="px-4 py-3">${p.certificates}</td><td class="px-4 py-3">${p.trophies}</td></tr>`;
+      }).join('');
+    }
+    function addPoints(name, delta) {
+      const record = getStudentRecord(name);
+      record.points = Math.max(0, record.points + delta);
+      if (delta > 0) record.earned += delta;
+      saveRewardData();
+      renderRewardPanel();
+    }
+
+    function missionKey(name = $('missionStudent').value, week = $('missionWeek').value.trim()) {
+      return `${findGradeByName(name)}:${name}:${week || '未命名週次'}`;
+    }
+    function syncMissionStudentList() {
+      const selected = $('missionStudent').value || $('rewardStudent').value;
+      $('missionStudent').innerHTML = getNames().map(name => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('');
+      if (getNames().includes(selected)) $('missionStudent').value = selected;
+    }
+    function renderMissionTaskGrid() {
+      $('missionTaskGrid').innerHTML = missionTasks.map(task => `
+        <div class="rounded-2xl border-2 border-orange-100 bg-orange-50/60 p-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <p class="font-black text-orange-900">${escapeHtml(task.label)}</p>
+            <span class="rounded-full bg-white px-3 py-1 text-xs font-black text-orange-700">每次 ${task.points} 點</span>
+          </div>
+          <div class="mt-3 grid grid-cols-5 gap-2">
+            ${missionDays.map(day => `<label class="rounded-xl bg-white p-2 text-center text-xs font-black text-slate-600 shadow-sm">${day}<select data-task="${task.key}" data-day="${day}" class="missionCount mt-1 w-full rounded-lg border border-orange-200 px-1 py-1 text-center font-black"><option>0</option><option>1</option><option>2</option><option>3</option></select></label>`).join('')}
+          </div>
+        </div>`).join('');
+      document.querySelectorAll('.missionCount').forEach(input => input.addEventListener('change', updateMissionSummary));
+    }
+    function collectMissionForm() {
+      const tasks = {};
+      document.querySelectorAll('.missionCount').forEach(select => {
+        const task = select.dataset.task;
+        const day = select.dataset.day;
+        if (!tasks[task]) tasks[task] = {};
+        tasks[task][day] = Number(select.value);
+      });
+      const taskPoints = missionTasks.reduce((sum, task) => {
+        const count = missionDays.reduce((daySum, day) => daySum + Number(tasks[task.key]?.[day] || 0), 0);
+        return sum + count * task.points;
+      }, 0);
+      const readingPoints = $('readingCertified').checked ? 5 : 0;
+      const totalPoints = taskPoints + readingPoints;
+      const rewardMinutes = Math.floor(totalPoints / 10) * 30;
+      const usedMinutes = Math.max(0, Number($('rewardMinutesUsed').value || 0));
+      return {
+        student: $('missionStudent').value,
+        week: $('missionWeek').value.trim() || '未命名週次',
+        tasks,
+        reading: {
+          title: $('readingTitle').value.trim(),
+          q1: $('readingQ1').value.trim(),
+          q2: $('readingQ2').value.trim(),
+          q3: $('readingQ3').value.trim(),
+          certified: $('readingCertified').checked
+        },
+        taskPoints,
+        readingPoints,
+        totalPoints,
+        rewardMinutes,
+        usedMinutes,
+        remainingMinutes: Math.max(0, rewardMinutes - usedMinutes),
+        note: $('missionNote').value.trim(),
+        updatedAt: new Date().toISOString()
+      };
+    }
+    function fillMissionForm(record) {
+      document.querySelectorAll('.missionCount').forEach(select => {
+        select.value = record?.tasks?.[select.dataset.task]?.[select.dataset.day] ?? 0;
+      });
+      $('readingTitle').value = record?.reading?.title || '';
+      $('readingQ1').value = record?.reading?.q1 || '';
+      $('readingQ2').value = record?.reading?.q2 || '';
+      $('readingQ3').value = record?.reading?.q3 || '';
+      $('readingCertified').checked = Boolean(record?.reading?.certified);
+      $('rewardMinutesUsed').value = record?.usedMinutes || 0;
+      $('missionNote').value = record?.note || '';
+      updateMissionSummary();
+    }
+    function updateMissionSummary() {
+      const data = collectMissionForm();
+      $('missionTaskPoints').textContent = data.totalPoints;
+      $('missionRewardMinutes').textContent = `${data.remainingMinutes} 分`;
+    }
+    function saveMissionRecord() {
+      const data = collectMissionForm();
+      if (!data.student) return showToast('請先選擇學生');
+      const key = missionKey(data.student, data.week);
+      const oldRecord = missionData[key];
+      const oldApplied = Number(oldRecord?.appliedPoints || 0);
+      const delta = data.totalPoints - oldApplied;
+      missionData[key] = { ...data, key, appliedPoints: data.totalPoints };
+      saveMissionData();
+      if (delta !== 0) addPoints(data.student, delta);
+      renderMissionRecords();
+      $('missionStatus').textContent = `已儲存：${data.student}｜${data.week}，本筆 ${data.totalPoints} 點，已同步星光 ${delta >= 0 ? '+' : ''}${delta}`;
+      showToast('任務閱讀紀錄已儲存');
+    }
+    function loadMissionRecord() {
+      const key = missionKey();
+      const record = missionData[key];
+      if (!record) {
+        fillMissionForm(null);
+        $('missionStatus').textContent = '查無這位學生的本週紀錄，可直接建立新紀錄';
+        return showToast('查無本筆紀錄');
+      }
+      fillMissionForm(record);
+      $('missionStatus').textContent = `已讀取：${record.student}｜${record.week}`;
+      showToast('已讀取任務閱讀紀錄');
+    }
+    function clearMissionRecord() {
+      const key = missionKey();
+      const record = missionData[key];
+      if (!record) return showToast('目前沒有可清除的本筆紀錄');
+      if (!confirm(`確定清除「${record.student}｜${record.week}」任務閱讀紀錄嗎？已同步的星光點不會自動扣回。`)) return;
+      delete missionData[key];
+      saveMissionData();
+      fillMissionForm(null);
+      renderMissionRecords();
+      $('missionStatus').textContent = '已清除本筆任務閱讀紀錄';
+      showToast('已清除本筆紀錄');
+    }
+    function renderMissionRecords() {
+      const keyword = $('missionSearch').value.trim();
+      const rows = Object.values(missionData)
+        .sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt)))
+        .filter(record => !keyword || record.student.includes(keyword) || record.week.includes(keyword));
+      $('missionRecordTable').innerHTML = rows.map(record => `
+        <tr class="cursor-pointer hover:bg-orange-50" data-mission-key="${escapeHtml(record.key)}">
+          <td class="px-4 py-3 font-black text-blue-700">${escapeHtml(record.student)}</td>
+          <td class="px-4 py-3">${escapeHtml(record.week)}</td>
+          <td class="px-4 py-3 font-black text-orange-700">${record.totalPoints}</td>
+          <td class="px-4 py-3">${record.reading?.certified ? `通過：${escapeHtml(record.reading.title || '未填書名')}` : '未認證'}</td>
+          <td class="px-4 py-3">${record.remainingMinutes} / ${record.rewardMinutes} 分</td>
+          <td class="px-4 py-3">${new Date(record.updatedAt).toLocaleString('zh-TW', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</td>
+        </tr>`).join('');
+      document.querySelectorAll('[data-mission-key]').forEach(row => {
+        row.addEventListener('click', () => {
+          const record = missionData[row.dataset.missionKey];
+          if (!record) return;
+          $('missionStudent').value = record.student;
+          $('missionWeek').value = record.week;
+          fillMissionForm(record);
+          $('missionStatus').textContent = `已載入表格紀錄：${record.student}｜${record.week}`;
+        });
+      });
+    }
+
+    function subjectTemplate(subject, topic, goal, minutes, groupCount) {
+      const shared = {
+        flow: [`導入 5 分鐘：用生活問題或圖片引起動機，連結澎湖與東衛生活經驗。`, `發展 ${Math.max(20, minutes - 20)} 分鐘：教師示範重點，小組完成任務並互相說明。`, `統整 10 分鐘：抽學生分享，小組回饋，教師整理今日關鍵句。`, `評量 5 分鐘：完成出口票或口頭問答，表現佳者加星光點。`],
+        worksheet: [`我今天學到的 3 個重點：`, `請寫下或畫出一個和「${topic}」有關的例子。`, `小組討論：我們合作時做得好的地方是什麼？`, `我的自評：□ 我能專心聽 □ 我能完成任務 □ 我能幫助同學`]
+      };
+      const map = {
+        '閩南語': {
+          objectives: [`能聽懂並練習說出「${topic}」相關語詞或句型。`, `能用簡短句型和同學進行口語互動。`, `能把語詞連結到澎湖在地生活與家庭經驗。`],
+          game: `語詞接龍擂台：每組輪流說出主題語詞或句子，說對得 1 分，能造句得 2 分，能加入澎湖生活例子得 3 分。`,
+          questions: [`「${topic}」可以想到哪些閩南語語詞？`, `請用今天的語詞說一句話。`, `哪一個語詞最常在家裡或社區聽到？`]
+        },
+        '體育': {
+          objectives: [`能遵守安全規則完成「${topic}」活動。`, `能和小組合作完成分站任務。`, `能說出一個自己進步的動作重點。`],
+          game: `分組闖關遊戲：全班分成 ${groupCount} 組，輪流完成「暖身站、技巧站、合作站、挑戰站」。每站完成得 1 星光點，合作態度佳可加分。`,
+          questions: [`今天哪個動作最需要注意安全？`, `小組合作時誰給了你幫助？`, `下一次你想挑戰哪一個動作？`],
+          pe: true
+        },
+        '社會': {
+          objectives: [`能說出「${topic}」的重點概念。`, `能用地圖、圖片或生活經驗說明自己的看法。`, `能尊重不同觀點並完成小組討論。`],
+          game: `澎湖任務偵探：各組抽任務卡，根據線索找出地點、人物、事件或原因，完成後上台用 30 秒報告。`,
+          questions: [`這個主題和澎湖生活有什麼關係？`, `如果你是社區小記者，你會問什麼問題？`, `哪一個證據最能支持你的答案？`]
+        },
+        '綜合活動': {
+          objectives: [`能覺察自己在「${topic}」中的角色與感受。`, `能和同學合作完成任務。`, `能提出一個可實行的改進方法。`],
+          game: `合作任務卡：每組抽一張情境卡，討論解決方法並演出 1 分鐘，其他組給予一個欣賞與一個建議。`,
+          questions: [`遇到困難時可以怎麼求助？`, `今天我為小組做了什麼？`, `下次合作我想改進什麼？`]
+        },
+        '一年級閱讀': {
+          objectives: [`能專心聆聽並說出故事或文章重點。`, `能辨認關鍵詞語。`, `能用圖畫或一句話表達理解。`],
+          game: `閱讀尋寶：老師讀文本，學生找出人物、地點、事情、感受四種寶物，完成一格得 1 顆星。`,
+          questions: [`故事裡有誰？`, `發生了什麼事？`, `你最喜歡哪一段？為什麼？`]
+        }
+      };
+      return { ...shared, ...map[subject], goal };
+    }
+
+    function getLessonTopic() {
+      const lessonNumber = $('lessonNumber').value;
+      const customTopic = $('lessonTopic').value.trim();
+      if (lessonNumber === '自訂課程') return customTopic || '自訂課程';
+      return customTopic ? `${lessonNumber}｜${customTopic}` : lessonNumber;
+    }
+
+    function renderMinnanLanguageCard(lessonData) {
+      const imageLinks = lessonData.imageKeywords.map(keyword => `<a class="rounded-xl bg-blue-100 px-3 py-2 font-black text-blue-700 hover:bg-blue-200" href="${searchUrl('image', keyword)}" target="_blank">${escapeHtml(keyword)}</a>`).join('');
+      const videoLinks = lessonData.videoKeywords.map(keyword => `<a class="rounded-xl bg-red-100 px-3 py-2 font-black text-red-700 hover:bg-red-200" href="${searchUrl('video', keyword)}" target="_blank">${escapeHtml(keyword)}</a>`).join('');
+      return `<article class="card-in print-block rounded-3xl border-2 border-orange-200 bg-orange-50 p-5">
+        <p class="text-sm font-black text-orange-600">閩南語語詞與句型</p>
+        <h3 class="mt-1 text-2xl font-black text-orange-900">${escapeHtml(lessonData.title)}</h3>
+        <p class="mt-3 font-bold text-slate-700">本課新語詞</p>
+        <div class="mt-2 flex flex-wrap gap-2">${lessonData.vocabulary.map((word, index) => `<span class="rounded-full bg-white px-3 py-2 font-black text-slate-700 shadow-sm">${index + 1}. ${escapeHtml(word)}</span>`).join('')}</div>
+        <p class="mt-4 font-bold text-slate-700">本課句型 / 講法</p>
+        <ul class="mt-2 space-y-2">${lessonData.patterns.map(item => `<li class="rounded-2xl bg-white p-3 shadow-sm"><b>${escapeHtml(item.phrase)}：</b>${escapeHtml(item.sentence)}</li>`).join('')}</ul>
+        <div class="no-print mt-4 rounded-2xl bg-white p-3 shadow-sm">
+          <p class="font-black text-blue-700">圖片素材搜尋</p>
+          <div class="mt-2 flex flex-wrap gap-2">${imageLinks}</div>
+          <p class="mt-3 font-black text-red-700">影片素材搜尋</p>
+          <div class="mt-2 flex flex-wrap gap-2">${videoLinks}</div>
+        </div>
+      </article>`;
+    }
+
+    function renderSocialStudiesCard(lessonData) {
+      return `<article class="card-in print-block rounded-3xl border-2 border-sky-200 bg-sky-50 p-5">
+        <p class="text-sm font-black text-sky-600">社會教師手冊重點</p>
+        <h3 class="mt-1 text-2xl font-black text-sky-900">${escapeHtml(lessonData.code)} ${escapeHtml(lessonData.title)}</h3>
+        <p class="mt-3 font-bold text-slate-700">本課概念</p>
+        <div class="mt-2 flex flex-wrap gap-2">${lessonData.concepts.map(item => `<span class="rounded-full bg-white px-3 py-2 font-black text-slate-700 shadow-sm">${escapeHtml(item)}</span>`).join('')}</div>
+        <p class="mt-4 font-bold text-slate-700">手冊活動重點</p>
+        <ol class="mt-2 list-decimal space-y-2 pl-5">${lessonData.activities.map(item => `<li class="rounded-2xl bg-white p-3 shadow-sm">${escapeHtml(item)}</li>`).join('')}</ol>
+      </article>`;
+    }
+    function renderComprehensiveCard(lessonData) {
+      return `<article class="card-in print-block rounded-3xl border-2 border-emerald-200 bg-emerald-50 p-5">
+        <p class="text-sm font-black text-emerald-600">綜合活動教師手冊重點</p>
+        <h3 class="mt-1 text-2xl font-black text-emerald-900">${escapeHtml(lessonData.semester)}｜單元 ${escapeHtml(lessonData.unit)} ${escapeHtml(lessonData.unitTitle)}</h3>
+        <p class="mt-2 text-xl font-black text-blue-900">活動 ${escapeHtml(lessonData.activity)}：${escapeHtml(lessonData.title)}</p>
+        <p class="mt-3 font-bold text-slate-700">核心概念</p>
+        <div class="mt-2 flex flex-wrap gap-2">${lessonData.concepts.map(item => `<span class="rounded-full bg-white px-3 py-2 font-black text-slate-700 shadow-sm">${escapeHtml(item)}</span>`).join('')}</div>
+        <p class="mt-4 font-bold text-slate-700">活動流程</p>
+        <ol class="mt-2 list-decimal space-y-2 pl-5">${lessonData.activities.map(item => `<li class="rounded-2xl bg-white p-3 shadow-sm">${escapeHtml(item)}</li>`).join('')}</ol>
+      </article>`;
+    }
+
+    function renderWorksheetLibrary(subject, socialLesson, comprehensiveLesson) {
+      if (subject === '綜合活動' && comprehensiveLesson) {
+        const related = comprehensiveWorksheetFiles.filter(item => item.semester === comprehensiveLesson.semester && item.unit === comprehensiveLesson.unit && item.activity === comprehensiveLesson.activity);
+        const folder = comprehensiveLesson.semester === '上學期' ? 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\綜合活動4上學習單' : 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\綜合活動4下學習單';
+        const refManual = comprehensiveManuals[comprehensiveLesson.semester === '上學期' ? 'c4a-ref' : 'c4b-ref'];
+        const card = item => `<a class="block rounded-2xl border-2 border-emerald-100 bg-emerald-50 p-4 shadow-sm transition hover:-translate-y-1 hover:border-emerald-300 hover:bg-white" href="${localFileUrl(item.file)}" target="_blank"><p class="text-xs font-black text-emerald-600">綜合活動學習單</p><h3 class="mt-1 font-black text-blue-800">${escapeHtml(item.title)}</h3><p class="mt-2 text-xs font-bold text-slate-500">點選開啟 PDF</p></a>`;
+        return `<section class="print-block rounded-3xl border-4 border-emerald-300 bg-white p-5 shadow-xl shadow-emerald-100 sm:p-7">
+          <div class="flex flex-wrap items-start justify-between gap-4">
+            <div><p class="text-sm font-bold text-emerald-600">資料夾附件</p><h2 class="text-3xl font-black text-blue-800">本次綜合活動學習單</h2><p class="mt-2 text-slate-500">已依 ${escapeHtml(comprehensiveLesson.semester)} 單元 ${escapeHtml(comprehensiveLesson.unit)} 活動 ${escapeHtml(comprehensiveLesson.activity)} 篩選主要學習單。</p></div>
+            <div class="no-print flex flex-wrap gap-2">
+              <a class="rounded-2xl bg-emerald-500 px-4 py-2 font-black text-white shadow hover:bg-emerald-400" href="${localFileUrl(folder)}" target="_blank">開啟完整學習單資料夾</a>
+              <a class="rounded-2xl bg-blue-500 px-4 py-2 font-black text-white shadow hover:bg-blue-400" href="${localFileUrl(refManual.file)}" target="_blank">開啟資料篇</a>
+            </div>
+          </div>
+          <div class="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4">${related.length ? related.map(card).join('') : '<p class="rounded-2xl bg-slate-50 p-4 font-bold text-slate-500">目前沒有找到完全對應的學習單。</p>'}</div>
+        </section>`;
+      }
+      if (subject !== '社會' || !socialLesson) {
+        return `<section class="print-block rounded-3xl border-4 border-violet-300 bg-white p-5 shadow-xl shadow-violet-100 sm:p-7"><h2 class="text-3xl font-black text-blue-800">本次學習單與測驗</h2><p class="mt-2 text-slate-500">上方紫色卡片可直接列印；之後可依教師手冊細修題目與格式。</p></section>`;
+      }
+      const unit = socialLesson.code.split('-')[0];
+      const related = socialWorksheetFiles.filter(item => item.lesson === socialLesson.code || item.unit === unit);
+      const assessments = socialWorksheetFiles.filter(item => item.unit === '評量');
+      const exams = socialExamFiles.filter(item => item.units.includes(unit));
+      const card = item => `<a class="block rounded-2xl border-2 border-violet-100 bg-violet-50 p-4 shadow-sm transition hover:-translate-y-1 hover:border-violet-300 hover:bg-white" href="${localFileUrl(item.file)}" target="_blank"><p class="text-xs font-black text-violet-600">${escapeHtml(item.type)}</p><h3 class="mt-1 font-black text-blue-800">${escapeHtml(item.title)}</h3><p class="mt-2 text-xs font-bold text-slate-500">點選開啟 PDF</p></a>`;
+      return `<section class="print-block rounded-3xl border-4 border-violet-300 bg-white p-5 shadow-xl shadow-violet-100 sm:p-7">
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p class="text-sm font-bold text-violet-600">資料夾附件</p>
+            <h2 class="text-3xl font-black text-blue-800">本次學習單與測驗</h2>
+            <p class="mt-2 text-slate-500">已依 ${escapeHtml(socialLesson.code)} ${escapeHtml(socialLesson.title)} 篩選資料夾內可用 PDF。</p>
+          </div>
+          <div class="no-print flex flex-wrap gap-2">
+            <a class="rounded-2xl bg-violet-500 px-4 py-2 font-black text-white shadow hover:bg-violet-400" href="${localFileUrl('C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\社會4上學習單')}" target="_blank">開啟學習單資料夾</a>
+            <a class="rounded-2xl bg-orange-500 px-4 py-2 font-black text-white shadow hover:bg-orange-400" href="${localFileUrl('C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\社會4上二次月考卷')}" target="_blank">月考卷資料夾</a>
+          </div>
+        </div>
+        <div class="mt-5">
+          <h3 class="font-black text-violet-800">本課 / 本單元可用</h3>
+          <div class="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-4">${related.length ? related.map(card).join('') : '<p class="rounded-2xl bg-slate-50 p-4 font-bold text-slate-500">目前沒有找到完全對應的學習單。</p>'}</div>
+        </div>
+        <div class="mt-5 rounded-3xl border-2 border-orange-200 bg-orange-50 p-4">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p class="text-sm font-black text-orange-600">月考卷</p>
+              <h3 class="text-xl font-black text-orange-900">${unit === '1' || unit === '2' ? '期中考卷（第 1～2 單元）' : '期末考卷（第 3～4 單元）'}</h3>
+            </div>
+            <a class="no-print rounded-2xl bg-orange-500 px-4 py-2 font-black text-white shadow hover:bg-orange-400" href="${localFileUrl(exams[0]?.file || 'C:\\Users\\janea\\我的雲端硬碟\\116\\02_班級經營\\社會4上二次月考卷')}" target="_blank">開啟月考卷</a>
+          </div>
+          <div class="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-4">${exams.map(card).join('')}</div>
+        </div>
+        <details class="mt-5 rounded-2xl bg-slate-50 p-4">
+          <summary class="cursor-pointer font-black text-slate-700">展開學習成果評量卷</summary>
+          <div class="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-4">${assessments.map(card).join('')}</div>
+        </details>
+      </section>`;
+    }
+
+    function generateLesson(options = {}) {
+      const subject = $('lessonSubject').value;
+      const lessonNumber = $('lessonNumber').value;
+      const topic = getLessonTopic();
+      if (subject === '社會') syncSocialManualFromLessonNumber();
+      updateGameLinks();
+      const minutes = Number($('lessonMinutes').value);
+      const groupCount = Number($('lessonGroups').value);
+      const goal = $('lessonGoal').value.trim() || '能理解本堂課重點並完成任務。';
+      const manual = subject === '閩南語' ? minnanManuals[$('minnanManual').value] : null;
+      const minnanLesson = manual ? getMinnanLessonData($('minnanManual').value, lessonNumber, topic) : null;
+      const socialManual = subject === '社會' ? socialManuals[$('socialManual').value] : null;
+      const socialLesson = socialManual ? getSocialLessonData($('socialManual').value) : null;
+      const comprehensiveLesson = subject === '綜合活動' ? getComprehensiveLessonData($('comprehensiveManual').value) : null;
+      const comprehensiveManual = comprehensiveLesson ? comprehensiveManuals[comprehensiveLesson.manual] : null;
+      const grade = (socialLesson || comprehensiveLesson) ? '4 年級' : $('lessonGrade').value;
+      const displayTopic = socialLesson ? `${socialLesson.code} ${socialLesson.title}` : (comprehensiveLesson ? `${comprehensiveLesson.semester} 單元 ${comprehensiveLesson.unit} 活動 ${comprehensiveLesson.activity} ${comprehensiveLesson.title}` : topic);
+      const tpl = subjectTemplate(subject, displayTopic, goal, minutes, groupCount);
+      const lessonObjectives = comprehensiveLesson ? comprehensiveLesson.objectives : (socialLesson ? socialLesson.objectives : tpl.objectives);
+      const lessonFlow = comprehensiveLesson ? comprehensiveLesson.activities : (socialLesson ? socialLesson.activities : tpl.flow);
+      const lessonGame = comprehensiveLesson ? comprehensiveLesson.game : (socialLesson ? socialLesson.game : tpl.game);
+      const lessonWorksheet = comprehensiveLesson ? comprehensiveLesson.worksheet : (socialLesson ? socialLesson.worksheet : (minnanLesson ? [
+        `請選 3 個本課新語詞，各寫一句或畫一張圖。`,
+        `請用本課句型完成一句話。`,
+        `看圖片或影片後，寫下你看到的 2 個重點。`,
+        `我今天最會說的閩南語語詞是：`
+      ] : tpl.worksheet));
+      const lessonQuestions = comprehensiveLesson ? comprehensiveLesson.questions : (socialLesson ? socialLesson.questions : tpl.questions);
+      const sourceManual = manual || socialManual || comprehensiveManual;
+      const peGroups = tpl.pe ? makeGroups(getNames(), Math.min(groupCount, Math.max(1, getNames().length || groupCount))) : [];
+
+      if (manual && !minnanLesson) {
+        $('lessonOutput').innerHTML = `
+          <article class="card-in print-block rounded-3xl border-2 border-orange-200 bg-orange-50 p-5 xl:col-span-4">
+            <p class="text-sm font-black text-orange-600">尚未讀取教師手冊資料</p>
+            <h3 class="mt-1 text-2xl font-black text-orange-900">${escapeHtml(manual.label)}｜${escapeHtml(lessonNumber)}</h3>
+            <p class="mt-3 leading-7">這一課目前尚未從教師手冊整理出「新語詞、句型、圖片/影片素材」，所以系統不會亂生成內容。請先選 1 年級上學期第 1～6 課，或提供這一課的手冊頁面/截圖，我再把真實資料寫入。</p>
+            <a class="no-print mt-4 inline-flex rounded-xl bg-orange-400 px-3 py-2 font-black text-orange-950 hover:bg-orange-300" href="${localFileUrl(manual.file)}" target="_blank">開啟 PDF 手冊</a>
+          </article>`;
+        $('lessonStatus').textContent = '這一課尚未整理，未生成假資料';
+        showToast('這一課尚未整理，未生成假資料');
+        if (options.scroll) $('lessonOutput').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+
+      $('lessonOutput').innerHTML = `
+        <article class="card-in print-block rounded-3xl border-2 border-blue-200 bg-blue-50 p-5">
+          <p class="text-sm font-black text-blue-500">教案</p>
+          <h3 class="mt-1 text-2xl font-black text-blue-900">${escapeHtml(grade)} ${escapeHtml(subject)}｜${escapeHtml(displayTopic)}</h3>
+          <p class="mt-3 font-bold text-slate-700">教學目標</p>
+          <ul class="mt-2 list-disc space-y-1 pl-5">${lessonObjectives.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>
+          <p class="mt-3 font-bold text-slate-700">課程流程</p>
+          <ol class="mt-2 list-decimal space-y-1 pl-5">${lessonFlow.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ol>
+          ${sourceManual ? `<div class="mt-4 rounded-2xl bg-white p-3 shadow-sm"><p class="font-black text-orange-700">教師手冊來源</p><p class="mt-1">${escapeHtml(sourceManual.label)}，共 ${sourceManual.pages} 頁。</p><a class="no-print mt-2 inline-flex rounded-xl bg-orange-400 px-3 py-2 font-black text-orange-950 hover:bg-orange-300" href="${localFileUrl(sourceManual.file)}" target="_blank">開啟 PDF</a></div>` : ''}
+        </article>
+        ${minnanLesson ? renderMinnanLanguageCard(minnanLesson) : ''}
+        ${socialLesson ? renderSocialStudiesCard(socialLesson) : ''}
+        ${comprehensiveLesson ? renderComprehensiveCard(comprehensiveLesson) : ''}
+        <article class="card-in print-block rounded-3xl border-2 border-emerald-200 bg-emerald-50 p-5">
+          <p class="text-sm font-black text-emerald-600">教學遊戲</p>
+          <h3 class="mt-1 text-2xl font-black text-emerald-900">${tpl.pe ? '體育分組遊戲' : '互動遊戲'}</h3>
+          <p class="mt-3 leading-7">${escapeHtml(lessonGame)}</p>
+          ${tpl.pe ? `<div class="mt-4 rounded-2xl bg-white p-3 shadow"><p class="font-black text-blue-700">建議分組</p>${peGroups.map((group, i) => `<p class="mt-2"><b>第 ${i + 1} 組：</b>${group.map(escapeHtml).join('、')}</p>`).join('')}</div>` : ''}
+          <p class="mt-3 font-bold">星光加分建議：完成任務 +1，主動合作 +2，帶領小組 +3。</p>
+        </article>
+        <article class="card-in print-block rounded-3xl border-2 border-violet-200 bg-violet-50 p-5">
+          <p class="text-sm font-black text-violet-600">學習單</p>
+          <h3 class="mt-1 text-2xl font-black text-violet-900">課堂任務單</h3>
+          <p class="mt-3">姓名：＿＿＿＿＿＿　日期：＿＿＿＿＿＿</p>
+          <ol class="mt-3 list-decimal space-y-3 pl-5">${lessonWorksheet.map(item => `<li>${escapeHtml(item)}<div class="mt-2 h-10 rounded-xl border-2 border-dashed border-violet-200 bg-white"></div></li>`).join('')}</ol>
+          <p class="mt-3 font-bold">小測驗題目</p>
+          <ul class="mt-2 list-disc space-y-1 pl-5">${lessonQuestions.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>
+        </article>`;
+
+      $('worksheetOutput').innerHTML = renderWorksheetLibrary(subject, socialLesson, comprehensiveLesson);
+      const now = new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      $('lessonStatus').textContent = `已生成 ${now}`;
+      showToast('已生成本堂課教案、遊戲與學習單');
+      if (options.scroll) $('lessonOutput').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function printLessonPack() {
+      generateLesson();
+      $('lessonStatus').textContent = '正在開啟列印視窗...';
+      showToast('正在準備列印課堂包');
+      setTimeout(() => window.print(), 150);
+    }
+
+    function renderGroups(groups) {
+      const colors = [['bg-yellow-400', 'border-yellow-200'], ['bg-blue-400', 'border-blue-200'], ['bg-emerald-400', 'border-emerald-200'], ['bg-pink-400', 'border-pink-200'], ['bg-violet-400', 'border-violet-200'], ['bg-orange-400', 'border-orange-200'], ['bg-cyan-400', 'border-cyan-200'], ['bg-lime-400', 'border-lime-200']];
+      $('groupResults').innerHTML = groups.map((group, index) => {
+        const [bg, border] = colors[index];
+        return `<article class="card-in overflow-hidden rounded-3xl border-4 ${border} bg-white shadow-xl" style="animation-delay:${index * 70}ms"><header class="flex items-center justify-between ${bg} px-5 py-4"><h3 class="text-xl font-black text-slate-900">第 ${index + 1} 組</h3><span class="rounded-full bg-white/70 px-3 py-1 text-sm font-black">${group.length} 人</span></header><ul class="space-y-2 bg-slate-50 p-4">${group.map((name, memberIndex) => `<li class="rounded-xl bg-white px-3 py-2 font-bold shadow-sm"><span class="mr-2 text-blue-500">${memberIndex + 1}.</span>${escapeHtml(name)}</li>`).join('')}</ul></article>`;
+      }).join('');
+    }
+
+
+
+    presetRoster.addEventListener('change', loadRoster);
+    nameList.addEventListener('input', () => { updateCount(); syncRewardStudentList(); syncMissionStudentList(); renderRewardPanel(); });
+    $('rewardStudent').addEventListener('change', renderRewardPanel);
+    $('searchStudent').addEventListener('input', renderRewardTable);
+    $('clearButton').addEventListener('click', () => { nameList.value = ''; updateCount(); syncRewardStudentList(); nameList.focus(); });
+    $('generateLessonButton').addEventListener('click', () => generateLesson({ scroll: true }));
+    $('printLessonButton').addEventListener('click', printLessonPack);
+    $('lessonSubject').addEventListener('change', () => { syncMinnanManualBox(); generateLesson(); });
+    $('lessonGrade').addEventListener('change', () => { syncMinnanManualBox(); generateLesson(); });
+    $('lessonNumber').addEventListener('change', () => { syncSocialManualFromLessonNumber(); generateLesson(); });
+    $('lessonTopic').addEventListener('input', generateLesson);
+    $('minnanManual').addEventListener('change', generateLesson);
+    $('socialManual').addEventListener('change', () => { syncLessonNumberFromSocialManual(); generateLesson(); });
+    $('comprehensiveManual').addEventListener('change', generateLesson);
+    $('missionStudent').addEventListener('change', () => { loadMissionRecord(); });
+    $('missionWeek').addEventListener('input', updateMissionSummary);
+    $('readingTitle').addEventListener('input', updateMissionSummary);
+    $('readingQ1').addEventListener('input', updateMissionSummary);
+    $('readingQ2').addEventListener('input', updateMissionSummary);
+    $('readingQ3').addEventListener('input', updateMissionSummary);
+    $('readingCertified').addEventListener('change', updateMissionSummary);
+    $('rewardMinutesUsed').addEventListener('input', updateMissionSummary);
+    $('missionSaveButton').addEventListener('click', saveMissionRecord);
+    $('missionLoadButton').addEventListener('click', loadMissionRecord);
+    $('missionClearButton').addEventListener('click', clearMissionRecord);
+    $('missionSearch').addEventListener('input', renderMissionRecords);
+    document.querySelectorAll('.pointButton').forEach(button => {
+      button.addEventListener('click', () => {
+        const name = $('rewardStudent').value;
+        if (!name) return showToast('請先選擇學生');
+        addPoints(name, Number(button.dataset.delta));
+        showToast(`${name} ${Number(button.dataset.delta) > 0 ? '加點完成' : '扣點完成'}`);
+      });
+    });
+    $('bonusAllButton').addEventListener('click', () => {
+      const names = getNames();
+      if (!names.length) return showToast('請先載入名單');
+      names.forEach(name => addPoints(name, 1));
+      showToast(`已幫目前名單 ${names.length} 位學生各加 1 點`);
+    });
+    $('exportButton').addEventListener('click', () => {
+      const rows = [['範圍', '姓名', '目前星光點', '累積星光', '星光卡', '星耀卡', '星冠證書', '星光獎盃']];
+      Object.keys(rosters).filter(key => key !== 'all').forEach(grade => {
+        rosters[grade].forEach(name => {
+          const oldPreset = presetRoster.value;
+          presetRoster.value = grade;
+          const record = getStudentRecord(name);
+          const p = progressFromPoints(record.points);
+          rows.push([rosterLabels[grade], name, record.points, record.earned, p.circles, p.honors, p.certificates, p.trophies]);
+          presetRoster.value = oldPreset;
+        });
+      });
+      const csv = rows.map(row => row.map(value => `"${String(value).split('"').join('""')}"`).join(',')).join('\n');
+      const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = '全校星光成長紀錄.csv';
+      link.click();
+      URL.revokeObjectURL(url);
+      showToast('已匯出星光成長紀錄');
+    });
+    $('resetButton').addEventListener('click', () => {
+      if (!confirm('確定要清除所有學生星光紀錄嗎？這個動作無法復原。')) return;
+      rewardData = {};
+      saveRewardData();
+      renderRewardPanel();
+      showToast('已清除全部星光紀錄');
+    });
+    $('pickButton').addEventListener('click', () => {
+      const names = getNames();
+      if (!names.length) return showToast('請先載入或輸入學生名單！');
+      const button = $('pickButton');
+      button.disabled = true;
+      let round = 0;
+      const timer = setInterval(() => {
+        winnerName.textContent = names[Math.floor(Math.random() * names.length)];
+        winnerName.animate([{ transform: 'translateY(-8px)' }, { transform: 'translateY(8px)' }], { duration: 70 });
+        if (++round >= 24) {
+          clearInterval(timer);
+          const winner = names[Math.floor(Math.random() * names.length)];
+          winnerName.textContent = winner;
+          $('rewardStudent').value = winner;
+          renderRewardPanel();
+          button.disabled = false;
+          $('winnerBox').animate([{ transform: 'scale(1)' }, { transform: 'scale(1.05)' }, { transform: 'scale(1)' }], { duration: 650 });
+        }
+      }, 75);
+    });
+    $('groupButton').addEventListener('click', () => {
+      const names = getNames();
+      const count = Number($('groupCount').value);
+      if (!names.length) return showToast('請先載入或輸入學生名單！');
+      if (names.length < count) return showToast(`學生人數不足，無法分成 ${count} 組。`);
+      const groups = makeGroups(names, count);
+      renderGroups(groups);
+      $('groupSummary').textContent = `共 ${count} 組・${names.length} 位學生`;
+      $('groupSection').classList.remove('hidden');
+      $('groupSection').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    renderMissionTaskGrid();
+    loadRoster();
+    syncMinnanManualBox();
+    generateLesson();
+    updateMissionSummary();
+  </script>
+</body>
+</html>

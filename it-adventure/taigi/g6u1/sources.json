@@ -1,0 +1,29 @@
+{
+  "title": "咱的故鄉—澎湖",
+  "book": "六上-愛的花火佇澎湖.pdf",
+  "printedPages": [
+    8,
+    15
+  ],
+  "pdfPages": [
+    9,
+    16
+  ],
+  "audio": "01Track 1.mp3",
+  "audioConfirmedByTeacher": true,
+  "audioTiming": "Full track; no sentence alignment",
+  "assessment": "Objective tasks scored; speaking is local practice only, not pronunciation assessment",
+  "files": {
+    "hut.webp": "efc83581d6d9e553c8b2b19190ec9ced3954deb51d5b955159010b91194ec866",
+    "lesson-01.mp3": "3c90929e674de632bcd8f382eabc1969dd35e014b8b12b30900c854da7cba39f",
+    "museum.webp": "0ec3cdcda566bc0a538138589d0776c5f7baf4a197bdfbfebdb7bb7a4883ea1a",
+    "page-10.webp": "fdfb11a1ff9b88be0c14a75d3a84e8f948ce4c5f13a08058b32a02f17a5968cd",
+    "page-11.webp": "9d0d6e8780b9bffd3ca41add7f2b92d4f5d325398dd0dc7dad650d708c0054e4",
+    "page-12.webp": "fc346dbb6bb1c52796dfd77a0db96c6a51ba69f67ca78fa5661f634390ff3877",
+    "page-13.webp": "93b01066632fcf985c28714c90d6343a3f633806af4931aed61817cd30cfa9a5",
+    "page-14.webp": "00e8fddd172cba9c8f2584c1ac7f84ec3a0bebb10cab7f5c68112137059866e7",
+    "page-15.webp": "db5ed5949d7c532386e1f13534aa27a40774d77ebb45e8a4b96a9baac7145ce1",
+    "page-8.webp": "d8dff7b505961c329f5f850754ce1105f81b850f4fbbf477999534dfd22d1775",
+    "page-9.webp": "dcdcc96511bc0d87a10cba0e32384d29607cf840f6909933a800b9550f32dfc5"
+  }
+}

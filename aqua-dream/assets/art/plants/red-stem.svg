@@ -1,0 +1,37 @@
+<svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="rotala-red-grad" x1="0%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%" stop-color="#15803d"/>
+          <stop offset="45%" stop-color="#ea580c"/>
+          <stop offset="100%" stop-color="#e11d48"/>
+        </linearGradient>
+      </defs>
+      <!-- Swaying stems turning bright pink/red towards the light -->
+      <path d="M92 235 Q75 145 94 75 Q100 35 96 15" stroke="url(#rotala-red-grad)" stroke-width="3" fill="none"/>
+      <path d="M108 235 Q120 145 106 75 Q98 35 108 15" stroke="url(#rotala-red-grad)" stroke-width="3" fill="none"/>
+      <!-- Lower leaves (olive green/amber) -->
+      <g fill="#84cc16" stroke="#4d7c0f" stroke-width="0.7">
+        <ellipse cx="80" cy="190" rx="12" ry="3.5" transform="rotate(-30 80 190)"/>
+        <ellipse cx="102" cy="185" rx="12" ry="3.5" transform="rotate(30 102 185)"/>
+        <ellipse cx="96" cy="188" rx="12" ry="3.5" transform="rotate(-25 96 188)"/>
+        <ellipse cx="118" cy="183" rx="12" ry="3.5" transform="rotate(35 118 183)"/>
+      </g>
+      <!-- Mid leaves (orange/amber) -->
+      <g fill="#f97316" stroke="#9a3412" stroke-width="0.7">
+        <ellipse cx="78" cy="140" rx="11" ry="3" transform="rotate(-25 78 140)"/>
+        <ellipse cx="98" cy="135" rx="11" ry="3" transform="rotate(35 98 135)"/>
+        <ellipse cx="98" cy="140" rx="11" ry="3" transform="rotate(-20 98 140)"/>
+        <ellipse cx="118" cy="135" rx="11" ry="3" transform="rotate(40 118 135)"/>
+      </g>
+      <!-- Upper high-light leaves (deep intense magenta & rose) -->
+      <g fill="#fb7185" stroke="#be123c" stroke-width="0.7">
+        <ellipse cx="85" cy="85" rx="10" ry="2.8" transform="rotate(-20 85 85)"/>
+        <ellipse cx="102" cy="80" rx="10" ry="2.8" transform="rotate(30 102 80)"/>
+        <ellipse cx="96" cy="85" rx="10" ry="2.8" transform="rotate(-15 96 85)"/>
+        <ellipse cx="112" cy="80" rx="10" ry="2.8" transform="rotate(30 112 80)"/>
+        <ellipse cx="90" cy="40" rx="9" ry="2.5" transform="rotate(-15 90 40)"/>
+        <ellipse cx="104" cy="38" rx="9" ry="2.5" transform="rotate(25 104 38)"/>
+        <ellipse cx="100" cy="38" rx="9" ry="2.5" transform="rotate(-10 100 38)"/>
+        <ellipse cx="114" cy="36" rx="9" ry="2.5" transform="rotate(25 114 36)"/>
+      </g>
+    </svg>

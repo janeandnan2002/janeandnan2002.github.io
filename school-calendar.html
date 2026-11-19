@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>東衛國小行事曆｜東衛教學星球</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #eff6ff;
+      background-image:
+        radial-gradient(circle at 10% 8%, rgba(253, 224, 71, .38) 0 100px, transparent 101px),
+        radial-gradient(circle at 91% 12%, rgba(34, 211, 238, .20) 0 150px, transparent 151px);
+    }
+    .event-card { animation: cardIn .35s ease-out both; }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media print {
+      body { background: #fff; }
+      .no-print { display: none !important; }
+      .print-card { break-inside: avoid; box-shadow: none !important; }
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-700">
+  <main class="mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:py-10">
+    <header class="mb-7 flex flex-wrap items-start justify-between gap-4">
+      <div>
+        <a href="index.html" class="no-print inline-flex rounded-full bg-white px-4 py-2 font-black text-blue-700 shadow hover:bg-blue-50">返回東衛教學星球</a>
+        <p class="mt-5 text-sm font-black text-cyan-700">115學年度第一學期</p>
+        <h1 class="mt-1 text-4xl font-black text-blue-800 sm:text-5xl">東衛國小行事曆</h1>
+        <p class="mt-2 max-w-3xl leading-7 text-slate-600">快速查看近期校務、評量、競賽與活動，並把重要行程加入本機提醒或手機日曆。</p>
+      </div>
+      <button type="button" onclick="window.print()" class="no-print rounded-2xl bg-slate-700 px-5 py-3 font-black text-white shadow hover:bg-slate-600">列印行事曆</button>
+    </header>
+
+    <section id="dueReminderPanel" class="mb-6 hidden rounded-3xl border-4 border-rose-300 bg-rose-50 p-5 shadow-lg" aria-live="polite">
+      <p class="text-sm font-black text-rose-600">目前提醒</p>
+      <div id="dueReminderList" class="mt-2 space-y-2"></div>
+    </section>
+
+    <section class="print-card mb-6 grid gap-4 lg:grid-cols-3">
+      <article class="rounded-3xl border-4 border-cyan-300 bg-white p-5 shadow-lg shadow-cyan-100 lg:col-span-2">
+        <p class="text-sm font-black text-cyan-600">下一個行程</p>
+        <div id="nextEvent" class="mt-2" aria-live="polite"></div>
+      </article>
+      <article class="rounded-3xl border-4 border-yellow-300 bg-yellow-50 p-5 shadow-lg shadow-yellow-100">
+        <p class="text-sm font-black text-yellow-700">已設定提醒</p>
+        <p id="reminderCount" class="mt-2 text-4xl font-black text-yellow-900">0 項</p>
+        <p class="mt-2 text-sm leading-6 text-yellow-900">提醒設定只保存在目前這台裝置，不會收集或上傳個人資料。</p>
+      </article>
+    </section>
+
+    <section class="no-print mb-6 rounded-3xl border-4 border-blue-200 bg-white p-5 shadow-lg sm:p-6">
+      <div class="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
+        <div>
+          <h2 class="text-2xl font-black text-blue-800">提醒設定</h2>
+          <p class="mt-2 leading-7 text-slate-600">網頁提醒會在開啟本頁時顯示。若要關閉網站後仍收到通知，請下載到手機、Google 或 Outlook 日曆。</p>
+        </div>
+        <label class="font-black text-blue-900">
+          提前時間
+          <select id="leadDays" class="ml-2 rounded-xl border-2 border-blue-200 bg-white px-3 py-2 font-black outline-none">
+            <option value="7">7 天前</option>
+            <option value="3">3 天前</option>
+            <option value="1" selected>1 天前</option>
+          </select>
+        </label>
+      </div>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <button id="enableNotificationButton" type="button" class="rounded-2xl bg-blue-600 px-5 py-3 font-black text-white shadow hover:bg-blue-500">啟用瀏覽器通知</button>
+        <button id="remindAllButton" type="button" class="rounded-2xl bg-yellow-400 px-5 py-3 font-black text-yellow-950 shadow hover:bg-yellow-300">全部設為提醒</button>
+        <button id="downloadAllButton" type="button" class="rounded-2xl bg-emerald-600 px-5 py-3 font-black text-white shadow hover:bg-emerald-500">下載整學期到日曆</button>
+        <button id="clearReminderButton" type="button" class="rounded-2xl bg-slate-200 px-5 py-3 font-black text-slate-700 hover:bg-slate-300">清除提醒</button>
+      </div>
+      <p id="notificationStatus" class="mt-3 text-sm font-bold text-blue-700" aria-live="polite"></p>
+    </section>
+
+    <section class="no-print mb-6 rounded-3xl border-2 border-slate-200 bg-white p-4 shadow-sm">
+      <div class="grid gap-3 sm:grid-cols-3">
+        <label class="font-black text-slate-700">
+          搜尋行程
+          <input id="searchInput" type="search" placeholder="例如：評量、運動會" class="mt-2 w-full rounded-xl border-2 border-slate-200 px-3 py-2 outline-none focus:border-blue-400">
+        </label>
+        <label class="font-black text-slate-700">
+          類別
+          <select id="categoryFilter" class="mt-2 w-full rounded-xl border-2 border-slate-200 bg-white px-3 py-2 outline-none focus:border-blue-400">
+            <option value="all">全部類別</option>
+          </select>
+        </label>
+        <label class="font-black text-slate-700">
+          顯示範圍
+          <select id="viewFilter" class="mt-2 w-full rounded-xl border-2 border-slate-200 bg-white px-3 py-2 outline-none focus:border-blue-400">
+            <option value="upcoming">今天以後</option>
+            <option value="all">整學期</option>
+            <option value="reminded">只看已提醒</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <section>
+      <div class="mb-4 flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <p id="currentDateLabel" class="text-sm font-black text-cyan-700"></p>
+          <h2 class="text-3xl font-black text-blue-800">學期行程</h2>
+        </div>
+        <p id="resultCount" class="font-bold text-slate-500" aria-live="polite"></p>
+      </div>
+      <div id="eventGrid" class="grid gap-4 md:grid-cols-2 xl:grid-cols-3"></div>
+      <div id="emptyState" class="hidden rounded-3xl border-2 border-dashed border-slate-300 bg-white p-10 text-center font-bold text-slate-500">找不到符合條件的行程。</div>
+    </section>
+
+    <footer class="mt-8 rounded-2xl bg-white/80 px-5 py-4 text-sm leading-6 text-slate-500">
+      <p>資料依據：<span id="sourceDocument"></span></p>
+      <p>原文件未標明確切日期的事項，以「本週辦理」呈現；匯入日曆時會放在該週第一天，請依學校最新通知調整。</p>
+    </footer>
+  </main>
+
+  <script src="school-calendar-data.js"></script>
+  <script>
+    (() => {
+      const data = window.DONGWEI_SCHOOL_CALENDAR;
+      const events = [...data.events].sort((a, b) => a.start.localeCompare(b.start) || a.title.localeCompare(b.title));
+      const storageKey = 'dongwei-school-calendar-reminders-v1';
+      const notifiedKey = 'dongwei-school-calendar-notified-v1';
+      const categoryStyles = {
+        '校務': 'bg-blue-100 text-blue-800', '教學': 'bg-indigo-100 text-indigo-800',
+        '親師': 'bg-pink-100 text-pink-800', '閱讀': 'bg-fuchsia-100 text-fuchsia-800',
+        '體育': 'bg-emerald-100 text-emerald-800', '節日': 'bg-yellow-100 text-yellow-900',
+        '評量': 'bg-rose-100 text-rose-800', '活動': 'bg-orange-100 text-orange-800',
+        '假期': 'bg-cyan-100 text-cyan-800', '安全': 'bg-teal-100 text-teal-800',
+        '競賽': 'bg-violet-100 text-violet-800'
+      };
+      const $ = id => document.getElementById(id);
+      const parseDate = (value, endOfDay = false) => new Date(`${value}T${endOfDay ? '23:59:59' : '00:00:00'}`);
+      const startOfToday = () => { const date = new Date(); date.setHours(0, 0, 0, 0); return date; };
+      const escapeHtml = value => String(value).replace(/[&<>'"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[char]);
+      const readStore = (key) => { try { return JSON.parse(localStorage.getItem(key) || '{}'); } catch { return {}; } };
+      let reminders = readStore(storageKey);
+
+      function saveReminders() {
+        localStorage.setItem(storageKey, JSON.stringify(reminders));
+        updateReminderCount();
+      }
+
+      function dateLabel(value) {
+        return new Intl.DateTimeFormat('zh-TW', { month: 'numeric', day: 'numeric', weekday: 'short' }).format(parseDate(value));
+      }
+
+      function eventDateLabel(event) {
+        if (event.dateKnown === false) {
+          return `第 ${event.week} 週・本週辦理（${dateLabel(event.start)}至${dateLabel(event.end)}）`;
+        }
+        const range = event.end && event.end !== event.start ? `${dateLabel(event.start)}至${dateLabel(event.end)}` : dateLabel(event.start);
+        return event.time ? `${range}・${event.time}` : range;
+      }
+
+      function renderNextEvent() {
+        const today = startOfToday();
+        const next = events.find(event => parseDate(event.end || event.start, true) >= today);
+        $('nextEvent').innerHTML = next
+          ? `<h2 class="text-2xl font-black text-blue-900">${escapeHtml(next.title)}</h2><p class="mt-2 font-bold text-cyan-700">${escapeHtml(eventDateLabel(next))}</p><p class="mt-2 text-sm text-slate-500">第 ${next.week} 週・${escapeHtml(next.category)}</p>`
+          : '<p class="font-bold text-slate-500">本學期行程已全部結束。</p>';
+      }
+
+      function updateReminderCount() {
+        const count = Object.keys(reminders).filter(id => events.some(event => event.id === id)).length;
+        $('reminderCount').textContent = `${count} 項`;
+      }
+
+      function toggleReminder(id) {
+        if (reminders[id]) delete reminders[id];
+        else reminders[id] = { leadDays: Number($('leadDays').value), savedAt: new Date().toISOString() };
+        saveReminders();
+        renderEvents();
+        checkDueReminders(false);
+      }
+
+      function reminderButton(event) {
+        const active = Boolean(reminders[event.id]);
+        return `<button type="button" data-reminder-id="${event.id}" class="rounded-xl px-3 py-2 text-sm font-black ${active ? 'bg-yellow-400 text-yellow-950' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">${active ? `已提醒・${reminders[event.id].leadDays} 天前` : '設定提醒'}</button>`;
+      }
+
+      function renderEvents() {
+        const keyword = $('searchInput').value.trim().toLowerCase();
+        const category = $('categoryFilter').value;
+        const view = $('viewFilter').value;
+        const today = startOfToday();
+        const filtered = events.filter(event => {
+          const matchesKeyword = !keyword || `${event.title} ${event.category} ${event.note || ''}`.toLowerCase().includes(keyword);
+          const matchesCategory = category === 'all' || event.category === category;
+          const matchesView = view === 'all' || (view === 'reminded' ? Boolean(reminders[event.id]) : parseDate(event.end || event.start, true) >= today);
+          return matchesKeyword && matchesCategory && matchesView;
+        });
+        $('eventGrid').innerHTML = filtered.map((event, index) => `
+          <article class="event-card print-card rounded-3xl border-2 border-slate-200 bg-white p-5 shadow-md" style="animation-delay:${Math.min(index * 25, 250)}ms">
+            <div class="flex items-start justify-between gap-3">
+              <span class="rounded-full px-3 py-1 text-xs font-black ${categoryStyles[event.category] || 'bg-slate-100 text-slate-800'}">${escapeHtml(event.category)}</span>
+              <span class="text-xs font-black text-slate-400">第 ${event.week} 週</span>
+            </div>
+            <h3 class="mt-3 text-xl font-black text-blue-900">${escapeHtml(event.title)}</h3>
+            <p class="mt-2 font-bold text-cyan-700">${escapeHtml(eventDateLabel(event))}</p>
+            ${event.note ? `<p class="mt-2 rounded-xl bg-yellow-50 px-3 py-2 text-sm font-bold text-yellow-900">${escapeHtml(event.note)}</p>` : ''}
+            ${event.dateKnown === false ? '<p class="mt-2 text-xs font-bold text-orange-700">原行事曆未指定日期，請依最新校務通知確認。</p>' : ''}
+            <div class="no-print mt-4 flex flex-wrap gap-2">
+              ${reminderButton(event)}
+              <button type="button" data-calendar-id="${event.id}" class="rounded-xl bg-emerald-100 px-3 py-2 text-sm font-black text-emerald-800 hover:bg-emerald-200">加入日曆</button>
+            </div>
+          </article>`).join('');
+        $('resultCount').textContent = `共 ${filtered.length} 項`;
+        $('emptyState').classList.toggle('hidden', filtered.length > 0);
+        document.querySelectorAll('[data-reminder-id]').forEach(button => button.addEventListener('click', () => toggleReminder(button.dataset.reminderId)));
+        document.querySelectorAll('[data-calendar-id]').forEach(button => button.addEventListener('click', () => downloadCalendar([events.find(event => event.id === button.dataset.calendarId)])));
+      }
+
+      function reminderDueAt(event, leadDays) {
+        const start = parseDate(event.start);
+        if (event.time) {
+          const [startTime] = event.time.split('-');
+          const [hour, minute] = startTime.split(':').map(Number);
+          start.setHours(hour, minute, 0, 0);
+        } else {
+          start.setHours(8, 0, 0, 0);
+        }
+        start.setDate(start.getDate() - leadDays);
+        return start;
+      }
+
+      function checkDueReminders(showNotifications = true) {
+        const now = new Date();
+        const due = events.filter(event => {
+          const setting = reminders[event.id];
+          if (!setting) return false;
+          return now >= reminderDueAt(event, setting.leadDays) && now <= parseDate(event.end || event.start, true);
+        });
+        $('dueReminderPanel').classList.toggle('hidden', due.length === 0);
+        $('dueReminderList').innerHTML = due.map(event => `<p class="font-black text-rose-900">${escapeHtml(eventDateLabel(event))}：${escapeHtml(event.title)}</p>`).join('');
+        if (!showNotifications || !due.length || !('Notification' in window) || Notification.permission !== 'granted') return;
+        const notified = readStore(notifiedKey);
+        const todayKey = new Date().toISOString().slice(0, 10);
+        due.forEach(event => {
+          if (notified[event.id] === todayKey) return;
+          new Notification('東衛國小行事提醒', { body: `${eventDateLabel(event)}｜${event.title}` });
+          notified[event.id] = todayKey;
+        });
+        localStorage.setItem(notifiedKey, JSON.stringify(notified));
+      }
+
+      function icsEscape(value) {
+        return String(value).replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/,/g, '\\,').replace(/;/g, '\\;');
+      }
+
+      function compactDate(value) { return value.replaceAll('-', ''); }
+      function nextDate(value) { const date = parseDate(value); date.setDate(date.getDate() + 1); return date.toISOString().slice(0, 10); }
+
+      function eventToIcs(event) {
+        const leadDays = reminders[event.id]?.leadDays ?? Number($('leadDays').value);
+        const lines = ['BEGIN:VEVENT', `UID:${event.id}@dongwei-teaching-planet`, `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z')}`];
+        if (event.time) {
+          const [startTime, endTime] = event.time.split('-');
+          lines.push(`DTSTART;TZID=Asia/Taipei:${compactDate(event.start)}T${startTime.replace(':', '')}00`);
+          lines.push(`DTEND;TZID=Asia/Taipei:${compactDate(event.end || event.start)}T${endTime.replace(':', '')}00`);
+        } else {
+          lines.push(`DTSTART;VALUE=DATE:${compactDate(event.start)}`);
+          lines.push(`DTEND;VALUE=DATE:${compactDate(nextDate(event.end || event.start))}`);
+        }
+        lines.push(`SUMMARY:${icsEscape(event.title)}`);
+        lines.push(`DESCRIPTION:${icsEscape(`第 ${event.week} 週｜${event.category}${event.dateKnown === false ? '｜原行事曆未指定確切日期' : ''}${event.note ? `｜${event.note}` : ''}`)}`);
+        lines.push('BEGIN:VALARM', `TRIGGER:-P${leadDays}D`, 'ACTION:DISPLAY', `DESCRIPTION:${icsEscape(event.title)}`, 'END:VALARM', 'END:VEVENT');
+        return lines.join('\r\n');
+      }
+
+      function downloadCalendar(selectedEvents) {
+        const content = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Dongwei Elementary School//School Calendar//ZH-TW', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH', ...selectedEvents.map(eventToIcs), 'END:VCALENDAR'].join('\r\n');
+        const blob = new Blob(['\uFEFF' + content], { type: 'text/calendar;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = selectedEvents.length === 1 ? `東衛行事-${selectedEvents[0].title}.ics` : '東衛國小115上行事曆.ics';
+        link.click();
+        URL.revokeObjectURL(url);
+        $('notificationStatus').textContent = selectedEvents.length === 1 ? '已下載這項行程，可開啟檔案加入手機日曆。' : '已下載整學期行事曆，可開啟檔案匯入手機、Google 或 Outlook 日曆。';
+      }
+
+      async function enableNotification() {
+        if (!('Notification' in window)) {
+          $('notificationStatus').textContent = '目前瀏覽器不支援通知，請使用「下載整學期到日曆」。';
+          return;
+        }
+        const permission = await Notification.requestPermission();
+        $('notificationStatus').textContent = permission === 'granted'
+          ? '瀏覽器通知已啟用；開啟本頁時，符合時間的行程會顯示通知。'
+          : '尚未取得通知權限；仍可使用頁面提醒或下載到手機日曆。';
+        checkDueReminders(true);
+      }
+
+      const categories = [...new Set(events.map(event => event.category))].sort((a, b) => a.localeCompare(b, 'zh-TW'));
+      $('categoryFilter').insertAdjacentHTML('beforeend', categories.map(category => `<option value="${category}">${category}</option>`).join(''));
+      $('sourceDocument').textContent = data.sourceDocument;
+      $('currentDateLabel').textContent = `今天是 ${new Intl.DateTimeFormat('zh-TW', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' }).format(new Date())}`;
+      $('searchInput').addEventListener('input', renderEvents);
+      $('categoryFilter').addEventListener('change', renderEvents);
+      $('viewFilter').addEventListener('change', renderEvents);
+      $('enableNotificationButton').addEventListener('click', enableNotification);
+      $('downloadAllButton').addEventListener('click', () => downloadCalendar(events));
+      $('remindAllButton').addEventListener('click', () => {
+        const leadDays = Number($('leadDays').value);
+        events.forEach(event => { reminders[event.id] = { leadDays, savedAt: new Date().toISOString() }; });
+        saveReminders();
+        renderEvents();
+        checkDueReminders(false);
+        $('notificationStatus').textContent = `已將 ${events.length} 項行程設為提前 ${leadDays} 天提醒。`;
+      });
+      $('clearReminderButton').addEventListener('click', () => {
+        if (!confirm('確定要清除這台裝置上的全部行事提醒嗎？')) return;
+        reminders = {};
+        saveReminders();
+        renderEvents();
+        checkDueReminders(false);
+        $('notificationStatus').textContent = '已清除這台裝置上的全部提醒。';
+      });
+
+      renderNextEvent();
+      updateReminderCount();
+      renderEvents();
+      checkDueReminders(true);
+      setInterval(() => checkDueReminders(true), 60000);
+    })();
+  </script>
+</body>
+</html>

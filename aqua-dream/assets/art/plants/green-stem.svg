@@ -1,0 +1,33 @@
+<svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="rotala-green" x1="0%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%" stop-color="#15803d"/>
+          <stop offset="100%" stop-color="#a3e635"/>
+        </linearGradient>
+      </defs>
+      <!-- Slender elegant Rotala stems -->
+      <path d="M90 235 Q75 150 92 80 Q98 40 95 15" stroke="url(#rotala-green)" stroke-width="3" fill="none"/>
+      <path d="M105 235 Q115 150 104 75 Q98 35 105 15" stroke="url(#rotala-green)" stroke-width="3" fill="none"/>
+      <path d="M120 235 Q135 160 122 90 Q115 50 120 25" stroke="url(#rotala-green)" stroke-width="2.5" fill="none"/>
+      <path d="M75 235 Q60 160 72 90 Q80 50 75 25" stroke="url(#rotala-green)" stroke-width="2.5" fill="none"/>
+      <!-- Dainty opposite lanceolate leaves -->
+      <g fill="#84cc16" stroke="#4d7c0f" stroke-width="0.8">
+        <!-- Stem 1 leaves -->
+        <ellipse cx="80" cy="180" rx="12" ry="3.5" transform="rotate(-30 80 180)"/>
+        <ellipse cx="98" cy="175" rx="12" ry="3.5" transform="rotate(30 98 175)"/>
+        <ellipse cx="78" cy="135" rx="11" ry="3" transform="rotate(-25 78 135)"/>
+        <ellipse cx="96" cy="130" rx="11" ry="3" transform="rotate(35 96 130)"/>
+        <ellipse cx="85" cy="85" rx="10" ry="2.8" transform="rotate(-20 85 85)"/>
+        <ellipse cx="100" cy="80" rx="10" ry="2.8" transform="rotate(30 100 80)"/>
+        <ellipse cx="90" cy="40" rx="9" ry="2.5" transform="rotate(-15 90 40)"/>
+        <ellipse cx="102" cy="38" rx="9" ry="2.5" transform="rotate(25 102 38)"/>
+        
+        <!-- Stem 2 leaves -->
+        <ellipse cx="96" cy="180" rx="12" ry="3.5" transform="rotate(-25 96 180)"/>
+        <ellipse cx="114" cy="175" rx="12" ry="3.5" transform="rotate(35 114 175)"/>
+        <ellipse cx="96" cy="135" rx="11" ry="3" transform="rotate(-20 96 135)"/>
+        <ellipse cx="114" cy="130" rx="11" ry="3" transform="rotate(40 114 130)"/>
+        <ellipse cx="95" cy="85" rx="10" ry="2.8" transform="rotate(-15 95 85)"/>
+        <ellipse cx="110" cy="80" rx="10" ry="2.8" transform="rotate(30 110 80)"/>
+      </g>
+    </svg>

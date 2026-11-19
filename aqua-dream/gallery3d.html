@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AQUA DREAM 3D 自然擬真水族箱 & 全 30 種混養生物圖鑑</title>
+  <style>
+    :root {
+      --bg: #07171d;
+      --card-bg: #0d2830;
+      --card-border: #1d525f;
+      --accent: #4ade80;
+      --accent-cyan: #38bdf8;
+      --accent-gold: #facc15;
+      --text: #e2f1ee;
+      --text-dim: #8faea8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: radial-gradient(ellipse at 50% 10%, #153c45 0%, #081a20 60%, #040e13 100%);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
+      min-height: 100vh;
+      padding: 20px 16px 80px;
+    }
+    header {
+      max-width: 1350px;
+      margin: 0 auto 20px;
+      text-align: center;
+    }
+    .badge {
+      display: inline-block;
+      padding: 5px 16px;
+      background: rgba(74, 222, 128, 0.15);
+      border: 1px solid rgba(74, 222, 128, 0.4);
+      color: var(--accent);
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+    h1 {
+      font-size: clamp(24px, 3.8vw, 36px);
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      background: linear-gradient(135deg, #ffffff 0%, #a7f3d0 60%, #38bdf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+    p.sub {
+      color: var(--text-dim);
+      font-size: 14px;
+      max-width: 820px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    /* Aquarium Tank Container */
+    .tank-section {
+      max-width: 1350px;
+      margin: 0 auto 35px;
+      background: #040d12;
+      border: 3px solid #1a424e;
+      border-radius: 24px;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.8), inset 0 0 50px rgba(7, 30, 38, 0.9);
+      overflow: hidden;
+      position: relative;
+    }
+    .tank-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 22px;
+      background: #092028;
+      border-bottom: 1px solid #173e49;
+      gap: 10px;
+    }
+    .tank-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tank-controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .tank-btn {
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid #1f4f5c;
+      color: #cbd5e1;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tank-btn:hover, .tank-btn.active {
+      background: #38bdf8;
+      color: #04141d;
+      border-color: #38bdf8;
+      box-shadow: 0 2px 10px rgba(56, 189, 248, 0.3);
+    }
+    .canvas-wrap {
+      position: relative;
+      width: 100%;
+      height: 640px;
+      cursor: crosshair;
+      user-select: none;
+    }
+    canvas#aquariumCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .tank-overlay-hint {
+      position: absolute;
+      top: 14px;
+      left: 18px;
+      pointer-events: none;
+      background: rgba(4, 16, 22, 0.82);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: #93c5fd;
+      backdrop-filter: blur(5px);
+    }
+    .tank-spotlight-bar {
+      position: absolute;
+      bottom: 15px;
+      right: 20px;
+      background: rgba(4, 16, 22, 0.9);
+      border: 1px solid #1f4f5c;
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-size: 13px;
+      color: #e2e8f0;
+      display: none;
+      backdrop-filter: blur(6px);
+      animation: fadeIn 0.2s;
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    /* Filter Bar */
+    .filter-bar {
+      max-width: 1350px;
+      margin: 20px auto 20px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 8px 16px;
+      background: rgba(13, 40, 48, 0.7);
+      border: 1px solid var(--card-border);
+      color: var(--text-dim);
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--accent);
+      color: #06241b;
+      border-color: var(--accent);
+      box-shadow: 0 4px 15px rgba(74, 222, 128, 0.3);
+    }
+
+    /* Grid */
+    .grid {
+      max-width: 1350px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 22px;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+    }
+    .card:hover {
+      transform: translateY(-8px);
+      border-color: #38bdf8;
+      box-shadow: 0 22px 50px rgba(56, 189, 248, 0.35);
+    }
+    .img-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #061118;
+      overflow: hidden;
+    }
+    .img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    .card:hover .img-wrap img {
+      transform: scale(1.05);
+    }
+    .card-body {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+    .category-tag {
+      font-size: 11px;
+      color: #38bdf8;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 8px;
+      gap: 8px;
+    }
+    .title-row h3 {
+      font-size: 19px;
+      font-weight: 700;
+      color: #ffffff;
+      white-space: nowrap;
+    }
+    .latin {
+      font-size: 12px;
+      color: var(--text-dim);
+      font-style: italic;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .desc {
+      font-size: 13px;
+      color: #9eb8b3;
+      line-height: 1.6;
+      margin-top: 6px;
+      flex-grow: 1;
+    }
+    .action-btn {
+      margin-top: 15px;
+      padding: 9px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      color: #a7f3d0;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .card:hover .action-btn {
+      background: rgba(74, 222, 128, 0.2);
+      border-color: var(--accent);
+      color: #ffffff;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 14, 19, 0.94);
+      backdrop-filter: blur(10px);
+      z-index: 999;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .modal.active { display: flex; }
+    .modal-content {
+      background: #0d2830;
+      border: 1px solid #38bdf8;
+      border-radius: 20px;
+      max-width: 850px;
+      width: 100%;
+      overflow: hidden;
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8);
+      position: relative;
+      animation: zoomIn 0.25s ease-out;
+    }
+    @keyframes zoomIn {
+      from { transform: scale(0.92); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .modal-img-wrap {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      max-height: 560px;
+      background: #061118;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .modal-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .modal-info {
+      padding: 22px 28px;
+      background: #0a2027;
+      border-top: 1px solid var(--card-border);
+    }
+    .modal-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      width: 38px;
+      height: 38px;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      color: #ffffff;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      transition: background 0.2s;
+    }
+    .modal-close:hover { background: #ef4444; border-color: #ef4444; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="badge">✨ 3D NATURAL BIOLOGICAL AQUARIUM</div>
+    <h1>3D 水族箱全 30 種混養與清潔生物生態模擬</h1>
+    <p class="sub">
+      全面升級為 U2-Net 零背景純淨透明立體生物！依魚類擺尾推進、米蝦攀爬彈跳、底棲翻砂爬行、水蛙蹬腿滑行等真實生物動力學自然游動。
+    </p>
+  </header>
+
+  <!-- AQUARIUM SECTION -->
+  <section class="tank-section">
+    <div class="tank-header">
+      <div class="tank-title">
+        <span>🐠 AQUA DREAM 自然生態水族箱</span>
+        <span style="font-size: 12px; color: #4ade80; background: rgba(74,222,128,0.15); padding: 2px 8px; border-radius: 4px;" id="inhabitantCount">30 隻全入缸</span>
+      </div>
+      <div class="tank-controls">
+        <span style="font-size: 13px; color: var(--text-dim); margin-right: 4px;">燈光：</span>
+        <button class="tank-btn active" onclick="setTankLight('day', this)">☀️ 日間水草</button>
+        <button class="tank-btn" onclick="setTankLight('dusk', this)">🌅 黃昏暖金</button>
+        <button class="tank-btn" onclick="setTankLight('night', this)">🌙 月夜幽藍</button>
+        <button class="tank-btn" onclick="setTankLight('reef', this)">🪸 珊瑚礁霓虹</button>
+        <button class="tank-btn" style="margin-left: 8px; border-color: #f59e0b; color: #fde68a;" onclick="dropFoodCenter()">🧆 投餵飼料</button>
+        <button class="tank-btn" onclick="toggleBubbles(this)">🫧 氣泡: 開</button>
+      </div>
+    </div>
+    <div class="canvas-wrap" id="canvasWrap">
+      <canvas id="aquariumCanvas" width="1280" height="680"></canvas>
+      <div class="tank-overlay-hint">💡 點擊水中任意處投餵飼料；點擊生物聚焦並檢視 3D 結構</div>
+      <div class="tank-spotlight-bar" id="spotlightBar"></div>
+    </div>
+  </section>
+
+  <!-- FILTER BAR FOR ENCYCLOPEDIA -->
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterCards('all', this)">全部生物 (30)</button>
+    <button class="filter-btn" onclick="filterCards('shrimp', this)">米蝦天團 (6)</button>
+    <button class="filter-btn" onclick="filterCards('snail', this)">除藻螺類 (6)</button>
+    <button class="filter-btn" onclick="filterCards('crab', this)">螯蝦蟹類 (2)</button>
+    <button class="filter-btn" onclick="filterCards('clam', this)">濾食貝類 (1)</button>
+    <button class="filter-btn" onclick="filterCards('amphibian', this)">兩棲水蛙 (2)</button>
+    <button class="filter-btn" onclick="filterCards('fish', this)">底棲除藻魚 (5)</button>
+    <button class="filter-btn" onclick="filterCards('marine', this)">海水清潔隊 (8)</button>
+  </div>
+
+  <div class="grid" id="creatureGrid">
+
+      <div class="card" data-category="shrimp" id="card-01" onclick="inspectCreature('01_amano_shrimp')">
+        <div class="img-wrap">
+          <img src="/assets/art/cleaners_3d/01_amano_shrimp.jpg" alt="大和米蝦" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="category-tag">第一列：淡水米蝦清潔家族 (1/5)</span>
+          <div class="title-row">
+            <h3>大和米蝦</h3>
+            <span class="latin">Caridina multidentata</span>
+          </div>
+          <p class="desc">水族除藻之王。3D 展現高透光玻璃體感、體側紅棕色點陣虛線與尾扇藍白反光點。</p>
+          <div class="action-btn">🏊‍♂️ 水族箱對焦 & 全螢幕 3D 微距</div>
+        </div>
+      </div>
+  
+
+      <div class="card" data-category="shrimp" id="card-02" onclick="inspectCreature('02_super_red_shrimp')">
+        <div class="img-wrap">
+          <img src="/assets/art/cleaners_3d/02_super_red_shrimp.jpg" alt="極火蝦" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="category-tag">第一列：淡水米蝦清潔家族 (2/5)</span>
+          <div class="title-row">
+            <h3>極火蝦</h3>
+            <span class="latin">Neocaridina davidi var. "Super Red"</span>
+          </div>
+          <p class="desc">頂級厚實烤漆深紅甲殼，微距光澤折射、半透紅步足與長弧鬚。</p>
+          <div class="action-btn">🏊‍♂️ 水族箱對焦 & 全螢幕 3D 微距</div>
+        </div>
+      </div>
+  
+
+      <div class="card" data-category="shrimp" id="card-03" onclick="inspectCreature('03_crystal_red_shrimp')">
+        <div class="img-wrap">
+          <img src="/assets/art/cleaners_3d/03_crystal_red_shrimp.jpg" alt="水晶蝦" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="category-tag">第一列：淡水米蝦清潔家族 (3/5)</span>
+          <div class="title-row">
+            <h3>水晶蝦</h3>
+            <span class="latin">Caridina cantonensis</span>
+          </div>
+          <p class="desc">紅白相間瓷白厚甲、次表面散射透光厚度、晶亮節肢與黑曜石高光複眼。</p>
+          <div class="action-btn">🏊‍♂️ 水族箱對焦 & 全螢幕 3D 微距</div>
+        </div>
+      </div>
+  
+
+      <div class="card" data-category="shrimp" id="card-04" onclick="inspectCreature('04_golden_yellow_shrimp')">
+        <div class="img-wrap">
+          <img src="/assets/art/cleaners_3d/04_golden_yellow_shrimp.jpg" alt="黃金米蝦" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="category-tag">第一列：淡水米蝦清潔家族 (4/5)</span>
+          <div class="title-row">
+            <h3>黃金米蝦</h3>
+            <span class="latin">Neocaridina davidi var. "Yellow Back"</span>
+          </div>
+          <p class="desc">通透檸檬金黃體色，背部標誌性實心亮金螢光背線，宛如自帶光芒。</p>
+          <div class="action-btn">🏊‍♂️ 水族箱對焦 & 全螢幕 3D 微距</div>
+        </div>
+      </div>
+  
+
+      <div class="card" data-category="shrimp" id="card-05" onclick="inspectCreature('05_bamboo_fan_shrimp')">
+        <div class="img-wrap">
+          <img src="/assets/art/cleaners_3d/05_bamboo_fan_shrimp.jpg" alt="網球蝦" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="category-tag">第一列：淡水米蝦清潔家族 (5/5)</span>
+          <div class="title-row">
+            <h3>網球蝦</h3>
+            <span class="latin">Atyopsis moluccensis</span>
+          </div>
+          <p class="desc">雙螯特化張開成羽毛傘狀濾食細網，絲狀羽毛纖毫畢現，樹皮木質厚重紋理。</p>
+          <div class="action-btn">🏊‍♂️ 水族箱對焦 & 全螢幕 3D 微距</div>
+        </div>
+      </div>
+  
+
+      <div class="card" data-category="shrimp" id="card-06" onclick="inspectCreature('06_red_nose_shrimp')">
+        <div class="img-wrap">
+          <img src="/assets/art/cleaners_3d/06_red_nose_shrimp.jpg" alt="紅鼻槍蝦" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="category-tag">第二列：水族除藻除螺天團 (1/5)</span>
+          <div class="title-row">
+            <h3>紅鼻槍蝦</h3>
+            <span class="latin">Caridina gracilirostris</span>
+          </div>
+          <p class="desc">標誌性纖長赤紅長鼻額角，全透水晶玻璃身軀，優雅懸浮於水中的輕盈姿態。</p>
+          <div class="action-btn">🏊‍♂️ 水族箱對焦 & 全螢幕 3D 微距</div>
+        </div>
+      </div>
+  
+
+      <div class="card" data-category="snail" id="card-07" onclick="inspectCreature('07_zebra_nerite_snail')">
+        <div class="img-wrap">
+          <img src="/assets/art/cleaners_3d/07_zebra_nerite_snail.jpg" alt="斑馬螺" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="category-tag">第二列：水族除藻除螺天團 (2/5)</span>
+          <div class="title-row">
+            <h3>斑馬螺</h3>
+            <span class="latin">Vittina turrita</span>
+          </div>
+          <p class="desc">高光瓷質半球螺殼、深墨黑與金黃斑馬螺紋，柔軟濕潤腹足與靈敏觸角。</p>
+          <div class="action-btn">🏊‍♂️ 水族箱對焦 & 全螢幕 3D 微距</div>
+        </div>
+      </div>
+  
+
+      <div class="card" data-category="snail" id="card-08" onclick="inspectCreature('08_horned_nerite_snail')">
+        <div class="img-wrap">
+          <img src="/assets/art/cleaners_3d/08_horned_nerite_snail.jpg" alt="蜜蜂角螺" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="category-tag">第二列：水族除藻除螺天團 (3/5)</span>
+          <div class="title-row">
+            <h3>蜜蜂角螺</h3>
+            <span class="latin">Clithon corona</span>
+          </div>
+          <p class="desc">螺肩處立體突出數根銳利角刺，黑黃相間蜜蜂條紋，除藻除壁膜必備高手。</p>
+          <div class="action-btn">🏊‍♂️ 水族箱對焦 & 全螢幕 3D 微距</div>
+        </div>
+      </div>
+  
+
+      <div class="card" data-category="snail" id="card-09" onclick="inspectCreature('09_red_ramshorn_snail')">
+        <div class="img-wrap">
+          <img src="/assets/art/cleaners_3d/09_red_ramshorn_snail.jpg" alt="蘋果螺" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="category-tag">第二列：水族除藻除螺天團 (4/5)</span>
+          <div class="title-row">
+            <h3>蘋果螺</h3>
+            <span class="latin">Planorbella duryi</span>
+          </div>
+          <p class="desc">紅寶石透光盤狀扁平螺旋殼，次表面散射溫潤紅肉足與長細觸角。</p>
+          <div class="action-btn">🏊‍♂️ 水族箱對焦 & 全螢幕 3D 微距</div>
+        </div>
+      </div>
+  
+
+      <div class="card" data-category="snail" id="card-10" onclick="inspectCreature('10_assassin_snail')">
+        <div class="img-wrap">
+          <img src="/assets/art/cleaners_3d/10_assassin_snail.jpg" alt="鑽紋螺 / 殺手螺" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="category-tag">第二列：水族除藻除螺天團 (5/5)</span>
+          <div class="title-row">
+            <h3>鑽紋螺 / 殺手螺</h3>
+            <span class="latin">Clea helena</span>
+          </div>
+          <p class="desc">螺旋寶塔型粗獷螺殼，黃黑警戒螺旋條紋，捕食雜螺的長吸管口器霸氣伸出。</p>
+          <div class="action-btn">🏊‍♂️ 水族箱對焦 & 全螢幕 3D 微距</div>
+        </div>
+      </div>
+  
+
+      <div class="card" data-category="snail" id="card-11" onclick="inspectCreature('11_golden_rabbit_snail')">
+        <div class="img-wrap">
+          <img src="/assets/art/cleaners_3d/11_golden_rabbit_snail.jpg" alt="黃金兔螺" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="category-tag">第三列：螯蝦、螃蟹與貝類 (1/5)</span>
+          <div class="title-row">
+            <h3>黃金兔螺</h3>
+            <span class="latin">Tylomelania sp. "Yellow"</span>
+          </div>
+          <p class="desc">蘇拉威西特色象鼻螺。修長深色溝槽螺殼，鮮豔金黃色皺褶肉足與象鼻吸管口吻。</p>
+          <div class="action-btn">🏊‍♂️ 水族箱對焦 & 全螢幕 3D 微距</div>
+        </div>
+      </div>
+  
+
+      <div class="card" data-category="snail" id="card-12" onclick="inspectCreature('12_trumpet_snail')">
+        <div class="img-wrap">
+          <img src="/assets/art/cleaners_3d/12_trumpet_snail.jpg" alt="甜筒螺 / 馬來螺" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="category-tag">第三列：螯蝦、螃蟹與貝類 (2/5)</span>
+          <div class="title-row">
+            <h3>甜筒螺 / 馬來螺</h3>
+            <span class="latin">Melanoides tuberculata</span>
+          </div>
+          <p class="desc">細長尖銳甜筒寶塔殼，沙色底帶橄欖棕斑點，翻砂鬆土與清理殘餌之王。</p>
+          <div class="action-btn">🏊‍♂️ 水族箱對焦 & 全螢幕 3D 微距</div>
+        </div>
+      </div>
+  
+
+      <div class="card" data-category="crab" id="card-13" onclick="inspectCreature('13_dwarf_orange_crayfish')">
+        <div class="img-wrap">
+          <img src="/assets/art/cleaners_3d/13_dwarf_orange_crayfish.jpg" alt="侏儒橘螯蝦" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="category-tag">第三列：螯蝦、螃蟹與貝類 (3/5)</span>
+          <div class="title-row">
+            <h3>侏儒橘螯蝦</h3>
+            <span class="latin">Cambarellus patzcuarensis "Orange"</span>
+          </div>
+          <p class="desc">亮眼螢光亮橘甲殼，威武高舉小雙螯與立體凸起斑點，體態迷你活潑可愛。</p>
+          <div class="action-btn">🏊‍♂️ 水族箱對焦 & 全螢幕 3D 微距</div>
+        </div>
+      </div>
+  
+
+      <div class="card" data-category="crab" id="card-14" onclick="inspectCreature('14_vampire_crab')">
+        <div class="img-wrap">
+          <img src="/assets/art/cleaners_3d/14_vampire_crab.jpg" alt="吸血鬼蟹" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="category-tag">第三列：螯蝦、螃蟹與貝類 (4/5)</span>
+          <div class="title-row">
+            <h3>吸血鬼蟹</h3>
+            <span class="latin">Geosesarma dennerle</span>
+          </div>
+          <p class="desc">深邃皇家紫天鵝絨背甲、銳利發光螢光亮黃大複眼與顆粒感紫鉗，神秘而霸氣。</p>
+          <div class="action-btn">🏊‍♂️ 水族箱對焦 & 全螢幕 3D 微距</div>
+        </div>
+      </div>
+  
+
+      <div class="card" data-category="clam" id="card-15" onclick="inspectCreature('15_golden_clam')">
+        <div class="img-wrap">
+          <img src="/assets/art/cleaners_3d/15_golden_clam.jpg" alt="黃金河蚌" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="category-tag">第三列：螯蝦、螃蟹與貝類 (5/5)</span>
+          <div class="title-row">
+            <h3>黃金河蚌</h3>
+            <span class="latin">Corbicula fluminea</span>
+          </div>
+          <p class="desc">金黃色飽滿同心生長輪雙殼，金屬質感光澤微泛橄欖綠，微啟貝殼露出生態出入水管。</p>
+          <div class="action-btn">🏊‍♂️ 水族箱對焦 & 全螢幕 3D 微距</div>
+        </div>
+      </div>
+  
+
+      <div class="card" data-category="amphibian" id="card-16" onclick="inspectCreature('16_golden_frog')">
+        <div class="img-wrap">
+          <img src="/assets/art/cleaners_3d/16_golden_frog.jpg" alt="金蛙 (白化爪蟾)" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="category-tag">第四列：底棲魚與兩棲類 (1/5)</span>
+          <div class="title-row">
+            <h3>金蛙 (白化爪蟾)</h3>
+            <span class="latin">Xenopus / Hymenochirus albino</span>
+          </div>
+          <p class="desc">溫潤粉橘半透粉嫩肌膚、細緻蹼狀後足與紅寶石圓眼，水中漂浮憨厚姿態。</p>
+          <div class="action-btn">🏊‍♂️ 水族箱對焦 & 全螢幕 3D 微距</div>
+        </div>
+      </div>
+  
+
+      <div class="card" data-category="amphibian" id="card-17" onclick="inspectCreature('17_african_dwarf_frog')">
+        <div class="img-wrap">
+          <img src="/assets/art/cleaners_3d/17_african_dwarf_frog.jpg" alt="侏儒爪蟾" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="category-tag">第四列：底棲魚與兩棲類 (2/5)</span>
+          <div class="title-row">
+            <h3>侏儒爪蟾</h3>
+            <span class="latin">Hymenochirus boettgeri</span>
+          </div>
+          <p class="desc">橄欖綠與深褐斑駁顆粒紋理水棲蛙，後肢蹼帶細黑爪，呆萌伸展四肢懸浮於水草間。</p>
+          <div class="action-btn">🏊‍♂️ 水族箱對焦 & 全螢幕 3D 微距</div>
+        </div>
+      </div>
+  
+
+      <div class="card" data-category="fish" id="card-18" onclick="inspectCreature('18_otocinclus')">
+        <div class="img-wrap">
+          <img src="/assets/art/cleaners_3d/18_otocinclus.jpg" alt="小精靈魚" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="category-tag">第四列：底棲魚與兩棲類 (3/5)</span>
+          <div class="title-row">
+            <h3>小精靈魚</h3>
+            <span class="latin">Otocinclus vittatus</span>
+          </div>
+          <p class="desc">水草缸必備除藻萌主。流線橄欖灰身軀、深邃橫貫黑線、純白雪腹與圓形吸盤嘴。</p>
+          <div class="action-btn">🏊‍♂️ 水族箱對焦 & 全螢幕 3D 微距</div>
+        </div>
+      </div>
+  
+
+      <div class="card" data-category="fish" id="card-19" onclick="inspectCreature('19_panda_corydoras')">
+        <div class="img-wrap">
+          <img src="/assets/art/cleaners_3d/19_panda_corydoras.jpg" alt="熊貓鼠魚" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="category-tag">第四列：底棲魚與兩棲類 (4/5)</span>
+          <div class="title-row">
+            <h3>熊貓鼠魚</h3>
+            <span class="latin">Corydoras panda</span>
+          </div>
+          <p class="desc">珍珠象牙白甲鱗身軀，標誌性熊貓黑眼圈眼帶、全黑背鰭與尾柄黑點，靈活觸鬚覓食。</p>
+          <div class="action-btn">🏊‍♂️ 水族箱對焦 & 全螢幕 3D 微距</div>
+        </div>
+      </div>
+  
+
+      <div class="card" data-category="fish" id="card-20" onclick="inspectCreature('20_bristlenose_pleco')">
+        <div class="img-wrap">
+          <img src="/assets/art/cleaners_3d/20_bristlenose_pleco.jpg" alt="鬍子異形" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="category-tag">第四列：底棲魚與兩棲類 (5/5)</span>
+          <div class="title-row">
+            <h3>鬍子異形</h3>
+            <span class="latin">Ancistrus cirrhosus</span>
+          </div>
+          <p class="desc">深邃鐵灰裝甲鱗片點綴微細白斑，吻部威武分岔立體肉質觸手（鬍子），除藻吸盤霸氣。</p>
+          <div class="action-btn">🏊‍♂️ 水族箱對焦 & 全螢幕 3D 微距</div>
+        </div>
+      </div>
+  
+
+      <div class="card" data-category="fish" id="card-21" onclick="inspectCreature('21_siamese_algae_eater')">
+        <div class="img-wrap">
+          <img src="/assets/art/cleaners_3d/21_siamese_algae_eater.jpg" alt="黑線飛狐" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="category-tag">第五列：除藻魚與海水清潔蝦 (1/5)</span>
+          <div class="title-row">
+            <h3>黑線飛狐</h3>
+            <span class="latin">Crossocheilus oblongus</span>
+          </div>
+          <p class="desc">黑毛藻剋星。修長銀棕魚身、從吻端一路鋸齒狀黑線貫穿直達尾鰭中央末端，清澈透明鰭條。</p>
+          <div class="action-btn">🏊‍♂️ 水族箱對焦 & 全螢幕 3D 微距</div>
+        </div>
+      </div>
+  
+
+      <div class="card" data-category="fish" id="card-22" onclick="inspectCreature('22_kuhli_loach')">
+        <div class="img-wrap">
+          <img src="/assets/art/cleaners_3d/22_kuhli_loach.jpg" alt="酷力泥鰍" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="category-tag">第五列：除藻魚與海水清潔蝦 (2/5)</span>
+          <div class="title-row">
+            <h3>酷力泥鰍</h3>
+            <span class="latin">Pangio kuhlii</span>
+          </div>
+          <p class="desc">蛇形流線鰻狀身軀，橙粉溫潤底色飾以 15-20 道黑巧克力垂直馬鞍環紋，嘴角四對靈動觸鬚。</p>
+          <div class="action-btn">🏊‍♂️ 水族箱對焦 & 全螢幕 3D 微距</div>
+        </div>
+      </div>
+  
+
+      <div class="card" data-category="marine" id="card-23" onclick="inspectCreature('23_skunk_cleaner_shrimp')">
+        <div class="img-wrap">
+          <img src="/assets/art/cleaners_3d/23_skunk_cleaner_shrimp.jpg" alt="清潔蝦 (太平洋白背蝦)" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="category-tag">第五列：除藻魚與海水清潔蝦 (3/5)</span>
+          <div class="title-row">
+            <h3>清潔蝦 (太平洋白背蝦)</h3>
+            <span class="latin">Lysmata amboinensis</span>
+          </div>
+          <p class="desc">珊瑚礁名醫。豔麗赤紅身軀中央貫穿一條雪白亮線，優雅細長雪白觸鬚，紅足白靴。</p>
+          <div class="action-btn">🏊‍♂️ 水族箱對焦 & 全螢幕 3D 微距</div>
+        </div>
+      </div>
+  
+
+      <div class="card" data-category="marine" id="card-24" onclick="inspectCreature('24_fire_shrimp')">
+        <div class="img-wrap">
+          <img src="/assets/art/cleaners_3d/24_fire_shrimp.jpg" alt="火焰蝦 (白襪蝦)" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="category-tag">第五列：除藻魚與海水清潔蝦 (4/5)</span>
+          <div class="title-row">
+            <h3>火焰蝦 (白襪蝦)</h3>
+            <span class="latin">Lysmata debelius</span>
+          </div>
+          <p class="desc">深紅寶石血紅漆面甲殼，鮮明純白長步足（白襪）與雪白長鬚，頭胸甲點綴白珍珠圓點。</p>
+          <div class="action-btn">🏊‍♂️ 水族箱對焦 & 全螢幕 3D 微距</div>
+        </div>
+      </div>
+  
+
+      <div class="card" data-category="marine" id="card-25" onclick="inspectCreature('25_sexy_shrimp')">
+        <div class="img-wrap">
+          <img src="/assets/art/cleaners_3d/25_sexy_shrimp.jpg" alt="性感蝦" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="category-tag">第五列：除藻魚與海水清潔蝦 (5/5)</span>
+          <div class="title-row">
+            <h3>性感蝦</h3>
+            <span class="latin">Thor amboinensis</span>
+          </div>
+          <p class="desc">翹屁股海葵蝦。半透琥珀焦糖橙色身軀，飾有藍光微暈的雪白瓷質斑塊，尾部高高翹起。</p>
+          <div class="action-btn">🏊‍♂️ 水族箱對焦 & 全螢幕 3D 微距</div>
+        </div>
+      </div>
+  
+
+      <div class="card" data-category="marine" id="card-26" onclick="inspectCreature('26_camel_shrimp')">
+        <div class="img-wrap">
+          <img src="/assets/art/cleaners_3d/26_camel_shrimp.jpg" alt="假綿羊蝦" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="category-tag">第六列：海水除藻除碎屑生物 (1/5)</span>
+          <div class="title-row">
+            <h3>假綿羊蝦</h3>
+            <span class="latin">Rhynchocinetes uritai</span>
+          </div>
+          <p class="desc">駝背鉸嘴蝦。高聳駝峰背脊、上揚紅色活動長吻，全身紅白褐交織立體迷彩條紋。</p>
+          <div class="action-btn">🏊‍♂️ 水族箱對焦 & 全螢幕 3D 微距</div>
+        </div>
+      </div>
+  
+
+      <div class="card" data-category="marine" id="card-27" onclick="inspectCreature('27_blue_leg_hermit_crab')">
+        <div class="img-wrap">
+          <img src="/assets/art/cleaners_3d/27_blue_leg_hermit_crab.jpg" alt="藍腳寄居蟹" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="category-tag">第六列：海水除藻除碎屑生物 (2/5)</span>
+          <div class="title-row">
+            <h3>藍腳寄居蟹</h3>
+            <span class="latin">Clibanarius tricolor</span>
+          </div>
+          <p class="desc">電光湛藍色步足帶亮橘關節，揹負螺旋鈣質海螺貝殼，珊瑚礁岩除藻小清道夫。</p>
+          <div class="action-btn">🏊‍♂️ 水族箱對焦 & 全螢幕 3D 微距</div>
+        </div>
+      </div>
+  
+
+      <div class="card" data-category="marine" id="card-28" onclick="inspectCreature('28_sand_sifting_starfish')">
+        <div class="img-wrap">
+          <img src="/assets/art/cleaners_3d/28_sand_sifting_starfish.jpg" alt="翻砂海星" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="category-tag">第六列：海水除藻除碎屑生物 (3/5)</span>
+          <div class="title-row">
+            <h3>翻砂海星</h3>
+            <span class="latin">Astropecten polyacanthus</span>
+          </div>
+          <p class="desc">對稱五角星型，細緻沙褐色顆粒背表，腕足邊緣排列整齊梳狀白棘刺，海底翻砂利器。</p>
+          <div class="action-btn">🏊‍♂️ 水族箱對焦 & 全螢幕 3D 微距</div>
+        </div>
+      </div>
+  
+
+      <div class="card" data-category="marine" id="card-29" onclick="inspectCreature('29_trochus_snail')">
+        <div class="img-wrap">
+          <img src="/assets/art/cleaners_3d/29_trochus_snail.jpg" alt="食藻螺 / 蠑螺" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="category-tag">第六列：海水除藻除碎屑生物 (4/5)</span>
+          <div class="title-row">
+            <h3>食藻螺 / 蠑螺</h3>
+            <span class="latin">Trochus / Tectus fenestratus</span>
+          </div>
+          <p class="desc">金字塔圓錐厚實螺殼，灰白底點綴紫紅放射火焰紋，底層隱現真珠光澤，吸附礁石狂啃褐藻。</p>
+          <div class="action-btn">🏊‍♂️ 水族箱對焦 & 全螢幕 3D 微距</div>
+        </div>
+      </div>
+  
+
+      <div class="card" data-category="marine" id="card-30" onclick="inspectCreature('30_blue_tuxedo_urchin')">
+        <div class="img-wrap">
+          <img src="/assets/art/cleaners_3d/30_blue_tuxedo_urchin.jpg" alt="藍禮服海膽" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="category-tag">第六列：海水除藻除碎屑生物 (5/5)</span>
+          <div class="title-row">
+            <h3>藍禮服海膽</h3>
+            <span class="latin">Mespilia globulus</span>
+          </div>
+          <p class="desc">皇家海膽。深邃寶石藍天鵝絨裸殼區域，與紫紅色帶白針尖棘刺垂直交錯，除藻功力一流。</p>
+          <div class="action-btn">🏊‍♂️ 水族箱對焦 & 全螢幕 3D 微距</div>
+        </div>
+      </div>
+  
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal" id="previewModal" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      <div class="modal-img-wrap">
+        <img id="modalImg" src="" alt="">
+      </div>
+      <div class="modal-info">
+        <h2 id="modalTitle" style="color: #ffffff; font-size: 24px; margin-bottom: 4px;"></h2>
+        <div id="modalLatin" style="color: #38bdf8; font-style: italic; font-size: 14px; margin-bottom: 10px;"></div>
+        <p id="modalDesc" style="color: #cbd5e1; font-size: 14px; line-height: 1.6;"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const CREATURE_SPECIES = [{"num":"01","id":"01_amano_shrimp","name":"大和米蝦","latin":"Caridina multidentata","row":"第一列：淡水米蝦清潔家族 (1/5)","cat":"shrimp","behavior":"shrimp_grazer","size":56,"preferredY":460,"speed":0.9,"desc":"水族除藻之王。3D 展現高透光玻璃體感、體側紅棕色點陣虛線與尾扇藍白反光點。"},{"num":"02","id":"02_super_red_shrimp","name":"極火蝦","latin":"Neocaridina davidi var. \"Super Red\"","row":"第一列：淡水米蝦清潔家族 (2/5)","cat":"shrimp","behavior":"shrimp_grazer","size":50,"preferredY":480,"speed":0.85,"desc":"頂級厚實烤漆深紅甲殼，微距光澤折射、半透紅步足與長弧鬚。"},{"num":"03","id":"03_crystal_red_shrimp","name":"水晶蝦","latin":"Caridina cantonensis","row":"第一列：淡水米蝦清潔家族 (3/5)","cat":"shrimp","behavior":"shrimp_grazer","size":52,"preferredY":470,"speed":0.8,"desc":"紅白相間瓷白厚甲、次表面散射透光厚度、晶亮節肢與黑曜石高光複眼。"},{"num":"04","id":"04_golden_yellow_shrimp","name":"黃金米蝦","latin":"Neocaridina davidi var. \"Yellow Back\"","row":"第一列：淡水米蝦清潔家族 (4/5)","cat":"shrimp","behavior":"shrimp_grazer","size":50,"preferredY":485,"speed":0.85,"desc":"通透檸檬金黃體色，背部標誌性實心亮金螢光背線，宛如自帶光芒。"},{"num":"05","id":"05_bamboo_fan_shrimp","name":"網球蝦","latin":"Atyopsis moluccensis","row":"第一列：淡水米蝦清潔家族 (5/5)","cat":"shrimp","behavior":"fan_shrimp","size":68,"preferredY":430,"speed":0.45,"desc":"雙螯特化張開成羽毛傘狀濾食細網，絲狀羽毛纖毫畢現，樹皮木質厚重紋理。"},{"num":"06","id":"06_red_nose_shrimp","name":"紅鼻槍蝦","latin":"Caridina gracilirostris","row":"第二列：水族除藻除螺天團 (1/5)","cat":"shrimp","behavior":"hover_shrimp","size":54,"preferredY":260,"speed":0.95,"desc":"標誌性纖長赤紅長鼻額角，全透水晶玻璃身軀，優雅懸浮於水中的輕盈姿態。"},{"num":"07","id":"07_zebra_nerite_snail","name":"斑馬螺","latin":"Vittina turrita","row":"第二列：水族除藻除螺天團 (2/5)","cat":"snail","behavior":"glass_snail","size":46,"preferredY":380,"speed":0.18,"desc":"高光瓷質半球螺殼、深墨黑與金黃斑馬螺紋，柔軟濕潤腹足與靈敏觸角。"},{"num":"08","id":"08_horned_nerite_snail","name":"蜜蜂角螺","latin":"Clithon corona","row":"第二列：水族除藻除螺天團 (3/5)","cat":"snail","behavior":"glass_snail","size":42,"preferredY":440,"speed":0.2,"desc":"螺肩處立體突出數根銳利角刺，黑黃相間蜜蜂條紋，除藻除壁膜必備高手。"},{"num":"09","id":"09_red_ramshorn_snail","name":"蘋果螺","latin":"Planorbella duryi","row":"第二列：水族除藻除螺天團 (4/5)","cat":"snail","behavior":"glass_snail","size":44,"preferredY":330,"speed":0.22,"desc":"紅寶石透光盤狀扁平螺旋殼，次表面散射溫潤紅肉足與長細觸角。"},{"num":"10","id":"10_assassin_snail","name":"鑽紋螺 / 殺手螺","latin":"Clea helena","row":"第二列：水族除藻除螺天團 (5/5)","cat":"snail","behavior":"floor_crawler","size":50,"preferredY":575,"speed":0.26,"desc":"螺旋寶塔型粗獷螺殼，黃黑警戒螺旋條紋，捕食雜螺的長吸管口器霸氣伸出。"},{"num":"11","id":"11_golden_rabbit_snail","name":"黃金兔螺","latin":"Tylomelania sp. \"Yellow\"","row":"第三列：螯蝦、螃蟹與貝類 (1/5)","cat":"snail","behavior":"floor_crawler","size":58,"preferredY":580,"speed":0.22,"desc":"蘇拉威西特色象鼻螺。修長深色溝槽螺殼，鮮豔金黃色皺褶肉足與象鼻吸管口吻。"},{"num":"12","id":"12_trumpet_snail","name":"甜筒螺 / 馬來螺","latin":"Melanoides tuberculata","row":"第三列：螯蝦、螃蟹與貝類 (2/5)","cat":"snail","behavior":"floor_crawler","size":46,"preferredY":590,"speed":0.2,"desc":"細長尖銳甜筒寶塔殼，沙色底帶橄欖棕斑點，翻砂鬆土與清理殘餌之王。"},{"num":"13","id":"13_dwarf_orange_crayfish","name":"侏儒橘螯蝦","latin":"Cambarellus patzcuarensis \"Orange\"","row":"第三列：螯蝦、螃蟹與貝類 (3/5)","cat":"crab","behavior":"scuttler","size":56,"preferredY":560,"speed":0.6,"desc":"亮眼螢光亮橘甲殼，威武高舉小雙螯與立體凸起斑點，體態迷你活潑可愛。"},{"num":"14","id":"14_vampire_crab","name":"吸血鬼蟹","latin":"Geosesarma dennerle","row":"第三列：螯蝦、螃蟹與貝類 (4/5)","cat":"crab","behavior":"scuttler","size":58,"preferredY":565,"speed":0.55,"desc":"深邃皇家紫天鵝絨背甲、銳利發光螢光亮黃大複眼與顆粒感紫鉗，神秘而霸氣。"},{"num":"15","id":"15_golden_clam","name":"黃金河蚌","latin":"Corbicula fluminea","row":"第三列：螯蝦、螃蟹與貝類 (5/5)","cat":"clam","behavior":"sedentary_clam","size":54,"preferredY":595,"speed":0.02,"desc":"金黃色飽滿同心生長輪雙殼，金屬質感光澤微泛橄欖綠，微啟貝殼露出生態出入水管。"},{"num":"16","id":"16_golden_frog","name":"金蛙 (白化爪蟾)","latin":"Xenopus / Hymenochirus albino","row":"第四列：底棲魚與兩棲類 (1/5)","cat":"amphibian","behavior":"frog_swimmer","size":60,"preferredY":280,"speed":0.8,"desc":"溫潤粉橘半透粉嫩肌膚、細緻蹼狀後足與紅寶石圓眼，水中漂浮憨厚姿態。"},{"num":"17","id":"17_african_dwarf_frog","name":"侏儒爪蟾","latin":"Hymenochirus boettgeri","row":"第四列：底棲魚與兩棲類 (2/5)","cat":"amphibian","behavior":"frog_swimmer","size":58,"preferredY":320,"speed":0.75,"desc":"橄欖綠與深褐斑駁顆粒紋理水棲蛙，後肢蹼帶細黑爪，呆萌伸展四肢懸浮於水草間。"},{"num":"18","id":"18_otocinclus","name":"小精靈魚","latin":"Otocinclus vittatus","row":"第四列：底棲魚與兩棲類 (3/5)","cat":"fish","behavior":"dart_fish","size":58,"preferredY":410,"speed":1.15,"desc":"水草缸必備除藻萌主。流線橄欖灰身軀、深邃橫貫黑線、純白雪腹與圓形吸盤嘴。"},{"num":"19","id":"19_panda_corydoras","name":"熊貓鼠魚","latin":"Corydoras panda","row":"第四列：底棲魚與兩棲類 (4/5)","cat":"fish","behavior":"bottom_fish","size":62,"preferredY":560,"speed":0.9,"desc":"珍珠象牙白甲鱗身軀，標誌性熊貓黑眼圈眼帶、全黑背鰭與尾柄黑點，靈活觸鬚覓食。"},{"num":"20","id":"20_bristlenose_pleco","name":"鬍子異形","latin":"Ancistrus cirrhosus","row":"第四列：底棲魚與兩棲類 (5/5)","cat":"fish","behavior":"bottom_fish","size":70,"preferredY":570,"speed":0.7,"desc":"深邃鐵灰裝甲鱗片點綴微細白斑，吻部威武分岔立體肉質觸手（鬍子），除藻吸盤霸氣。"},{"num":"21","id":"21_siamese_algae_eater","name":"黑線飛狐","latin":"Crossocheilus oblongus","row":"第五列：除藻魚與海水清潔蝦 (1/5)","cat":"fish","behavior":"torpedo_fish","size":66,"preferredY":240,"speed":1.35,"desc":"黑毛藻剋星。修長銀棕魚身、從吻端一路鋸齒狀黑線貫穿直達尾鰭中央末端，清澈透明鰭條。"},{"num":"22","id":"22_kuhli_loach","name":"酷力泥鰍","latin":"Pangio kuhlii","row":"第五列：除藻魚與海水清潔蝦 (2/5)","cat":"fish","behavior":"bottom_fish","size":64,"preferredY":585,"speed":0.95,"desc":"蛇形流線鰻狀身軀，橙粉溫潤底色飾以 15-20 道黑巧克力垂直馬鞍環紋，嘴角四對靈動觸鬚。"},{"num":"23","id":"23_skunk_cleaner_shrimp","name":"清潔蝦 (太平洋白背蝦)","latin":"Lysmata amboinensis","row":"第五列：除藻魚與海水清潔蝦 (3/5)","cat":"marine","behavior":"hover_shrimp","size":64,"preferredY":330,"speed":0.9,"desc":"珊瑚礁名醫。豔麗赤紅身軀中央貫穿一條雪白亮線，優雅細長雪白觸鬚，紅足白靴。"},{"num":"24","id":"24_fire_shrimp","name":"火焰蝦 (白襪蝦)","latin":"Lysmata debelius","row":"第五列：除藻魚與海水清潔蝦 (4/5)","cat":"marine","behavior":"shrimp_grazer","size":62,"preferredY":450,"speed":0.85,"desc":"深紅寶石血紅漆面甲殼，鮮明純白長步足（白襪）與雪白長鬚，頭胸甲點綴白珍珠圓點。"},{"num":"25","id":"25_sexy_shrimp","name":"性感蝦","latin":"Thor amboinensis","row":"第五列：除藻魚與海水清潔蝦 (5/5)","cat":"marine","behavior":"shrimp_grazer","size":46,"preferredY":470,"speed":0.8,"desc":"翹屁股海葵蝦。半透琥珀焦糖橙色身軀，飾有藍光微暈的雪白瓷質斑塊，尾部高高翹起。"},{"num":"26","id":"26_camel_shrimp","name":"假綿羊蝦","latin":"Rhynchocinetes uritai","row":"第六列：海水除藻除碎屑生物 (1/5)","cat":"marine","behavior":"shrimp_grazer","size":60,"preferredY":460,"speed":0.85,"desc":"駝背鉸嘴蝦。高聳駝峰背脊、上揚紅色活動長吻，全身紅白褐交織立體迷彩條紋。"},{"num":"27","id":"27_blue_leg_hermit_crab","name":"藍腳寄居蟹","latin":"Clibanarius tricolor","row":"第六列：海水除藻除碎屑生物 (2/5)","cat":"marine","behavior":"scuttler","size":58,"preferredY":575,"speed":0.5,"desc":"電光湛藍色步足帶亮橘關節，揹負螺旋鈣質海螺貝殼，珊瑚礁岩除藻小清道夫。"},{"num":"28","id":"28_sand_sifting_starfish","name":"翻砂海星","latin":"Astropecten polyacanthus","row":"第六列：海水除藻除碎屑生物 (3/5)","cat":"marine","behavior":"starfish_crawler","size":62,"preferredY":595,"speed":0.12,"desc":"對稱五角星型，細緻沙褐色顆粒背表，腕足邊緣排列整齊梳狀白棘刺，海底翻砂利器。"},{"num":"29","id":"29_trochus_snail","name":"食藻螺 / 蠑螺","latin":"Trochus / Tectus fenestratus","row":"第六列：海水除藻除碎屑生物 (4/5)","cat":"marine","behavior":"glass_snail","size":50,"preferredY":420,"speed":0.22,"desc":"金字塔圓錐厚實螺殼，灰白底點綴紫紅放射火焰紋，底層隱現真珠光澤，吸附礁石狂啃褐藻。"},{"num":"30","id":"30_blue_tuxedo_urchin","name":"藍禮服海膽","latin":"Mespilia globulus","row":"第六列：海水除藻除碎屑生物 (5/5)","cat":"marine","behavior":"floor_crawler","size":60,"preferredY":580,"speed":0.15,"desc":"皇家海膽。深邃寶石藍天鵝絨裸殼區域，與紫紅色帶白針尖棘刺垂直交錯，除藻功力一流。"}];
+
+    // Preload transparent cutouts
+    const cutoutImages = {};
+    CREATURE_SPECIES.forEach(c => {
+      const img = new Image();
+      img.src = '/assets/art/cleaners_3d/' + c.id + '_cutout.png';
+      cutoutImages[c.id] = img;
+    });
+
+    let tankLight = 'day';
+    let bubblesEnabled = true;
+    let currentFilter = 'all';
+    const pellets = [];
+
+    const canvas = document.getElementById('aquariumCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = 1280, H = 680;
+
+    // Bubbles
+    const bubbles = Array.from({ length: 55 }, (_, i) => ({
+      x: 100 + (i % 2 === 0 ? 0 : 1060) + (Math.sin(i * 17) * 35),
+      y: (i * 29) % H,
+      r: 1.2 + (i % 4) * 0.9,
+      speed: 38 + (i % 5) * 12,
+      wobble: Math.random() * Math.PI * 2
+    }));
+
+    // Natural Actor Initialization with Proper Ecological Distribution
+    const actors = CREATURE_SPECIES.map((c, idx) => {
+      // Distribute evenly horizontally across the 1280px tank
+      const margin = 100;
+      const slotWidth = (W - margin * 2) / CREATURE_SPECIES.length;
+      let startX = margin + idx * slotWidth + (Math.random() * 20 - 10);
+      let startY = c.preferredY + (Math.random() * 20 - 10);
+
+      // Initial facing direction
+      const dir = (idx % 2 === 0) ? 1 : -1;
+
+      return {
+        ...c,
+        x: startX,
+        y: startY,
+        vx: dir * (12 + Math.random() * 15) * c.speed,
+        vy: 0,
+        direction: dir,
+        angle: 0,
+        targetAngle: 0,
+        phase: Math.random() * Math.PI * 2,
+        tailPhase: Math.random() * Math.PI * 2,
+        
+        // Biological timing states
+        dartTimer: Math.random() * 4 + 2,
+        isDarting: false,
+        perchTimer: Math.random() * 3 + 2,
+        isPerching: false,
+        frogKickTimer: Math.random() * 2.5 + 1,
+        isKicking: false,
+
+        // Eating state
+        eatingPellet: null,
+        visible: true
+      };
+    });
+
+    // Feeding Pellet Dropping
+    function dropFood(x, y) {
+      const p = {
+        x: Math.max(80, Math.min(W - 80, x)),
+        y: Math.max(30, y),
+        vy: 35 + Math.random() * 15,
+        life: 16.0,
+        maxLife: 16.0,
+        r: 5,
+        claimedBy: []
+      };
+      pellets.push(p);
+
+      // Only alert 2 closest creatures to prevent unnatural clumping!
+      const sorted = [...actors]
+        .filter(a => a.visible && a.behavior !== 'sedentary_clam')
+        .map(a => ({ actor: a, dist: Math.hypot(a.x - p.x, a.y - p.y) }))
+        .sort((a, b) => a.dist - b.dist);
+
+      for (let i = 0; i < Math.min(2, sorted.length); i++) {
+        sorted[i].actor.eatingPellet = p;
+        p.claimedBy.push(sorted[i].actor);
+      }
+
+      showSpotlight("🧆 已投放水族營養藻錠，附近生物前來覓食！");
+    }
+
+    function dropFoodCenter() {
+      dropFood(380 + Math.random() * 60, 40);
+      setTimeout(() => dropFood(820 + Math.random() * 60, 40), 300);
+    }
+
+    // Canvas click event (feed or select)
+    canvas.addEventListener('click', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const clickX = (e.clientX - rect.left) * (W / rect.width);
+      const clickY = (e.clientY - rect.top) * (H / rect.height);
+
+      let clickedActor = null;
+      for (let i = actors.length - 1; i >= 0; i--) {
+        const a = actors[i];
+        if (!a.visible) continue;
+        const dx = clickX - a.x;
+        const dy = clickY - a.y;
+        if (Math.abs(dx) < a.size * 0.6 && Math.abs(dy) < a.size * 0.5) {
+          clickedActor = a;
+          break;
+        }
+      }
+
+      if (clickedActor) {
+        inspectCreature(clickedActor.id);
+      } else {
+        dropFood(clickX, clickY);
+      }
+    });
+
+    function showSpotlight(text) {
+      const bar = document.getElementById('spotlightBar');
+      bar.textContent = text;
+      bar.style.display = 'block';
+      clearTimeout(window._spotlightTimeout);
+      window._spotlightTimeout = setTimeout(() => {
+        bar.style.display = 'none';
+      }, 4000);
+    }
+
+    function setTankLight(mode, btn) {
+      tankLight = mode;
+      document.querySelectorAll('.tank-controls .tank-btn').forEach(b => {
+        if (b.textContent.includes('日間') || b.textContent.includes('黃昏') || b.textContent.includes('月夜') || b.textContent.includes('珊瑚')) {
+          b.classList.remove('active');
+        }
+      });
+      btn.classList.add('active');
+    }
+
+    function toggleBubbles(btn) {
+      bubblesEnabled = !bubblesEnabled;
+      btn.textContent = bubblesEnabled ? '🫧 氣泡: 開' : '🫧 氣泡: 關';
+      btn.classList.toggle('active', bubblesEnabled);
+    }
+
+    // Main Biological Animation Loop
+    let lastTime = 0;
+    function render(time) {
+      const dt = lastTime ? Math.min((time - lastTime) / 1000, 0.04) : 0.016;
+      lastTime = time;
+      const t = time / 1000;
+
+      // 1. Water Background
+      ctx.clearRect(0, 0, W, H);
+      const waterGrad = ctx.createLinearGradient(0, 0, 0, H);
+      if (tankLight === 'day') {
+        waterGrad.addColorStop(0, '#1c5e6d');
+        waterGrad.addColorStop(0.5, '#0e3a46');
+        waterGrad.addColorStop(1, '#061e24');
+      } else if (tankLight === 'dusk') {
+        waterGrad.addColorStop(0, '#593e29');
+        waterGrad.addColorStop(0.4, '#243940');
+        waterGrad.addColorStop(1, '#08171d');
+      } else if (tankLight === 'night') {
+        waterGrad.addColorStop(0, '#0c2235');
+        waterGrad.addColorStop(0.5, '#071624');
+        waterGrad.addColorStop(1, '#030c14');
+      } else if (tankLight === 'reef') {
+        waterGrad.addColorStop(0, '#112a58');
+        waterGrad.addColorStop(0.5, '#091c3d');
+        waterGrad.addColorStop(1, '#040d1e');
+      }
+      ctx.fillStyle = waterGrad;
+      ctx.fillRect(0, 0, W, H);
+
+      // 2. Caustics & Sunbeams
+      ctx.save();
+      ctx.globalCompositeOperation = 'screen';
+      const beamColor = tankLight === 'dusk' ? 'rgba(255, 195, 120, 0.06)' : tankLight === 'reef' ? 'rgba(90, 190, 255, 0.08)' : 'rgba(160, 245, 255, 0.07)';
+      ctx.fillStyle = beamColor;
+      for (let i = 0; i < 7; i++) {
+        const bx = 90 + i * 190 + Math.sin(t * 0.4 + i) * 35;
+        ctx.beginPath();
+        ctx.moveTo(bx, 0);
+        ctx.lineTo(bx + 55, 0);
+        ctx.lineTo(bx + 150 + Math.sin(t * 0.3) * 20, H - 70);
+        ctx.lineTo(bx + 85, H - 70);
+        ctx.fill();
+      }
+      ctx.restore();
+
+      // 3. Swaying Aquatic Plants in Background
+      for (let i = 0; i < 24; i++) {
+        const px = i * 55 - 10;
+        const sway = Math.sin(t * 0.8 + i * 0.35) * 16;
+        ctx.strokeStyle = i % 3 === 0 ? 'rgba(34, 115, 78, 0.38)' : 'rgba(20, 85, 58, 0.28)';
+        ctx.lineWidth = 14 + (i % 3) * 6;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(px, H - 60);
+        ctx.bezierCurveTo(px + 10, H - 220, px + sway - 15, H - 380, px + sway + 15, 100 + (i % 5) * 45);
+        ctx.stroke();
+      }
+
+      // 4. Aquascape Driftwood & Rocks
+      // Left rocks
+      ctx.fillStyle = '#172826';
+      ctx.beginPath();
+      ctx.moveTo(0, H - 70);
+      ctx.quadraticCurveTo(140, H - 240, 250, H - 140);
+      ctx.quadraticCurveTo(320, H - 70, 400, H - 70);
+      ctx.lineTo(0, H - 70);
+      ctx.fill();
+
+      // Center driftwood trunk
+      ctx.strokeStyle = '#271f19';
+      ctx.lineWidth = 28;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(310, H - 70);
+      ctx.quadraticCurveTo(460, H - 270, 750, H - 220);
+      ctx.stroke();
+
+      // Center driftwood branch 2
+      ctx.strokeStyle = '#201914';
+      ctx.lineWidth = 18;
+      ctx.beginPath();
+      ctx.moveTo(490, H - 220);
+      ctx.quadraticCurveTo(580, H - 330, 680, H - 350);
+      ctx.stroke();
+
+      // Right reef rock
+      ctx.fillStyle = '#132122';
+      ctx.beginPath();
+      ctx.moveTo(W, H - 70);
+      ctx.quadraticCurveTo(W - 160, H - 260, W - 300, H - 150);
+      ctx.quadraticCurveTo(W - 370, H - 70, W - 450, H - 70);
+      ctx.lineTo(W, H - 70);
+      ctx.fill();
+
+      // 5. Sand & Gravel Floor
+      const sandGrad = ctx.createLinearGradient(0, H - 95, 0, H);
+      sandGrad.addColorStop(0, '#5a5e51');
+      sandGrad.addColorStop(0.35, '#393c33');
+      sandGrad.addColorStop(1, '#1b1d19');
+      ctx.fillStyle = sandGrad;
+      ctx.beginPath();
+      ctx.moveTo(0, H - 85);
+      ctx.quadraticCurveTo(W * 0.35, H - 105, W * 0.7, H - 90);
+      ctx.quadraticCurveTo(W * 0.88, H - 80, W, H - 85);
+      ctx.lineTo(W, H);
+      ctx.lineTo(0, H);
+      ctx.fill();
+
+      // Sand gravel specks
+      for (let i = 0; i < 180; i++) {
+        const gx = (i * 127) % W;
+        const gy = (H - 85) + ((i * 31) % 80);
+        ctx.fillStyle = ['#9ba18c', '#626859', '#3e4238', '#867d68'][i % 4];
+        ctx.beginPath();
+        ctx.ellipse(gx, gy, 2.5 + (i % 3), 1.5 + (i % 2), 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // 6. Oxygen Bubble Streams
+      if (bubblesEnabled) {
+        ctx.lineWidth = 1;
+        bubbles.forEach(b => {
+          b.y -= b.speed * dt;
+          b.wobble += dt * 3;
+          if (b.y < 20) b.y = H - 80;
+
+          ctx.strokeStyle = tankLight === 'reef' ? 'rgba(147, 197, 253, 0.7)' : 'rgba(215, 250, 248, 0.65)';
+          ctx.beginPath();
+          ctx.arc(b.x + Math.sin(b.wobble) * 8, b.y, b.r, 0, Math.PI * 2);
+          ctx.stroke();
+        });
+      }
+
+      // 7. Update & Draw Food Pellets
+      for (let i = pellets.length - 1; i >= 0; i--) {
+        const p = pellets[i];
+        p.y = Math.min(H - 95, p.y + p.vy * dt);
+        p.life -= dt;
+
+        ctx.fillStyle = '#f59e0b';
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r * (p.life / p.maxLife * 0.5 + 0.5), 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = '#fef3c7';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        if (p.life <= 0) {
+          actors.forEach(a => { if (a.eatingPellet === p) a.eatingPellet = null; });
+          pellets.splice(i, 1);
+        }
+      }
+
+      // 8. Individual Flocking / Repulsion Physics (NO CLUMPING!)
+      for (let i = 0; i < actors.length; i++) {
+        const a1 = actors[i];
+        if (!a1.visible) continue;
+        for (let j = i + 1; j < actors.length; j++) {
+          const a2 = actors[j];
+          if (!a2.visible) continue;
+          const dx = a2.x - a1.x;
+          const dy = a2.y - a1.y;
+          const dist = Math.hypot(dx, dy);
+          const minDist = (a1.size + a2.size) * 0.65;
+          if (dist < minDist && dist > 1) {
+            const push = ((minDist - dist) / minDist) * 22 * dt;
+            const nx = dx / dist;
+            const ny = dy / dist;
+            a1.x -= nx * push;
+            a1.y -= ny * push;
+            a2.x += nx * push;
+            a2.y += ny * push;
+          }
+        }
+      }
+
+      // 9. Update & Draw All 30 Creatures with Natural Biological Locomotion
+      actors.forEach((a, idx) => {
+        if (!a.visible) return;
+
+        a.phase += dt * (1.1 + a.speed * 0.5);
+        a.tailPhase += dt * (8.0 * a.speed);
+
+        // --- BEHAVIOR STATE MACHINES ---
+        if (a.eatingPellet && pellets.includes(a.eatingPellet)) {
+          // Seeking food
+          const p = a.eatingPellet;
+          const dx = p.x - a.x;
+          const dy = p.y - a.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist > 18) {
+            const moveSpeed = 35 * a.speed;
+            a.vx = (dx / dist) * moveSpeed;
+            a.vy = (dy / dist) * moveSpeed;
+            a.direction = dx > 0 ? 1 : -1;
+          } else {
+            // Reached food, nibble gently
+            a.vx = Math.sin(a.phase * 3) * 3;
+            a.vy = 0;
+            p.life -= dt * 0.8;
+          }
+        } else {
+          // Autonomous natural locomotion based on biology:
+          if (a.behavior === 'sedentary_clam') {
+            // Clam: rests stationary on sand, micro breathing rhythm
+            a.vx = 0;
+            a.vy = 0;
+            a.y = a.preferredY + Math.sin(a.phase * 0.5) * 1.5;
+            a.targetAngle = 0;
+          }
+          else if (a.behavior === 'starfish_crawler') {
+            // Starfish: extremely slow sand crawling (0.1px/frame)
+            a.x += a.vx * dt;
+            a.y = a.preferredY + Math.sin(a.phase * 0.3) * 1.5;
+            a.targetAngle = 0;
+            if (a.x > W - 110) { a.vx = -Math.abs(a.vx); a.direction = -1; }
+            if (a.x < 110) { a.vx = Math.abs(a.vx); a.direction = 1; }
+          }
+          else if (a.behavior === 'floor_crawler' || a.behavior === 'scuttler') {
+            // Benthic snails & crabs: crawl smoothly along sand floor with stepping bob
+            a.perchTimer -= dt;
+            if (a.perchTimer <= 0) {
+              a.isPerching = !a.isPerching;
+              a.perchTimer = a.isPerching ? (Math.random() * 2 + 1) : (Math.random() * 5 + 3);
+            }
+            if (!a.isPerching) {
+              a.x += a.vx * dt;
+            }
+            a.y = a.preferredY + Math.sin(a.phase * 3) * 2; // subtle footstep bob
+            a.targetAngle = 0;
+            if (a.x > W - 100) { a.vx = -Math.abs(a.vx); a.direction = -1; }
+            if (a.x < 100) { a.vx = Math.abs(a.vx); a.direction = 1; }
+          }
+          else if (a.behavior === 'glass_snail') {
+            // Snails on glass: slow, steady vertical/horizontal glide
+            a.x += a.vx * dt;
+            a.y = a.preferredY + Math.sin(a.phase * 0.4) * 25;
+            a.targetAngle = Math.sin(a.phase * 0.4) * 0.12;
+            if (a.x > W - 110) { a.vx = -Math.abs(a.vx); a.direction = -1; }
+            if (a.x < 110) { a.vx = Math.abs(a.vx); a.direction = 1; }
+          }
+          else if (a.behavior === 'fan_shrimp') {
+            // Bamboo fan shrimp: perches on high driftwood, fans gently opening/closing
+            a.x += a.vx * 0.15 * dt;
+            a.y = a.preferredY + Math.sin(a.phase) * 1.5;
+            a.targetAngle = 0.05;
+            if (a.x > W - 250) { a.vx = -Math.abs(a.vx); a.direction = -1; }
+            if (a.x < 250) { a.vx = Math.abs(a.vx); a.direction = 1; }
+          }
+          else if (a.behavior === 'shrimp_grazer') {
+            // Dwarf shrimps: 80% perching & grazing on wood/moss, 20% darting burst swim
+            a.dartTimer -= dt;
+            if (a.dartTimer <= 0) {
+              a.isDarting = !a.isDarting;
+              if (a.isDarting) {
+                // Backward tail flick burst!
+                a.dartTimer = Math.random() * 1.2 + 0.6;
+                a.vx = (Math.random() > 0.5 ? 1 : -1) * (45 + Math.random() * 30);
+                a.direction = a.vx > 0 ? 1 : -1;
+              } else {
+                // Land and graze comfortably
+                a.dartTimer = Math.random() * 5 + 3;
+                a.vx = a.direction * (6 + Math.random() * 8);
+              }
+            }
+            a.x += a.vx * dt;
+            a.y = a.preferredY + (a.isDarting ? Math.sin(a.phase * 3) * 14 : Math.sin(a.phase) * 2);
+            a.targetAngle = a.isDarting ? (a.direction * 0.18) : 0;
+            if (a.x > W - 90) { a.vx = -Math.abs(a.vx); a.direction = -1; }
+            if (a.x < 90) { a.vx = Math.abs(a.vx); a.direction = 1; }
+          }
+          else if (a.behavior === 'hover_shrimp') {
+            // Red nose & cleaner shrimp: graceful hovering midwater with upward tilt
+            a.x += a.vx * dt;
+            a.y = a.preferredY + Math.sin(a.phase * 1.2) * 18;
+            a.targetAngle = -0.15; // rostrum pointed slightly upward
+            if (a.x > W - 110) { a.vx = -Math.abs(a.vx); a.direction = -1; }
+            if (a.x < 110) { a.vx = Math.abs(a.vx); a.direction = 1; }
+          }
+          else if (a.behavior === 'frog_swimmer') {
+            // Aquatic frogs: kick propulsion -> glide -> sink rhythm
+            a.frogKickTimer -= dt;
+            if (a.frogKickTimer <= 0) {
+              a.frogKickTimer = Math.random() * 2.2 + 1.2;
+              // Kick thrust!
+              a.vx = a.direction * (45 + Math.random() * 25);
+              a.vy = -18 + Math.random() * 10;
+            } else {
+              // Water drag glide
+              a.vx *= 0.96;
+              a.vy = Math.min(15, a.vy + 12 * dt); // gentle downward sink
+            }
+            a.x += a.vx * dt;
+            a.y += a.vy * dt;
+            a.targetAngle = Math.atan2(a.vy, Math.abs(a.vx) + 0.1) * 0.5;
+            if (a.x > W - 110) { a.vx = -Math.abs(a.vx); a.direction = -1; }
+            if (a.x < 110) { a.vx = Math.abs(a.vx); a.direction = 1; }
+          }
+          else if (a.behavior === 'dart_fish' || a.behavior === 'torpedo_fish') {
+            // Fish swimming: smooth sinusoidal path with horizontal tail propulsion
+            a.x += a.vx * dt;
+            const waveY = Math.sin(a.phase) * 12 * dt * a.speed;
+            a.y = a.preferredY + Math.sin(a.phase) * 22;
+            a.targetAngle = (Math.cos(a.phase) * 0.15);
+            if (a.x > W - 120) { a.vx = -Math.abs(a.vx); a.direction = -1; }
+            if (a.x < 120) { a.vx = Math.abs(a.vx); a.direction = 1; }
+          }
+          else if (a.behavior === 'bottom_fish') {
+            // Corydoras, Pleco, Loach: bottom search with quick dashes
+            a.x += a.vx * dt;
+            a.y = a.preferredY + Math.sin(a.phase * 2) * 5;
+            a.targetAngle = Math.sin(a.phase * 2) * 0.08;
+            if (a.x > W - 110) { a.vx = -Math.abs(a.vx); a.direction = -1; }
+            if (a.x < 110) { a.vx = Math.abs(a.vx); a.direction = 1; }
+          }
+        }
+
+        // Clamp boundaries
+        a.x = Math.max(65, Math.min(W - 65, a.x));
+        a.y = Math.max(85, Math.min(H - 80, a.y));
+
+        // Smooth angle slerp
+        a.angle += (a.targetAngle - a.angle) * 0.15;
+
+        // Render Creature
+        const sprite = cutoutImages[a.id];
+        ctx.save();
+        ctx.translate(a.x, a.y);
+        ctx.scale(a.direction, 1);
+        ctx.rotate(a.angle);
+
+        // Ground contact shadow for benthic dwellers
+        if (a.y > H - 150) {
+          ctx.save();
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.32)';
+          ctx.beginPath();
+          ctx.ellipse(0, a.size * 0.42, a.size * 0.42, a.size * 0.13, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+
+        if (sprite && sprite.complete && sprite.naturalWidth > 0) {
+          const w = a.size * 1.35;
+          const h = w * (sprite.naturalHeight / sprite.naturalWidth);
+
+          // For fish & loaches, apply subtle tail fin flexion
+          if (a.behavior === 'torpedo_fish' || a.behavior === 'bottom_fish' || a.behavior === 'dart_fish') {
+            const cut = Math.floor(sprite.naturalWidth * 0.3);
+            const tailW = w * 0.3;
+            const bodyW = w - tailW;
+
+            // Main body
+            ctx.drawImage(sprite, cut, 0, sprite.naturalWidth - cut, sprite.naturalHeight, -w / 2 + tailW, -h / 2, bodyW, h);
+
+            // Tail with harmonic oscillation
+            ctx.save();
+            ctx.translate(-w / 2 + tailW, 0);
+            ctx.rotate(Math.sin(a.tailPhase) * 0.12);
+            ctx.drawImage(sprite, 0, 0, cut, sprite.naturalHeight, -tailW, -h / 2, tailW, h);
+            ctx.restore();
+          } else {
+            // Clean render with subtle breathing scale
+            ctx.drawImage(sprite, -w / 2, -h / 2, w, h);
+          }
+        }
+
+        ctx.restore();
+      });
+
+      // 10. Water Surface Ripple Line
+      ctx.strokeStyle = 'rgba(210, 245, 255, 0.45)';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      for (let x = 0; x <= W; x += 10) {
+        const y = 22 + Math.sin(x * 0.025 + t * 2.2) * 3 + Math.sin(x * 0.01 - t * 1.5) * 2;
+        if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      // 11. Subtle Glass Refraction Reflection
+      ctx.save();
+      const glassReflect = ctx.createLinearGradient(0, 0, W, H);
+      glassReflect.addColorStop(0, 'rgba(255, 255, 255, 0.04)');
+      glassReflect.addColorStop(0.3, 'rgba(255, 255, 255, 0.0)');
+      glassReflect.addColorStop(0.7, 'rgba(0, 0, 0, 0.0)');
+      glassReflect.addColorStop(1, 'rgba(0, 0, 0, 0.2)');
+      ctx.fillStyle = glassReflect;
+      ctx.fillRect(0, 0, W, H);
+      ctx.restore();
+
+      requestAnimationFrame(render);
+    }
+    requestAnimationFrame(render);
+
+    function filterCards(cat, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = cat;
+
+      let count = 0;
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        if (cat === 'all' || card.getAttribute('data-category') === cat) {
+          card.style.display = 'flex';
+          count++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      actors.forEach(a => {
+        a.visible = (cat === 'all' || a.cat === cat);
+      });
+
+      const countBadge = document.getElementById('inhabitantCount');
+      countBadge.textContent = cat === 'all' ? '30 隻全入缸' : count + ' 隻在缸中';
+      showSpotlight('🌊 已切換水族箱成員：' + btn.textContent);
+    }
+
+    function inspectCreature(id) {
+      const creature = CREATURE_SPECIES.find(c => c.id === id);
+      if (!creature) return;
+
+      const actor = actors.find(a => a.id === id);
+      if (actor) {
+        actor.phase += 5;
+        showSpotlight('🔍 水族箱定位：' + creature.name + ' (' + creature.latin + ')');
+      }
+
+      openModal(creature.name, creature.latin, creature.desc, '/assets/art/cleaners_3d/' + creature.id + '.jpg');
+    }
+
+    function openModal(name, latin, desc, imgSrc) {
+      document.getElementById('modalTitle').textContent = name;
+      document.getElementById('modalLatin').textContent = latin;
+      document.getElementById('modalDesc').textContent = desc;
+      document.getElementById('modalImg').src = imgSrc;
+      document.getElementById('previewModal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('previewModal').classList.remove('active');
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+  </script>
+</body>
+</html>

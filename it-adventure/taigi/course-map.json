@@ -1,0 +1,470 @@
+[
+  {
+    "grade": 1,
+    "lesson": 1,
+    "title": "你佮我",
+    "pdf": [
+      9,
+      14
+    ],
+    "printed": [
+      2,
+      7
+    ]
+  },
+  {
+    "grade": 1,
+    "lesson": 2,
+    "title": "阿公是討海人",
+    "pdf": [
+      15,
+      20
+    ],
+    "printed": [
+      8,
+      13
+    ]
+  },
+  {
+    "grade": 1,
+    "lesson": 3,
+    "title": "坐船真趣味",
+    "pdf": [
+      21,
+      26
+    ],
+    "printed": [
+      14,
+      19
+    ]
+  },
+  {
+    "grade": 1,
+    "lesson": 4,
+    "title": "去菜市買菜",
+    "pdf": [
+      29,
+      34
+    ],
+    "printed": [
+      22,
+      27
+    ]
+  },
+  {
+    "grade": 1,
+    "lesson": 5,
+    "title": "穿衫褲",
+    "pdf": [
+      35,
+      40
+    ],
+    "printed": [
+      28,
+      33
+    ]
+  },
+  {
+    "grade": 1,
+    "lesson": 6,
+    "title": "阿兄足歡喜",
+    "pdf": [
+      41,
+      46
+    ],
+    "printed": [
+      34,
+      39
+    ]
+  },
+  {
+    "grade": 2,
+    "lesson": 1,
+    "title": "澎湖的瓜",
+    "pdf": [
+      9,
+      14
+    ],
+    "printed": [
+      2,
+      7
+    ]
+  },
+  {
+    "grade": 2,
+    "lesson": 2,
+    "title": "食塗豆",
+    "pdf": [
+      15,
+      20
+    ],
+    "printed": [
+      8,
+      13
+    ]
+  },
+  {
+    "grade": 2,
+    "lesson": 3,
+    "title": "風茹茶",
+    "pdf": [
+      21,
+      26
+    ],
+    "printed": [
+      14,
+      19
+    ]
+  },
+  {
+    "grade": 2,
+    "lesson": 4,
+    "title": "放風星",
+    "pdf": [
+      29,
+      34
+    ],
+    "printed": [
+      22,
+      27
+    ]
+  },
+  {
+    "grade": 2,
+    "lesson": 5,
+    "title": "我有一對寶",
+    "pdf": [
+      35,
+      40
+    ],
+    "printed": [
+      28,
+      33
+    ]
+  },
+  {
+    "grade": 2,
+    "lesson": 6,
+    "title": "我是澎湖人",
+    "pdf": [
+      41,
+      46
+    ],
+    "printed": [
+      34,
+      39
+    ]
+  },
+  {
+    "grade": 3,
+    "lesson": 1,
+    "title": "中秋團圓暝",
+    "pdf": [
+      11,
+      20
+    ],
+    "printed": [
+      10,
+      19
+    ]
+  },
+  {
+    "grade": 3,
+    "lesson": 2,
+    "title": "澎湖的魚上蓋鮮",
+    "pdf": [
+      21,
+      32
+    ],
+    "printed": [
+      20,
+      31
+    ]
+  },
+  {
+    "grade": 3,
+    "lesson": 3,
+    "title": "討海行船三分命",
+    "pdf": [
+      33,
+      42
+    ],
+    "printed": [
+      32,
+      41
+    ]
+  },
+  {
+    "grade": 3,
+    "lesson": 4,
+    "title": "冬節圓圓圓圓",
+    "pdf": [
+      45,
+      54
+    ],
+    "printed": [
+      44,
+      53
+    ]
+  },
+  {
+    "grade": 3,
+    "lesson": 5,
+    "title": "過新年真歡喜",
+    "pdf": [
+      55,
+      66
+    ],
+    "printed": [
+      54,
+      65
+    ]
+  },
+  {
+    "grade": 3,
+    "lesson": 6,
+    "title": "乞龜飼大豬",
+    "pdf": [
+      67,
+      76
+    ],
+    "printed": [
+      66,
+      75
+    ]
+  },
+  {
+    "grade": 4,
+    "lesson": 1,
+    "title": "魚食流水，人食喙水",
+    "pdf": [
+      11,
+      20
+    ],
+    "printed": [
+      10,
+      19
+    ]
+  },
+  {
+    "grade": 4,
+    "lesson": 2,
+    "title": "龍銀填海",
+    "pdf": [
+      21,
+      30
+    ],
+    "printed": [
+      20,
+      29
+    ]
+  },
+  {
+    "grade": 4,
+    "lesson": 3,
+    "title": "在家日日好",
+    "pdf": [
+      31,
+      40
+    ],
+    "printed": [
+      30,
+      39
+    ]
+  },
+  {
+    "grade": 4,
+    "lesson": 4,
+    "title": "青盲牛毋捌半字",
+    "pdf": [
+      43,
+      52
+    ],
+    "printed": [
+      42,
+      51
+    ]
+  },
+  {
+    "grade": 4,
+    "lesson": 5,
+    "title": "豬母落水",
+    "pdf": [
+      53,
+      62
+    ],
+    "printed": [
+      52,
+      61
+    ]
+  },
+  {
+    "grade": 4,
+    "lesson": 6,
+    "title": "天台山的跤跡",
+    "pdf": [
+      63,
+      72
+    ],
+    "printed": [
+      62,
+      71
+    ]
+  },
+  {
+    "grade": 5,
+    "lesson": 1,
+    "title": "來媽宮踅街",
+    "pdf": [
+      9,
+      16
+    ],
+    "printed": [
+      8,
+      15
+    ]
+  },
+  {
+    "grade": 5,
+    "lesson": 2,
+    "title": "來西嶼捌地名",
+    "pdf": [
+      17,
+      24
+    ],
+    "printed": [
+      16,
+      23
+    ]
+  },
+  {
+    "grade": 5,
+    "lesson": 3,
+    "title": "來七美看風景",
+    "pdf": [
+      25,
+      32
+    ],
+    "printed": [
+      24,
+      31
+    ]
+  },
+  {
+    "grade": 5,
+    "lesson": 4,
+    "title": "來湖西行海跤",
+    "pdf": [
+      35,
+      42
+    ],
+    "printed": [
+      34,
+      41
+    ]
+  },
+  {
+    "grade": 5,
+    "lesson": 5,
+    "title": "來望安掠大魚",
+    "pdf": [
+      43,
+      52
+    ],
+    "printed": [
+      42,
+      51
+    ]
+  },
+  {
+    "grade": 5,
+    "lesson": 6,
+    "title": "來白沙知地理",
+    "pdf": [
+      53,
+      60
+    ],
+    "printed": [
+      52,
+      59
+    ]
+  },
+  {
+    "grade": 6,
+    "lesson": 1,
+    "title": "咱的故鄉—澎湖",
+    "pdf": [
+      9,
+      16
+    ],
+    "printed": [
+      8,
+      15
+    ]
+  },
+  {
+    "grade": 6,
+    "lesson": 2,
+    "title": "回鄉的心情",
+    "pdf": [
+      17,
+      26
+    ],
+    "printed": [
+      16,
+      25
+    ]
+  },
+  {
+    "grade": 6,
+    "lesson": 3,
+    "title": "愛的花火佇澎湖",
+    "pdf": [
+      27,
+      36
+    ],
+    "printed": [
+      26,
+      35
+    ]
+  },
+  {
+    "grade": 6,
+    "lesson": 4,
+    "title": "海上迎媽祖",
+    "pdf": [
+      39,
+      50
+    ],
+    "printed": [
+      38,
+      49
+    ]
+  },
+  {
+    "grade": 6,
+    "lesson": 5,
+    "title": "澎湖四寶",
+    "pdf": [
+      51,
+      62
+    ],
+    "printed": [
+      50,
+      61
+    ]
+  },
+  {
+    "grade": 6,
+    "lesson": 6,
+    "title": "澎湖的烏心石",
+    "pdf": [
+      63,
+      72
+    ],
+    "printed": [
+      62,
+      71
+    ]
+  }
+]

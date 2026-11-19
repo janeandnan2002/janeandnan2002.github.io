@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的教學設定｜東衛教學星球</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="teacher-settings.js"></script>
+</head>
+<body class="min-h-screen bg-sky-50 text-slate-700">
+  <main class="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:py-12">
+    <header class="mb-6 flex flex-wrap items-start justify-between gap-4">
+      <div>
+        <p class="font-black text-emerald-600">東衛教學星球</p>
+        <h1 class="mt-1 text-4xl font-black text-blue-800">我的教學設定</h1>
+        <p class="mt-2 max-w-3xl leading-7 text-slate-600">每位老師可以使用自己的班級名單、教材連結與課程資料。設定只保存在目前瀏覽器，不會和其他使用者混在一起。</p>
+      </div>
+      <a href="index.html" class="rounded-2xl bg-blue-600 px-5 py-3 font-black text-white shadow hover:bg-blue-500">回到教學星球</a>
+    </header>
+
+    <div id="status" class="mb-5 rounded-2xl bg-white px-4 py-3 font-bold text-blue-800 shadow"></div>
+
+    <section class="mb-6 rounded-3xl border-4 border-blue-200 bg-white p-5 shadow-xl sm:p-7">
+      <div class="mb-4">
+        <p class="font-black text-blue-600">第一步</p>
+        <h2 class="text-2xl font-black text-blue-800">建立自己的設定檔</h2>
+        <p class="mt-2 text-sm leading-6 text-slate-500">同一台電腦若有不同老師，可以使用不同的設定檔代號。不同代號的名單、教材資料與星光紀錄會分開保存。</p>
+      </div>
+      <div class="grid gap-4 md:grid-cols-3">
+        <label class="font-black text-blue-900">設定檔代號
+          <input id="profileId" class="mt-2 w-full rounded-2xl border-2 border-blue-200 px-4 py-3 font-bold" placeholder="例如：teacher-a">
+        </label>
+        <label class="font-black text-blue-900">顯示名稱
+          <input id="profileName" class="mt-2 w-full rounded-2xl border-2 border-blue-200 px-4 py-3 font-bold" placeholder="例如：王老師的班級">
+        </label>
+        <label class="font-black text-blue-900">學校／班級（可不填）
+          <input id="profileSchool" class="mt-2 w-full rounded-2xl border-2 border-blue-200 px-4 py-3 font-bold" placeholder="例如：東衛國小五年級">
+        </label>
+      </div>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <button id="saveProfile" class="rounded-2xl bg-blue-600 px-5 py-3 font-black text-white shadow hover:bg-blue-500">儲存並切換設定檔</button>
+        <select id="profilePicker" class="rounded-2xl border-2 border-blue-200 bg-white px-4 py-3 font-black text-blue-800"></select>
+        <button id="switchProfile" class="rounded-2xl bg-slate-200 px-5 py-3 font-black text-slate-700 hover:bg-slate-300">切換設定檔</button>
+      </div>
+    </section>
+
+    <section class="mb-6 rounded-3xl border-4 border-yellow-200 bg-white p-5 shadow-xl sm:p-7">
+      <div class="mb-4">
+        <p class="font-black text-yellow-700">第二步</p>
+        <h2 class="text-2xl font-black text-blue-800">設定班級名單</h2>
+        <p class="mt-2 text-sm leading-6 text-slate-500">每行一位學生。名單只儲存在本機瀏覽器；請不要把含有學生姓名的設定檔公開分享。</p>
+      </div>
+      <div class="grid gap-4 lg:grid-cols-[220px_1fr]">
+        <label class="font-black text-yellow-900">選擇年級
+          <select id="rosterGrade" class="mt-2 w-full rounded-2xl border-2 border-yellow-200 bg-white px-4 py-3 font-black"></select>
+        </label>
+        <div>
+          <textarea id="rosterText" rows="10" class="w-full rounded-2xl border-2 border-yellow-200 bg-yellow-50/50 p-4 text-lg font-bold leading-8" placeholder="每行一個名字"></textarea>
+          <div class="mt-3 flex flex-wrap gap-3">
+            <button id="saveRoster" class="rounded-2xl bg-yellow-400 px-5 py-3 font-black text-yellow-950 shadow hover:bg-yellow-300">儲存這個年級</button>
+            <button id="clearRoster" class="rounded-2xl bg-slate-200 px-5 py-3 font-black text-slate-700 hover:bg-slate-300">清除此年級自訂名單</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-6 rounded-3xl border-4 border-pink-200 bg-white p-5 shadow-xl sm:p-7">
+      <div class="mb-4">
+        <p class="font-black text-pink-600">第三步</p>
+        <h2 class="text-2xl font-black text-blue-800">加入自己的課程內容</h2>
+        <p class="mt-2 text-sm leading-6 text-slate-500">可把不同版本教材的每課重點、活動、題目寫入。課堂包產生器會優先使用這些資料，不會誤套用其他年級的內容。</p>
+      </div>
+      <div class="grid gap-4 md:grid-cols-4">
+        <label class="font-black text-pink-900">科目<select id="lessonSubject" class="mt-2 w-full rounded-2xl border-2 border-pink-200 bg-white px-4 py-3 font-bold"><option>閩南語</option><option>體育</option><option>社會</option><option>綜合活動</option><option>一年級閱讀</option></select></label>
+        <label class="font-black text-pink-900">年級<select id="lessonGrade" class="mt-2 w-full rounded-2xl border-2 border-pink-200 bg-white px-4 py-3 font-bold"></select></label>
+        <label class="font-black text-pink-900">課次／單元<input id="lessonNumber" class="mt-2 w-full rounded-2xl border-2 border-pink-200 px-4 py-3 font-bold" placeholder="例如：第 5 課、1-2"></label>
+        <label class="font-black text-pink-900">課程名稱<input id="lessonTitle" class="mt-2 w-full rounded-2xl border-2 border-pink-200 px-4 py-3 font-bold" placeholder="例如：我的家鄉"></label>
+      </div>
+      <div class="mt-4 grid gap-4 md:grid-cols-2">
+        <label class="font-black text-pink-900">學習目標（每行一項）<textarea id="lessonObjectives" rows="4" class="mt-2 w-full rounded-2xl border-2 border-pink-200 p-3 font-bold" placeholder="能說出……"></textarea></label>
+        <label class="font-black text-pink-900">教學流程（每行一步）<textarea id="lessonActivities" rows="4" class="mt-2 w-full rounded-2xl border-2 border-pink-200 p-3 font-bold" placeholder="導入……"></textarea></label>
+        <label class="font-black text-pink-900">教學遊戲<textarea id="lessonGame" rows="3" class="mt-2 w-full rounded-2xl border-2 border-pink-200 p-3 font-bold" placeholder="例如：小組闖關……"></textarea></label>
+        <label class="font-black text-pink-900">學習單題目（每行一題）<textarea id="lessonWorksheet" rows="3" class="mt-2 w-full rounded-2xl border-2 border-pink-200 p-3 font-bold"></textarea></label>
+        <label class="font-black text-pink-900">隨堂練習／討論題（每行一題）<textarea id="lessonQuestions" rows="3" class="mt-2 w-full rounded-2xl border-2 border-pink-200 p-3 font-bold"></textarea></label>
+        <label class="font-black text-pink-900">本課教材連結（可不填）<input id="lessonMaterialUrl" type="url" class="mt-2 w-full rounded-2xl border-2 border-pink-200 px-3 py-3 font-bold" placeholder="貼上 Google Drive PDF 連結"></label>
+      </div>
+      <div class="mt-4 flex flex-wrap gap-3"><button id="saveLesson" class="rounded-2xl bg-pink-500 px-5 py-3 font-black text-white shadow hover:bg-pink-400">儲存課程內容</button><button id="clearLesson" class="rounded-2xl bg-slate-200 px-5 py-3 font-black text-slate-700 hover:bg-slate-300">清空表單</button></div>
+      <div id="lessonList" class="mt-5 grid gap-3 md:grid-cols-2"></div>
+    </section>
+
+    <section class="mb-6 rounded-3xl border-4 border-emerald-200 bg-white p-5 shadow-xl sm:p-7">
+      <div class="mb-4"><p class="font-black text-emerald-600">第四步</p><h2 class="text-2xl font-black text-blue-800">加入教材與學習單連結</h2><p class="mt-2 text-sm leading-6 text-slate-500">網站可以幫你整理連結，但無法在沒有登入權限的情況下自動讀取別人的私人 Google Drive PDF。請先把檔案分享給需要使用的人，再貼上連結。</p></div>
+      <div class="grid gap-4 md:grid-cols-3">
+        <label class="font-black text-emerald-900">名稱<input id="materialTitle" class="mt-2 w-full rounded-2xl border-2 border-emerald-200 px-3 py-3 font-bold" placeholder="例如：五上社會教師手冊"></label>
+        <label class="font-black text-emerald-900">類型<select id="materialType" class="mt-2 w-full rounded-2xl border-2 border-emerald-200 bg-white px-3 py-3 font-bold"><option>教師手冊</option><option>課本</option><option>學習單</option><option>隨堂練習</option><option>月考卷</option><option>其他教材</option></select></label>
+        <label class="font-black text-emerald-900">連結<input id="materialUrl" type="url" class="mt-2 w-full rounded-2xl border-2 border-emerald-200 px-3 py-3 font-bold" placeholder="https://drive.google.com/..."></label>
+        <label class="font-black text-emerald-900">科目（可不填）<select id="materialSubject" class="mt-2 w-full rounded-2xl border-2 border-emerald-200 bg-white px-3 py-3 font-bold"><option value="">全部科目</option><option>閩南語</option><option>體育</option><option>社會</option><option>綜合活動</option><option>一年級閱讀</option></select></label>
+        <label class="font-black text-emerald-900">年級（可不填）<select id="materialGrade" class="mt-2 w-full rounded-2xl border-2 border-emerald-200 bg-white px-3 py-3 font-bold"><option value="">全部年級</option></select></label>
+        <label class="font-black text-emerald-900">課次（可不填）<input id="materialLesson" class="mt-2 w-full rounded-2xl border-2 border-emerald-200 px-3 py-3 font-bold" placeholder="例如：第 5 課、1-2"></label>
+      </div>
+      <label class="mt-4 block font-black text-emerald-900">備註<textarea id="materialNote" rows="2" class="mt-2 w-full rounded-2xl border-2 border-emerald-200 p-3 font-bold"></textarea></label>
+      <button id="saveMaterial" class="mt-4 rounded-2xl bg-emerald-500 px-5 py-3 font-black text-white shadow hover:bg-emerald-400">加入教材</button>
+      <div id="materialList" class="mt-5 grid gap-3 md:grid-cols-2"></div>
+    </section>
+
+    <section class="rounded-3xl border-4 border-violet-200 bg-white p-5 shadow-xl sm:p-7">
+      <p class="font-black text-violet-600">跨裝置使用</p><h2 class="mt-1 text-2xl font-black text-blue-800">匯出／匯入我的設定</h2>
+      <p class="mt-2 text-sm leading-6 text-slate-500">匯出檔只包含名單、課程資料與教材連結，不包含星光點數和任務紀錄，避免不小心把學生紀錄一起分享。</p>
+      <div class="mt-4 flex flex-wrap gap-3"><button id="exportSettings" class="rounded-2xl bg-violet-500 px-5 py-3 font-black text-white shadow hover:bg-violet-400">下載設定檔</button><label class="cursor-pointer rounded-2xl bg-slate-200 px-5 py-3 font-black text-slate-700 hover:bg-slate-300">匯入設定檔<input id="importSettings" type="file" accept="application/json" class="hidden"></label></div>
+    </section>
+  </main>
+  <script>
+    const $ = id => document.getElementById(id);
+    const grades = ['1', '2', '3', '4', '5', '6'];
+    const subjects = ['閩南語', '體育', '社會', '綜合活動', '一年級閱讀'];
+    function profile() { return window.TeacherProfile.getActiveProfile(); }
+    function lineText(value) { return window.TeacherProfile.normaliseLines(value); }
+    function showStatus(message, kind = 'blue') { $('status').className = `mb-5 rounded-2xl bg-white px-4 py-3 font-bold text-${kind}-800 shadow`; $('status').textContent = message; }
+    function fillSelects() {
+      $('rosterGrade').innerHTML = grades.map(grade => `<option value="${grade}">${grade} 年級</option>`).join('');
+      $('lessonGrade').innerHTML = grades.map(grade => `<option value="${grade}">${grade} 年級</option>`).join('');
+      $('materialGrade').innerHTML = '<option value="">全部年級</option>' + grades.map(grade => `<option value="${grade}">${grade} 年級</option>`).join('');
+      $('profilePicker').innerHTML = Object.values(window.TeacherProfile.getStore().profiles).map(item => `<option value="${item.id}">${item.name}（${item.id}）</option>`).join('');
+      $('profilePicker').value = window.TeacherProfile.getActiveProfileId();
+    }
+    function fillProfileForm() { const item = profile(); $('profileId').value = item.id; $('profileName').value = item.name; $('profileSchool').value = item.school || ''; }
+    function fillRosterForm() { $('rosterText').value = (profile().customRosters?.[`grade${$('rosterGrade').value}`] || []).join('\n'); }
+    function clearLessonForm() { ['lessonNumber','lessonTitle','lessonGame','lessonMaterialUrl'].forEach(id => $(id).value = ''); ['lessonObjectives','lessonActivities','lessonWorksheet','lessonQuestions'].forEach(id => $(id).value = ''); }
+    function renderLessonList() { $('lessonList').innerHTML = (profile().customLessons || []).map(item => `<article class="rounded-2xl border-2 border-pink-100 bg-pink-50 p-4"><div class="flex items-start justify-between gap-3"><div><p class="text-xs font-black text-pink-600">${item.subject}｜${item.grade} 年級｜${item.lesson}</p><h3 class="mt-1 font-black text-blue-800">${item.title || '未命名課程'}</h3></div><button data-delete-lesson="${item.id}" class="rounded-xl bg-white px-3 py-2 text-sm font-black text-rose-600">刪除</button></div><p class="mt-2 text-sm text-slate-600">目標 ${item.objectives?.length || 0} 項｜題目 ${item.questions?.length || 0} 題</p></article>`).join('') || '<p class="rounded-2xl bg-slate-50 p-4 font-bold text-slate-500">尚未加入自訂課程內容。</p>'; document.querySelectorAll('[data-delete-lesson]').forEach(button => button.onclick = () => { profile().customLessons = profile().customLessons.filter(item => item.id !== button.dataset.deleteLesson); window.TeacherProfile.persist(); renderLessonList(); showStatus('已刪除自訂課程內容。'); }); }
+    function renderMaterialList() { $('materialList').innerHTML = (profile().materials || []).map(item => `<article class="rounded-2xl border-2 border-emerald-100 bg-emerald-50 p-4"><div class="flex items-start justify-between gap-3"><div><p class="text-xs font-black text-emerald-600">${item.type}｜${item.subject || '全部科目'}｜${item.grade ? `${item.grade} 年級` : '全部年級'}</p><h3 class="mt-1 font-black text-blue-800">${item.title}</h3></div><button data-delete-material="${item.id}" class="rounded-xl bg-white px-3 py-2 text-sm font-black text-rose-600">刪除</button></div><a href="${item.url}" target="_blank" rel="noopener" class="mt-2 block break-all text-sm font-bold text-blue-600 underline">開啟教材連結</a></article>`).join('') || '<p class="rounded-2xl bg-slate-50 p-4 font-bold text-slate-500">尚未加入教材連結。</p>'; document.querySelectorAll('[data-delete-material]').forEach(button => button.onclick = () => { profile().materials = profile().materials.filter(item => item.id !== button.dataset.deleteMaterial); window.TeacherProfile.persist(); renderMaterialList(); showStatus('已刪除教材連結。'); }); }
+    function refresh() { fillSelects(); fillProfileForm(); fillRosterForm(); renderLessonList(); renderMaterialList(); showStatus(`目前設定檔：${profile().name}（${profile().id}）`); }
+    $('rosterGrade').onchange = fillRosterForm;
+    $('saveProfile').onclick = () => { window.TeacherProfile.saveProfile({ ...profile(), id: $('profileId').value, name: $('profileName').value, school: $('profileSchool').value }); refresh(); showStatus('設定檔已儲存，之後的名單與點數會使用這份設定。', 'emerald'); };
+    $('switchProfile').onclick = () => { window.TeacherProfile.switchProfile($('profilePicker').value); refresh(); };
+    $('saveRoster').onclick = () => { profile().customRosters[`grade${$('rosterGrade').value}`] = lineText($('rosterText').value); window.TeacherProfile.persist(); fillRosterForm(); showStatus(`${$('rosterGrade').value} 年級名單已儲存。`, 'emerald'); };
+    $('clearRoster').onclick = () => { delete profile().customRosters[`grade${$('rosterGrade').value}`]; window.TeacherProfile.persist(); fillRosterForm(); showStatus('已清除這個年級的自訂名單；主頁會回到網站預設名單。', 'yellow'); };
+    $('saveLesson').onclick = () => { const item = { id: crypto.randomUUID?.() || String(Date.now()), subject: $('lessonSubject').value, grade: $('lessonGrade').value, lesson: $('lessonNumber').value.trim(), title: $('lessonTitle').value.trim(), objectives: lineText($('lessonObjectives').value), activities: lineText($('lessonActivities').value), game: $('lessonGame').value.trim(), worksheet: lineText($('lessonWorksheet').value), questions: lineText($('lessonQuestions').value), materialUrl: window.TeacherProfile.safeUrl($('lessonMaterialUrl').value) }; if (!item.lesson) return showStatus('請先填寫課次／單元。', 'rose'); profile().customLessons = (profile().customLessons || []).filter(old => !(old.subject === item.subject && String(old.grade) === item.grade && old.lesson.replace(/\s+/g, '') === item.lesson.replace(/\s+/g, ''))); profile().customLessons.push(item); window.TeacherProfile.persist(); renderLessonList(); clearLessonForm(); showStatus('課程資料已儲存，課堂包會優先使用這份內容。', 'emerald'); };
+    $('clearLesson').onclick = clearLessonForm;
+    $('saveMaterial').onclick = () => { const title = $('materialTitle').value.trim(); const url = window.TeacherProfile.safeUrl($('materialUrl').value); if (!title || !url) return showStatus('請填寫教材名稱與有效的 http(s) 連結。', 'rose'); profile().materials.push({ id: crypto.randomUUID?.() || String(Date.now()), title, type: $('materialType').value, subject: $('materialSubject').value, grade: $('materialGrade').value, lesson: $('materialLesson').value.trim(), url, note: $('materialNote').value.trim() }); window.TeacherProfile.persist(); ['materialTitle','materialUrl','materialLesson','materialNote'].forEach(id => $(id).value = ''); renderMaterialList(); showStatus('教材連結已加入。', 'emerald'); };
+    $('exportSettings').onclick = () => { const blob = new Blob([JSON.stringify(window.TeacherProfile.exportData(), null, 2)], { type: 'application/json' }); const url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; link.download = `${profile().id}-東衛教學設定.json`; link.click(); URL.revokeObjectURL(url); showStatus('設定檔已下載；匯入時不會帶入星光點數。', 'violet'); };
+    $('importSettings').onchange = event => { const file = event.target.files?.[0]; if (!file) return; const reader = new FileReader(); reader.onload = () => { try { window.TeacherProfile.importData(JSON.parse(reader.result)); refresh(); showStatus('設定檔已匯入並切換完成。', 'emerald'); } catch (error) { showStatus(`匯入失敗：${error.message}`, 'rose'); } }; reader.readAsText(file); event.target.value = ''; };
+    refresh();
+  </script>
+</body>
+</html>

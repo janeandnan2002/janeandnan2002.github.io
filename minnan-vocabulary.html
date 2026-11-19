@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>東衛教學星球｜閩南語每課新詞</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #eff6ff;
+      background-image:
+        radial-gradient(circle at 8% 8%, rgba(250, 204, 21, .35) 0 120px, transparent 121px),
+        radial-gradient(circle at 92% 10%, rgba(244, 114, 182, .2) 0 150px, transparent 151px),
+        radial-gradient(circle at 78% 90%, rgba(52, 211, 153, .18) 0 160px, transparent 161px);
+    }
+    .card-in { animation: cardIn .35s ease-out both; }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-700">
+  <div class="fixed bottom-5 right-5 z-50 flex flex-col gap-3">
+    <a href="#vocabularyTop" class="rounded-full bg-orange-400 px-5 py-3 text-center font-black text-orange-950 shadow-xl shadow-orange-100 transition hover:-translate-y-1 hover:bg-orange-300">回頁首 ↑</a>
+    <a href="index.html#top" class="rounded-full bg-blue-600 px-5 py-3 text-center font-black text-white shadow-xl shadow-blue-200 transition hover:-translate-y-1 hover:bg-blue-500">回首頁</a>
+  </div>
+
+  <main id="vocabularyTop" class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:py-10">
+    <header class="rounded-3xl border-4 border-orange-300 bg-white p-6 shadow-xl shadow-orange-100 sm:p-8">
+      <div class="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p class="text-sm font-black text-orange-600">東衛國小閩南語備課工具</p>
+          <h1 class="mt-1 text-4xl font-black text-blue-800 sm:text-5xl">閩南語每課新詞</h1>
+          <p class="mt-3 max-w-3xl leading-7 text-slate-600">依 1～6 年級、上下學期與課次查看教師手冊整理的新詞。每個詞都附上 YouTube「【系列課程】臺灣閩南語」相關搜尋入口。</p>
+        </div>
+        <a href="index.html#top" class="rounded-2xl bg-slate-200 px-4 py-2 font-black text-slate-700 hover:bg-slate-300">回首頁</a>
+      </div>
+    </header>
+
+    <section class="mt-6 rounded-3xl border-4 border-blue-200 bg-white p-5 shadow-xl shadow-blue-100 sm:p-7">
+      <div class="grid gap-4 lg:grid-cols-[.7fr_.7fr_1.2fr]">
+        <label class="rounded-2xl bg-yellow-50 p-4 font-black text-yellow-900">
+          年級
+          <select id="gradeSelect" class="mt-2 w-full rounded-xl border-2 border-yellow-300 bg-white px-4 py-3 font-black text-blue-800 outline-none focus:border-yellow-500"></select>
+        </label>
+        <label class="rounded-2xl bg-sky-50 p-4 font-black text-sky-900">
+          學期
+          <select id="semesterSelect" class="mt-2 w-full rounded-xl border-2 border-sky-300 bg-white px-4 py-3 font-black text-blue-800 outline-none focus:border-sky-500">
+            <option value="a">上學期</option>
+            <option value="b">下學期</option>
+          </select>
+        </label>
+        <label class="rounded-2xl bg-pink-50 p-4 font-black text-pink-900">
+          課次
+          <select id="lessonSelect" class="mt-2 w-full rounded-xl border-2 border-pink-300 bg-white px-4 py-3 font-black text-blue-800 outline-none focus:border-pink-500"></select>
+        </label>
+      </div>
+      <div class="mt-4 flex flex-wrap items-center gap-3">
+        <label class="min-w-64 flex-1 font-black text-slate-700">
+          搜尋本課新詞
+          <input id="wordSearch" class="mt-2 w-full rounded-2xl border-2 border-blue-100 bg-blue-50 px-4 py-3 outline-none focus:border-blue-300" placeholder="輸入語詞，例如：汝、菜宅、海產">
+        </label>
+        <p id="courseStatus" class="rounded-2xl bg-emerald-50 px-4 py-3 font-black text-emerald-700"></p>
+      </div>
+    </section>
+
+    <section id="lessonPanel" class="card-in mt-6 rounded-3xl border-4 border-emerald-300 bg-white p-5 shadow-xl shadow-emerald-100 sm:p-7">
+      <div class="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p class="text-sm font-black text-emerald-600">教師手冊課文詞彙</p>
+          <h2 id="lessonTitle" class="mt-1 text-3xl font-black text-blue-800"></h2>
+          <p id="lessonMeta" class="mt-2 text-slate-500"></p>
+        </div>
+        <a id="lessonVideoLink" href="#" target="_blank" rel="noopener" class="rounded-2xl bg-red-500 px-5 py-3 font-black text-white shadow hover:bg-red-400">搜尋本課系列影片</a>
+      </div>
+
+      <div class="mt-6 rounded-3xl bg-orange-50 p-5">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p class="text-sm font-black text-orange-600">本課新詞</p>
+            <h3 id="wordCount" class="text-2xl font-black text-orange-900"></h3>
+          </div>
+          <p class="text-sm font-bold text-orange-800">點擊詞卡下方按鈕，可搜尋「【系列課程】臺灣閩南語」影片。</p>
+        </div>
+        <div id="wordGrid" class="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3"></div>
+        <p id="emptyWords" class="hidden rounded-2xl bg-white p-5 text-center font-black text-slate-500">找不到符合的語詞，請換一個關鍵字。</p>
+      </div>
+
+      <div id="patternPanel" class="mt-5 rounded-3xl bg-violet-50 p-5"></div>
+    </section>
+
+    <section class="mt-6 rounded-3xl border-4 border-slate-200 bg-white p-5 shadow-lg sm:p-7">
+      <p class="text-sm font-black text-slate-500">使用說明</p>
+      <p class="mt-2 leading-7 text-slate-600">影片按鈕會開啟 YouTube 搜尋結果，關鍵字包含「【系列課程】臺灣閩南語」與「基隆教主」。若同一語詞在不同課次出現，會以目前選擇的年級、學期與課文名稱協助縮小搜尋範圍。</p>
+    </section>
+  </main>
+
+  <script src="course-data.js"></script>
+  <script>
+    const lessonBank = window.DONGWEI_COURSE_DATA?.minnanLessonBank || {};
+    const state = { grade: '1', semester: 'a', lessonKey: '', search: '' };
+    const $ = id => document.getElementById(id);
+
+    function escapeHtml(value) {
+      const el = document.createElement('div');
+      el.textContent = value;
+      return el.innerHTML;
+    }
+    function uniqueWords(words = []) {
+      return [...new Set(words.map(word => String(word).trim()).filter(Boolean))];
+    }
+    function lessonsForSelection() {
+      const prefix = `g${state.grade}${state.semester}|`;
+      return Object.entries(lessonBank)
+        .filter(([key]) => key.startsWith(prefix))
+        .sort(([, a], [, b]) => String(a.title).localeCompare(String(b.title), 'zh-Hant'));
+    }
+    function youtubeSearch(query) {
+      return `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
+    }
+    function wordVideoUrl(word, lesson) {
+      return youtubeSearch(`【系列課程】臺灣閩南語 ${word} ${lesson.title} 基隆教主`);
+    }
+    function lessonVideoUrl(lesson) {
+      return youtubeSearch(`【系列課程】臺灣閩南語 ${lesson.title} 基隆教主`);
+    }
+    function currentLesson() {
+      return lessonBank[state.lessonKey] || lessonsForSelection()[0]?.[1] || null;
+    }
+    function currentLessonEntry() {
+      return Object.entries(lessonBank).find(([key]) => key === state.lessonKey) || lessonsForSelection()[0] || null;
+    }
+    function renderGradeOptions() {
+      $('gradeSelect').innerHTML = Array.from({ length: 6 }, (_, index) => {
+        const grade = String(index + 1);
+        return `<option value="${grade}">${grade} 年級</option>`;
+      }).join('');
+      $('gradeSelect').value = state.grade;
+    }
+    function renderLessonOptions() {
+      const entries = lessonsForSelection();
+      const previous = state.lessonKey;
+      $('lessonSelect').innerHTML = entries.map(([key, lesson]) => `<option value="${escapeHtml(key)}">${escapeHtml(key.split('|')[1])}｜${escapeHtml(lesson.title)}</option>`).join('');
+      state.lessonKey = entries.some(([key]) => key === previous) ? previous : entries[0]?.[0] || '';
+      $('lessonSelect').value = state.lessonKey;
+    }
+    function renderLesson() {
+      const lesson = currentLesson();
+      const entry = currentLessonEntry();
+      if (!lesson || !entry) return;
+      const words = uniqueWords(lesson.vocabulary);
+      const filtered = words.filter(word => !state.search || word.includes(state.search));
+      const lessonNumber = entry[0].split('|')[1] || '';
+      $('lessonTitle').textContent = `${lessonNumber}｜${lesson.title}`;
+      $('lessonMeta').textContent = `${state.grade} 年級${state.semester === 'a' ? '上' : '下'}學期｜教師手冊整理 ${words.length} 個新詞`;
+      $('wordCount').textContent = state.search ? `顯示 ${filtered.length} / ${words.length} 個詞` : `共 ${words.length} 個詞`;
+      $('courseStatus').textContent = `目前：${state.grade} 年級${state.semester === 'a' ? '上' : '下'}學期｜${lessonNumber}`;
+      $('lessonVideoLink').href = lessonVideoUrl(lesson);
+      $('wordGrid').innerHTML = filtered.map(word => `<article class="rounded-2xl border-2 border-orange-100 bg-white p-4 shadow-sm transition hover:-translate-y-1 hover:border-orange-300">
+        <p class="text-2xl font-black text-blue-900">${escapeHtml(word)}</p>
+        <a class="mt-3 inline-flex rounded-xl bg-red-100 px-3 py-2 text-sm font-black text-red-700 hover:bg-red-200" href="${wordVideoUrl(word, lesson)}" target="_blank" rel="noopener">找系列影片 ▶</a>
+      </article>`).join('');
+      $('emptyWords').classList.toggle('hidden', filtered.length > 0);
+      const patterns = (lesson.patterns || []).filter(item => item?.phrase && item?.sentence);
+      $('patternPanel').innerHTML = patterns.length ? `<p class="text-sm font-black text-violet-600">本課句型與例句</p><div class="mt-3 grid gap-3 md:grid-cols-2">${patterns.map(item => `<div class="rounded-2xl bg-white p-4 shadow-sm"><p class="font-black text-blue-900">${escapeHtml(item.phrase)}</p><p class="mt-2 leading-7 text-slate-600">${escapeHtml(item.sentence)}</p></div>`).join('')}</div>` : '<p class="font-black text-slate-500">本課目前沒有另外整理句型資料。</p>';
+    }
+    function resetLessonAfterFilter() {
+      renderLessonOptions();
+      renderLesson();
+    }
+    $('gradeSelect').addEventListener('change', event => { state.grade = event.target.value; state.lessonKey = ''; resetLessonAfterFilter(); });
+    $('semesterSelect').addEventListener('change', event => { state.semester = event.target.value; state.lessonKey = ''; resetLessonAfterFilter(); });
+    $('lessonSelect').addEventListener('change', event => { state.lessonKey = event.target.value; renderLesson(); });
+    $('wordSearch').addEventListener('input', event => { state.search = event.target.value.trim(); renderLesson(); });
+    renderGradeOptions();
+    renderLessonOptions();
+    renderLesson();
+  </script>
+</body>
+</html>

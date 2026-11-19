@@ -1,0 +1,35 @@
+<svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="grad-root" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#4a3b2c"/>
+          <stop offset="100%" stop-color="#2a1f17"/>
+        </radialGradient>
+        <linearGradient id="anubias-leaf-1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#4ade80"/>
+          <stop offset="50%" stop-color="#16a34a"/>
+          <stop offset="100%" stop-color="#14532d"/>
+        </linearGradient>
+        <linearGradient id="anubias-leaf-2" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#86efac"/>
+          <stop offset="70%" stop-color="#15803d"/>
+          <stop offset="100%" stop-color="#052e16"/>
+        </linearGradient>
+      </defs>
+      <!-- Roots -->
+      <path d="M100 190 Q90 215 70 235 M100 190 Q105 220 100 238 M100 190 Q115 210 130 232 M85 195 Q70 210 55 225 M115 195 Q130 215 145 228" stroke="#854d0e" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.8"/>
+      <!-- Rhizome Rock -->
+      <path d="M75 190 C70 180 85 175 100 176 C115 175 130 182 125 192 C120 198 80 198 75 190 Z" fill="url(#grad-root)"/>
+      <!-- Leaf 1 (Left low) -->
+      <path d="M90 180 C60 170 30 140 25 110 C20 75 55 85 80 115 C95 135 95 165 90 180 Z" fill="url(#anubias-leaf-1)"/>
+      <path d="M90 180 Q65 145 40 100" stroke="#bbf7d0" stroke-width="2" fill="none" opacity="0.6"/>
+      <!-- Leaf 2 (Right low) -->
+      <path d="M110 180 C140 170 170 140 175 110 C180 75 145 85 120 115 C105 135 105 165 110 180 Z" fill="url(#anubias-leaf-2)"/>
+      <path d="M110 180 Q135 145 160 100" stroke="#bbf7d0" stroke-width="2" fill="none" opacity="0.6"/>
+      <!-- Leaf 3 (Center High) -->
+      <path d="M100 175 C80 140 65 90 85 50 C100 20 115 20 125 50 C140 90 120 140 100 175 Z" fill="url(#anubias-leaf-2)"/>
+      <path d="M100 175 Q102 100 105 35" stroke="#bbf7d0" stroke-width="2.5" fill="none" opacity="0.7"/>
+      <!-- Leaf 4 (Left Upper) -->
+      <path d="M95 175 C70 150 45 110 50 80 C55 50 80 60 95 95 C102 115 100 150 95 175 Z" fill="url(#anubias-leaf-1)"/>
+      <!-- Leaf 5 (Right Upper) -->
+      <path d="M105 175 C130 150 155 110 150 80 C145 50 120 60 105 95 C98 115 100 150 105 175 Z" fill="url(#anubias-leaf-2)"/>
+    </svg>
