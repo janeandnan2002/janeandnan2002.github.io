@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#215b50">
+  <title>小黑啤閱讀認證｜東衛國小</title>
+  <link rel="stylesheet" href="/blackbear/style.css">
+  <script src="/teacher-settings.js"></script>
+  <script src="/blackbear/blackbear-static-data.js"></script>
+  <script type="module" src="/blackbear/app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">跳到主要內容</a>
+  <header>
+    <a class="brand" href="/blackbear/" aria-label="小黑啤閱讀認證首頁">
+      <span class="bear" aria-hidden="true">🐻</span>
+      <span>小黑啤閱讀認證<small>東衛國小 · 讀一本，發現一個臺灣</small></span>
+    </a>
+    <nav aria-label="主要導覽">
+      <button id="sound" aria-label="切換音效" title="切換作答音效">🔊</button>
+      <a class="nav-link" id="back-passport" href="/index.html#missionReading">📖 東衛任務閱讀存摺</a>
+      <button id="home">閱讀書架</button>
+      <button id="account" hidden>我的紀錄</button>
+      <button id="password" hidden>修改密碼</button>
+      <button id="teacher">教師後台</button>
+      <button id="logout" hidden>登出</button>
+    </nav>
+  </header>
+  <div id="notice" role="alert" hidden></div>
+  <main id="main" tabindex="-1"><p role="status">正在打開閱讀書架…</p></main>
+  <footer>
+    先閱讀，再挑戰。每冊隨機 10 題，答對 8 題即可通過（認證資料自動同步至東衛任務閱讀存摺）。<br>
+    題目來源：臺中市推動校園閱讀線上認證系統 · 書籍：臺灣吧製作團隊<br>
+    <a href="/blackbear/entry-qr.png" download>下載學生入口 QR Code</a>
+  </footer>
+</body>
+</html>

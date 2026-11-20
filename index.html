@@ -349,18 +349,19 @@
     <section id="missionReading" class="mt-8 rounded-3xl border-4 border-orange-300 bg-white p-5 shadow-xl shadow-orange-100 sm:p-7">
       <div class="mb-5 flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p class="text-sm font-bold text-orange-500">任務與閱讀認證</p>
+          <p class="text-sm font-bold text-orange-500">任務與閱讀認證（整合小黑啤閱讀認證 ✕ 彈性主題閱讀）</p>
           <h2 class="text-3xl font-black text-blue-800">東衛任務閱讀存摺</h2>
-          <p class="mt-2 max-w-3xl text-sm font-medium text-slate-500">改自家事閱讀技能：把「家事」轉成課堂任務，把「手機時間」轉成獎勵時間。紀錄依「學生＋週次」保存，方便追蹤學生任務、閱讀與點數兌換。</p>
+          <p class="mt-2 max-w-3xl text-sm font-medium text-slate-500">靈活自訂課堂／閱讀任務與主題書單，並自動同步「小黑啤閱讀認證」成績與理解度紀錄，可累積點數並兌換獎勵時間與全校星光。</p>
         </div>
         <div class="flex flex-wrap gap-2 no-print">
-          <button id="missionSaveButton" class="rounded-2xl bg-orange-500 px-4 py-2 font-black text-white shadow hover:bg-orange-400">儲存任務紀錄</button>
-          <button id="missionLoadButton" class="rounded-2xl bg-blue-500 px-4 py-2 font-black text-white shadow hover:bg-blue-400">讀取紀錄</button>
-          <button id="missionClearButton" class="rounded-2xl bg-slate-200 px-4 py-2 font-black text-slate-700 hover:bg-slate-300">清除本筆</button>
+          <button id="missionSaveButton" type="button" class="rounded-2xl bg-orange-500 px-4 py-2 font-black text-white shadow hover:bg-orange-400">儲存任務與認證紀錄</button>
+          <button id="missionLoadButton" type="button" class="rounded-2xl bg-blue-500 px-4 py-2 font-black text-white shadow hover:bg-blue-400">讀取紀錄</button>
+          <button id="missionExportCsvButton" type="button" class="rounded-2xl bg-emerald-600 px-4 py-2 font-black text-white shadow hover:bg-emerald-500">📥 匯出閱讀存摺 CSV</button>
+          <button id="missionClearButton" type="button" class="rounded-2xl bg-slate-200 px-4 py-2 font-black text-slate-700 hover:bg-slate-300">清除本筆</button>
         </div>
       </div>
 
-      <div class="grid gap-5 xl:grid-cols-[0.8fr_1.2fr]">
+      <div class="grid gap-5 xl:grid-cols-[0.85fr_1.35fr]">
         <div class="rounded-3xl bg-orange-50 p-4">
           <div class="grid gap-3 sm:grid-cols-2">
             <label class="block text-sm font-black text-orange-900">
@@ -374,55 +375,174 @@
           </div>
 
           <div class="mt-4 rounded-3xl bg-white p-4 shadow">
-            <h3 class="text-lg font-black text-blue-800">本週任務設定</h3>
-            <p class="mt-1 text-sm font-medium text-slate-500">每項每天可記 0～3 次，儲存時會自動換算任務點。</p>
-            <div id="missionTaskGrid" class="mt-4 space-y-4"></div>
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h3 class="text-lg font-black text-blue-800">本週／單元任務設定</h3>
+              <div class="flex flex-wrap gap-1.5 no-print">
+                <button id="addMissionTaskButton" type="button" class="rounded-xl bg-orange-500 px-3 py-1.5 text-xs font-black text-white hover:bg-orange-400">＋ 新增任務</button>
+                <button id="toggleManageTasksButton" type="button" class="rounded-xl bg-slate-100 px-3 py-1.5 text-xs font-black text-slate-700 hover:bg-slate-200">⚙️ 管理點數</button>
+                <button id="resetMissionTasksButton" type="button" class="rounded-xl bg-slate-100 px-2.5 py-1.5 text-xs font-bold text-slate-500 hover:bg-slate-200">還原預設</button>
+              </div>
+            </div>
+            <p class="mt-1 text-xs font-medium text-slate-500">可隨時新增閱讀或課堂任務並自訂單次點數；每項每天可記 0～3 次。</p>
+
+            <div id="newTaskBox" class="mt-3 hidden rounded-2xl border-2 border-dashed border-orange-300 bg-orange-50 p-3 no-print">
+              <p class="text-xs font-black text-orange-900">新增自訂閱讀／課堂任務</p>
+              <div class="mt-2 flex flex-wrap gap-2">
+                <input id="newTaskLabelInput" type="text" class="min-w-[160px] flex-1 rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm font-bold outline-none focus:border-orange-400" placeholder="例如：晨讀 15 分鐘分享、閱讀報紙一篇">
+                <label class="flex items-center gap-1 rounded-xl border border-orange-200 bg-white px-2.5 py-1.5 text-xs font-black text-orange-900">
+                  每次
+                  <input id="newTaskPointsInput" type="number" min="1" max="20" value="2" class="w-12 text-center font-black outline-none">
+                  點
+                </label>
+                <button id="confirmAddTaskButton" type="button" class="rounded-xl bg-orange-500 px-3 py-2 text-xs font-black text-white hover:bg-orange-400">加入</button>
+                <button id="cancelAddTaskButton" type="button" class="rounded-xl bg-slate-200 px-3 py-2 text-xs font-black text-slate-700 hover:bg-slate-300">取消</button>
+              </div>
+            </div>
+
+            <div id="missionTaskGrid" class="mt-4 space-y-3"></div>
           </div>
         </div>
 
-        <div class="grid gap-5 lg:grid-cols-2">
+        <div class="grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
           <div class="rounded-3xl border-2 border-blue-200 bg-blue-50 p-4">
-            <h3 class="text-lg font-black text-blue-800">閱讀認證</h3>
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h3 class="text-lg font-black text-blue-800">閱讀與小黑啤認證登錄</h3>
+              <span id="readingCertCountBadge" class="rounded-full bg-white px-3 py-1 text-xs font-black text-blue-700 shadow-sm">已記錄 0 本</span>
+            </div>
+
+            <div class="mt-3 rounded-2xl border-2 border-amber-300 bg-amber-50 p-3 shadow-sm">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <p id="blackbearProgressBadge" class="text-sm font-black text-amber-900">🐻 小黑啤認證：0 / 22 本</p>
+                  <p id="blackbearLatestHint" class="mt-0.5 text-xs font-bold text-amber-800">載入小黑啤認證紀錄中…</p>
+                </div>
+                <div class="flex flex-wrap gap-1.5 no-print">
+                  <button id="syncBlackbearButton" type="button" class="rounded-xl bg-amber-600 px-3 py-1.5 text-xs font-black text-white shadow hover:bg-amber-500">🔄 同步小黑啤測驗紀錄</button>
+                  <a id="openBlackbearLink" href="/blackbear/" target="_blank" rel="noopener" class="rounded-xl border border-amber-600 bg-white px-3 py-1.5 text-xs font-black text-amber-900 hover:bg-amber-100">🐻 前往小黑啤書架測驗 ↗</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-3 grid gap-2 sm:grid-cols-[1fr_auto] items-end">
+              <label class="block text-sm font-black text-blue-900">
+                主題閱讀分類
+                <select id="readingThemeSelect" class="mt-1.5 w-full rounded-2xl border-2 border-blue-200 bg-white px-3 py-2.5 text-sm font-bold outline-none focus:border-blue-400"></select>
+              </label>
+              <button id="addReadingThemeButton" type="button" class="no-print h-[44px] rounded-2xl bg-indigo-600 px-3.5 text-xs font-black text-white shadow hover:bg-indigo-500">＋ 新增主題</button>
+            </div>
+
+            <div id="newThemeBox" class="mt-2 hidden rounded-2xl border-2 border-dashed border-indigo-300 bg-indigo-50 p-3 no-print">
+              <p class="text-xs font-black text-indigo-900">新增自訂主題閱讀分類</p>
+              <div class="mt-2 flex flex-wrap gap-2">
+                <input id="newThemeNameInput" type="text" class="min-w-[160px] flex-1 rounded-xl border border-indigo-200 bg-white px-3 py-2 text-sm font-bold outline-none" placeholder="例如：四上社會跨領域閱讀、世界繪本週">
+                <button id="confirmAddThemeButton" type="button" class="rounded-xl bg-indigo-600 px-3 py-2 text-xs font-black text-white hover:bg-indigo-500">新增主題</button>
+                <button id="cancelAddThemeButton" type="button" class="rounded-xl bg-slate-200 px-3 py-2 text-xs font-black text-slate-700 hover:bg-slate-300">取消</button>
+              </div>
+            </div>
+
+            <div id="blackbearPickerWrap" class="mt-3">
+              <label class="block text-sm font-black text-blue-900">
+                小黑啤 22 本專書快選
+                <select id="blackbearBookSelect" class="mt-1.5 w-full rounded-2xl border-2 border-blue-200 bg-white px-3 py-2.5 text-sm font-bold outline-none focus:border-blue-400"></select>
+              </label>
+            </div>
+
             <label class="mt-3 block text-sm font-black text-blue-900">
               書名 / 篇名
-              <input id="readingTitle" class="mt-2 w-full rounded-2xl border-2 border-blue-200 bg-white px-4 py-3 font-bold outline-none focus:border-blue-400" placeholder="例如：澎湖的故事、國語日報一篇文章">
+              <input id="readingTitle" class="mt-1.5 w-full rounded-2xl border-2 border-blue-200 bg-white px-4 py-2.5 font-bold outline-none focus:border-blue-400" placeholder="例如：小黑啤玩臺灣1新北篇：扮英雄、澎湖的故事">
             </label>
-            <label class="mt-3 block text-sm font-black text-blue-900">
-              1. 這篇主要在說什麼？
-              <textarea id="readingQ1" rows="2" class="mt-2 w-full rounded-2xl border-2 border-blue-200 bg-white px-4 py-3 font-bold outline-none focus:border-blue-400"></textarea>
-            </label>
-            <label class="mt-3 block text-sm font-black text-blue-900">
-              2. 我最有感覺的一句話或一個畫面
-              <textarea id="readingQ2" rows="2" class="mt-2 w-full rounded-2xl border-2 border-blue-200 bg-white px-4 py-3 font-bold outline-none focus:border-blue-400"></textarea>
-            </label>
-            <label class="mt-3 block text-sm font-black text-blue-900">
-              3. 這本書 / 文章和我的生活有什麼關係？
-              <textarea id="readingQ3" rows="2" class="mt-2 w-full rounded-2xl border-2 border-blue-200 bg-white px-4 py-3 font-bold outline-none focus:border-blue-400"></textarea>
-            </label>
-            <label class="mt-3 flex items-center gap-3 rounded-2xl bg-white p-3 font-black text-blue-900 shadow-sm">
-              <input id="readingCertified" type="checkbox" class="h-5 w-5 rounded border-blue-300">
-              閱讀認證通過，加 5 點
-            </label>
+
+            <div class="mt-3 grid gap-3 sm:grid-cols-2">
+              <label class="block text-xs font-black text-blue-900">
+                認證方式
+                <select id="readingMethod" class="mt-1 w-full rounded-xl border-2 border-blue-200 bg-white px-3 py-2 text-sm font-bold outline-none focus:border-blue-400">
+                  <option value="小黑啤線上測驗">小黑啤線上測驗</option>
+                  <option value="教師口頭提問">教師口頭提問</option>
+                  <option value="讀後心得單">讀後心得單</option>
+                  <option value="主題共讀任務">主題共讀任務</option>
+                </select>
+              </label>
+              <label class="block text-xs font-black text-blue-900">
+                測驗得分 / 評分
+                <input id="readingScore" class="mt-1 w-full rounded-xl border-2 border-blue-200 bg-white px-3 py-2 text-sm font-bold outline-none focus:border-blue-400" placeholder="例如：9/10、優異">
+              </label>
+              <label class="block text-xs font-black text-blue-900">
+                是否理解 / 認證結果
+                <select id="readingComprehension" class="mt-1 w-full rounded-xl border-2 border-blue-200 bg-white px-3 py-2 text-sm font-bold outline-none focus:border-blue-400">
+                  <option value="full">✅ 完全理解（認證通過）</option>
+                  <option value="good">⭕ 大致理解（認證通過）</option>
+                  <option value="partial">⚠️ 部分理解（需加強引導）</option>
+                  <option value="retry">⏳ 待補考／重讀</option>
+                </select>
+              </label>
+              <label class="block text-xs font-black text-blue-900">
+                本筆認證點數
+                <input id="readingPointsInput" type="number" min="0" max="20" value="5" class="mt-1 w-full rounded-xl border-2 border-blue-200 bg-white px-3 py-2 text-sm font-black outline-none focus:border-blue-400">
+              </label>
+            </div>
+
+            <details class="mt-3 rounded-2xl bg-white/80 p-3">
+              <summary class="cursor-pointer text-xs font-black text-blue-800">✍️ 讀後思考與理解筆記（選填：3 題引導問答）</summary>
+              <div class="mt-3 space-y-2.5">
+                <label class="block text-xs font-black text-blue-900">
+                  1. 這篇主要在說什麼？
+                  <textarea id="readingQ1" rows="2" class="mt-1 w-full rounded-xl border-2 border-blue-200 bg-white px-3 py-2 text-sm font-bold outline-none focus:border-blue-400"></textarea>
+                </label>
+                <label class="block text-xs font-black text-blue-900">
+                  2. 我最有感覺的一句話或一個畫面
+                  <textarea id="readingQ2" rows="2" class="mt-1 w-full rounded-xl border-2 border-blue-200 bg-white px-3 py-2 text-sm font-bold outline-none focus:border-blue-400"></textarea>
+                </label>
+                <label class="block text-xs font-black text-blue-900">
+                  3. 這本書 / 文章和我的生活有什麼關係？
+                  <textarea id="readingQ3" rows="2" class="mt-1 w-full rounded-xl border-2 border-blue-200 bg-white px-3 py-2 text-sm font-bold outline-none focus:border-blue-400"></textarea>
+                </label>
+              </div>
+            </details>
+
+            <div class="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-2xl bg-white p-3 shadow-sm">
+              <label class="flex items-center gap-2 text-sm font-black text-blue-900">
+                <input id="readingCertified" type="checkbox" checked class="h-5 w-5 rounded border-blue-300">
+                閱讀認證通過，計入點數
+              </label>
+              <button id="addReadingCertButton" type="button" class="no-print rounded-xl bg-blue-600 px-3.5 py-2 text-xs font-black text-white shadow hover:bg-blue-500">＋ 加入本筆閱讀認證</button>
+            </div>
+
+            <div class="mt-4">
+              <p class="mb-2 text-xs font-black text-blue-900">本週已登錄認證清單（可累計多本）</p>
+              <div id="readingCertList" class="space-y-2 max-h-60 overflow-auto pr-1"></div>
+            </div>
           </div>
 
-          <div class="rounded-3xl border-2 border-emerald-200 bg-emerald-50 p-4">
-            <h3 class="text-lg font-black text-emerald-800">獎勵時間兌換</h3>
-            <p class="mt-1 text-sm font-medium text-slate-500">預設 10 點可換 30 分鐘，適合換自由閱讀、教具遊戲、協助老師或其他班級獎勵。</p>
-            <div class="mt-4 grid grid-cols-2 gap-3">
-              <div class="rounded-2xl bg-white p-4 text-center shadow-sm"><p class="text-xs font-black text-emerald-700">本週任務點</p><p id="missionTaskPoints" class="text-3xl font-black text-emerald-700">0</p></div>
-              <div class="rounded-2xl bg-white p-4 text-center shadow-sm"><p class="text-xs font-black text-blue-700">可換獎勵時間</p><p id="missionRewardMinutes" class="text-3xl font-black text-blue-700">0 分</p></div>
+          <div class="rounded-3xl border-2 border-emerald-200 bg-emerald-50 p-4 flex flex-col justify-between">
+            <div>
+              <h3 class="text-lg font-black text-emerald-800">獎勵時間兌換</h3>
+              <p class="mt-1 text-xs font-medium text-slate-600">預設 10 點可換 30 分鐘，適合換自由閱讀、教具遊戲、協助老師或獎勵時段。</p>
+              <div class="mt-4 grid grid-cols-2 gap-3">
+                <div class="rounded-2xl bg-white p-3 text-center shadow-sm">
+                  <p class="text-xs font-black text-emerald-700">本週總任務點</p>
+                  <p id="missionTaskPoints" class="text-3xl font-black text-emerald-700">0</p>
+                </div>
+                <div class="rounded-2xl bg-white p-3 text-center shadow-sm">
+                  <p class="text-xs font-black text-blue-700">可換獎勵時間</p>
+                  <p id="missionRewardMinutes" class="text-3xl font-black text-blue-700">0 分</p>
+                </div>
+              </div>
+              <p id="missionPointsBreakdown" class="mt-2 text-center text-xs font-black text-emerald-800">課堂任務 0 ＋ 閱讀認證 0 點</p>
+              <label class="mt-4 block text-sm font-black text-emerald-900">
+                已兌換 / 使用分鐘數
+                <input id="rewardMinutesUsed" type="number" min="0" step="5" class="mt-2 w-full rounded-2xl border-2 border-emerald-200 bg-white px-4 py-3 font-black outline-none focus:border-emerald-400" value="0">
+              </label>
+              <label class="mt-3 block text-sm font-black text-emerald-900">
+                備註 / 教師評語
+                <textarea id="missionNote" rows="3" class="mt-2 w-full rounded-2xl border-2 border-emerald-200 bg-white px-4 py-3 font-bold outline-none focus:border-emerald-400" placeholder="例如：小黑啤玩臺灣閱讀分享非常清楚；主動協助同學。"></textarea>
+              </label>
             </div>
-            <label class="mt-4 block text-sm font-black text-emerald-900">
-              已兌換 / 使用分鐘數
-              <input id="rewardMinutesUsed" type="number" min="0" step="5" class="mt-2 w-full rounded-2xl border-2 border-emerald-200 bg-white px-4 py-3 font-black outline-none focus:border-emerald-400" value="0">
-            </label>
-            <label class="mt-3 block text-sm font-black text-emerald-900">
-              備註
-              <textarea id="missionNote" rows="3" class="mt-2 w-full rounded-2xl border-2 border-emerald-200 bg-white px-4 py-3 font-bold outline-none focus:border-emerald-400" placeholder="例如：體育課主動協助收器材；閱讀分享清楚。"></textarea>
-            </label>
-            <div class="mt-4 rounded-2xl bg-white p-4 shadow-sm">
-              <p class="text-sm font-black text-slate-500">儲存狀態</p>
-              <p id="missionStatus" class="mt-1 font-black text-orange-700">尚未儲存</p>
+            <div class="mt-4 space-y-2">
+              <div class="rounded-2xl bg-white p-3 shadow-sm">
+                <p class="text-xs font-black text-slate-500">儲存狀態</p>
+                <p id="missionStatus" class="mt-1 text-sm font-black text-orange-700">尚未儲存</p>
+              </div>
+              <p class="rounded-xl bg-white/70 px-3 py-2 text-xs font-bold leading-5 text-emerald-900">💡 按下「儲存任務與認證紀錄」後，點數差額會同步寫入上方全校星光記錄，並受星光歷史還原保護。</p>
             </div>
           </div>
         </div>
@@ -430,13 +550,25 @@
 
       <div class="mt-5 overflow-hidden rounded-3xl border-2 border-slate-200">
         <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-50 px-4 py-3">
-          <h3 class="text-lg font-black text-blue-800">任務閱讀紀錄</h3>
-          <input id="missionSearch" class="rounded-xl border-2 border-slate-200 px-3 py-2 text-sm font-bold outline-none focus:border-blue-400" placeholder="搜尋學生或週次">
+          <h3 class="text-lg font-black text-blue-800">任務與閱讀認證總紀錄</h3>
+          <div class="flex flex-wrap gap-2">
+            <select id="missionThemeFilter" class="rounded-xl border-2 border-slate-200 bg-white px-3 py-2 text-sm font-bold outline-none focus:border-blue-400">
+              <option value="">全部主題</option>
+            </select>
+            <input id="missionSearch" class="rounded-xl border-2 border-slate-200 bg-white px-3 py-2 text-sm font-bold outline-none focus:border-blue-400" placeholder="搜尋學生、週次、主題或書名">
+          </div>
         </div>
-        <div class="max-h-80 overflow-auto">
+        <div class="max-h-96 overflow-auto">
           <table class="w-full text-left text-sm">
             <thead class="sticky top-0 bg-orange-500 text-white">
-              <tr><th class="px-4 py-3">學生</th><th class="px-4 py-3">週次</th><th class="px-4 py-3">任務點</th><th class="px-4 py-3">閱讀</th><th class="px-4 py-3">獎勵時間</th><th class="px-4 py-3">更新時間</th></tr>
+              <tr>
+                <th class="px-4 py-3">學生／小黑啤進度</th>
+                <th class="px-4 py-3">週次 / 單元</th>
+                <th class="px-4 py-3">點數明細</th>
+                <th class="px-4 py-3">閱讀認證＆理解紀錄</th>
+                <th class="px-4 py-3">獎勵時間</th>
+                <th class="px-4 py-3">更新時間</th>
+              </tr>
             </thead>
             <tbody id="missionRecordTable" class="divide-y divide-slate-100 bg-white"></tbody>
           </table>
@@ -520,6 +652,8 @@
   <script src="information-course-data.js"></script>
   <script src="detailed-lesson-plan.js"></script>
   <script src="school-calendar-data.js"></script>
+  <script src="blackbear/blackbear-static-data.js"></script>
+  <script src="mission-reading-passport.js"></script>
   <script>
         // 舊版教材路徑僅保留給靜態檢核，不在瀏覽器執行，避免 Windows 路徑破壞首頁初始化。
         const legacyResourceFiles = []; /*
@@ -1954,156 +2088,17 @@
       return true;
     }
 
-    function missionKey(name = $('missionStudent').value, week = $('missionWeek').value.trim()) {
-      return `${findGradeByName(name)}:${name}:${week || '未命名週次'}`;
-    }
+    let missionPassport = null;
     function syncMissionStudentList() {
       const selected = $('missionStudent').value || $('rewardStudent').value;
       $('missionStudent').innerHTML = getNames().map(name => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('');
       if (getNames().includes(selected)) $('missionStudent').value = selected;
+      missionPassport?.refreshBlackbear();
     }
-    function renderMissionTaskGrid() {
-      $('missionTaskGrid').innerHTML = missionTasks.map(task => `
-        <div class="rounded-2xl border-2 border-orange-100 bg-orange-50/60 p-3">
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <p class="font-black text-orange-900">${escapeHtml(task.label)}</p>
-            <span class="rounded-full bg-white px-3 py-1 text-xs font-black text-orange-700">每次 ${task.points} 點</span>
-          </div>
-          <div class="mt-3 grid grid-cols-5 gap-2">
-            ${missionDays.map(day => `<label class="rounded-xl bg-white p-2 text-center text-xs font-black text-slate-600 shadow-sm">${day}<select data-task="${task.key}" data-day="${day}" class="missionCount mt-1 w-full rounded-lg border border-orange-200 px-1 py-1 text-center font-black"><option>0</option><option>1</option><option>2</option><option>3</option></select></label>`).join('')}
-          </div>
-        </div>`).join('');
-      document.querySelectorAll('.missionCount').forEach(input => input.addEventListener('change', updateMissionSummary));
-    }
-    function collectMissionForm() {
-      const tasks = {};
-      document.querySelectorAll('.missionCount').forEach(select => {
-        const task = select.dataset.task;
-        const day = select.dataset.day;
-        if (!tasks[task]) tasks[task] = {};
-        tasks[task][day] = Number(select.value);
-      });
-      const taskPoints = missionTasks.reduce((sum, task) => {
-        const count = missionDays.reduce((daySum, day) => daySum + Number(tasks[task.key]?.[day] || 0), 0);
-        return sum + count * task.points;
-      }, 0);
-      const readingPoints = $('readingCertified').checked ? 5 : 0;
-      const totalPoints = taskPoints + readingPoints;
-      const rewardMinutes = Math.floor(totalPoints / 10) * 30;
-      const usedMinutes = Math.max(0, Number($('rewardMinutesUsed').value || 0));
-      return {
-        student: $('missionStudent').value,
-        week: $('missionWeek').value.trim() || '未命名週次',
-        tasks,
-        reading: {
-          title: $('readingTitle').value.trim(),
-          q1: $('readingQ1').value.trim(),
-          q2: $('readingQ2').value.trim(),
-          q3: $('readingQ3').value.trim(),
-          certified: $('readingCertified').checked
-        },
-        taskPoints,
-        readingPoints,
-        totalPoints,
-        rewardMinutes,
-        usedMinutes,
-        remainingMinutes: Math.max(0, rewardMinutes - usedMinutes),
-        note: $('missionNote').value.trim(),
-        updatedAt: new Date().toISOString()
-      };
-    }
-    function fillMissionForm(record) {
-      document.querySelectorAll('.missionCount').forEach(select => {
-        select.value = record?.tasks?.[select.dataset.task]?.[select.dataset.day] ?? 0;
-      });
-      $('readingTitle').value = record?.reading?.title || '';
-      $('readingQ1').value = record?.reading?.q1 || '';
-      $('readingQ2').value = record?.reading?.q2 || '';
-      $('readingQ3').value = record?.reading?.q3 || '';
-      $('readingCertified').checked = Boolean(record?.reading?.certified);
-      $('rewardMinutesUsed').value = record?.usedMinutes || 0;
-      $('missionNote').value = record?.note || '';
-      updateMissionSummary();
-    }
-    function updateMissionSummary() {
-      const data = collectMissionForm();
-      $('missionTaskPoints').textContent = data.totalPoints;
-      $('missionRewardMinutes').textContent = `${data.remainingMinutes} 分`;
-    }
-    function saveMissionRecord() {
-      const data = collectMissionForm();
-      if (!data.student) return showToast('請先選擇學生');
-      const key = missionKey(data.student, data.week);
-      const oldRecord = missionData[key];
-      const oldApplied = Number(oldRecord?.appliedPoints || 0);
-      const delta = data.totalPoints - oldApplied;
-      missionData[key] = { ...data, key, appliedPoints: data.totalPoints };
-      try { saveMissionData(); }
-      catch {
-        if (oldRecord) missionData[key] = oldRecord; else delete missionData[key];
-        return showToast('任務紀錄未儲存，也未加點。請檢查瀏覽器儲存空間。');
-      }
-      if (delta !== 0 && !addPoints(data.student, delta)) {
-        if (oldRecord) missionData[key] = oldRecord; else delete missionData[key];
-        try { saveMissionData(); }
-        catch { alert('點數未變更，但任務紀錄無法復原，請勿重複給點，先匯出資料再檢查。'); }
-        $('missionStatus').textContent = '點數未儲存，本次任務未完成同步。';
-        return;
-      }
-      renderMissionRecords();
-      $('missionStatus').textContent = `已儲存：${data.student}｜${data.week}，本筆 ${data.totalPoints} 點，已同步星光 ${delta >= 0 ? '+' : ''}${delta}`;
-      showToast('任務閱讀紀錄已儲存');
-    }
-    function loadMissionRecord() {
-      const key = missionKey();
-      const record = missionData[key];
-      if (!record) {
-        fillMissionForm(null);
-        $('missionStatus').textContent = '查無這位學生的本週紀錄，可直接建立新紀錄';
-        return showToast('查無本筆紀錄');
-      }
-      fillMissionForm(record);
-      $('missionStatus').textContent = `已讀取：${record.student}｜${record.week}`;
-      showToast('已讀取任務閱讀紀錄');
-    }
-    function clearMissionRecord() {
-      const key = missionKey();
-      const record = missionData[key];
-      if (!record) return showToast('目前沒有可清除的本筆紀錄');
-      if (!confirm(`確定清除「${record.student}｜${record.week}」任務閱讀紀錄嗎？已同步的星光點不會自動扣回。`)) return;
-      delete missionData[key];
-      saveMissionData();
-      fillMissionForm(null);
-      renderMissionRecords();
-      $('missionStatus').textContent = '已清除本筆任務閱讀紀錄';
-      showToast('已清除本筆紀錄');
-    }
-    function renderMissionRecords() {
-      const keyword = $('missionSearch').value.trim();
-      const rows = Object.values(missionData)
-        .sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt)))
-        .filter(record => !keyword || record.student.includes(keyword) || record.week.includes(keyword));
-      $('missionRecordTable').innerHTML = rows.map(record => `
-        <tr class="cursor-pointer hover:bg-orange-50" data-mission-key="${escapeHtml(record.key)}">
-          <td class="px-4 py-3 font-black text-blue-700">${escapeHtml(record.student)}</td>
-          <td class="px-4 py-3">${escapeHtml(record.week)}</td>
-          <td class="px-4 py-3 font-black text-orange-700">${record.totalPoints}</td>
-          <td class="px-4 py-3">${record.reading?.certified ? `通過：${escapeHtml(record.reading.title || '未填書名')}` : '未認證'}</td>
-          <td class="px-4 py-3">${record.remainingMinutes} / ${record.rewardMinutes} 分</td>
-          <td class="px-4 py-3">${new Date(record.updatedAt).toLocaleString('zh-TW', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</td>
-        </tr>`).join('');
-      document.querySelectorAll('[data-mission-key]').forEach(row => {
-        row.addEventListener('click', () => {
-          const record = missionData[row.dataset.missionKey];
-          if (!record) return;
-          $('missionStudent').value = record.student;
-          $('missionWeek').value = record.week;
-          fillMissionForm(record);
-          $('missionStatus').textContent = `已載入表格紀錄：${record.student}｜${record.week}`;
-        });
-      });
-    }
-
+    function renderMissionTaskGrid() { missionPassport?.renderMissionTaskGrid(); }
+    function updateMissionSummary() { missionPassport?.updateMissionSummary(); }
+    function renderMissionRecords() { missionPassport?.renderMissionRecords(); }
+    function loadMissionRecord() { missionPassport?.loadMissionRecord(); }
     function getNames() { return nameList.value.split(/\r?\n/).map(name => name.trim()).filter(Boolean); }
     function getActiveStudentNames() {
       const typedNames = getNames();
@@ -2722,18 +2717,6 @@
     $('lessonMinutes').addEventListener('change', () => { generateLesson(); });
     $('lessonGroups').addEventListener('change', () => { generateLesson(); });
     $('scheduleSemester').addEventListener('change', renderWeeklySchedule);
-    $('missionStudent').addEventListener('change', () => { loadMissionRecord(); });
-    $('missionWeek').addEventListener('input', updateMissionSummary);
-    $('readingTitle').addEventListener('input', updateMissionSummary);
-    $('readingQ1').addEventListener('input', updateMissionSummary);
-    $('readingQ2').addEventListener('input', updateMissionSummary);
-    $('readingQ3').addEventListener('input', updateMissionSummary);
-    $('readingCertified').addEventListener('change', updateMissionSummary);
-    $('rewardMinutesUsed').addEventListener('input', updateMissionSummary);
-    $('missionSaveButton').addEventListener('click', saveMissionRecord);
-    $('missionLoadButton').addEventListener('click', loadMissionRecord);
-    $('missionClearButton').addEventListener('click', clearMissionRecord);
-    $('missionSearch').addEventListener('input', renderMissionRecords);
     document.querySelectorAll('.pointButton').forEach(button => {
       button.addEventListener('click', () => {
         const name = $('rewardStudent').value;
@@ -2846,10 +2829,32 @@
     }
 
     window.mountRewardRecovery({ store: rewardStore, loadError: () => rewardLoadError, save: saveRewardData, render: renderRewardPanel });
+    missionPassport = window.MissionReadingPassport
+      ? window.MissionReadingPassport.mount({
+          $,
+          getNames,
+          findGradeByName,
+          getProfileStorageKey,
+          missionData,
+          saveMissionData,
+          addPoints,
+          showToast
+        })
+      : null;
     renderProfileNotice();
     renderCalendarPreview();
     renderMissionTaskGrid();
     loadRoster();
+    (() => {
+      const requestedStudent = new URLSearchParams(window.location.search).get('student');
+      if (!requestedStudent) return;
+      if (!getNames().includes(requestedStudent) && (rosters.all || []).includes(requestedStudent)) {
+        const gradeKey = findGradeByName(requestedStudent);
+        presetRoster.value = rosterGradeKeys.includes(gradeKey) ? gradeKey : 'all';
+        loadRoster();
+      }
+      missionPassport?.selectStudentAndLoad(requestedStudent);
+    })();
       syncLessonUnitOptions();
       generateLesson();
     applyLessonQueryParams();
