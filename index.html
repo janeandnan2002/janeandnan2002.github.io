@@ -357,6 +357,8 @@
           <button id="missionSaveButton" type="button" class="rounded-2xl bg-orange-500 px-4 py-2 font-black text-white shadow hover:bg-orange-400">儲存任務與認證紀錄</button>
           <button id="missionLoadButton" type="button" class="rounded-2xl bg-blue-500 px-4 py-2 font-black text-white shadow hover:bg-blue-400">讀取紀錄</button>
           <button id="missionExportCsvButton" type="button" class="rounded-2xl bg-emerald-600 px-4 py-2 font-black text-white shadow hover:bg-emerald-500">📥 匯出閱讀存摺 CSV</button>
+          <button id="missionImportCertButton" type="button" class="rounded-2xl bg-amber-600 px-4 py-2 font-black text-white shadow hover:bg-amber-500">📂 匯入認證 JSON/CSV</button>
+          <input id="missionImportCertFile" type="file" accept=".json,.csv" class="hidden">
           <button id="missionClearButton" type="button" class="rounded-2xl bg-slate-200 px-4 py-2 font-black text-slate-700 hover:bg-slate-300">清除本筆</button>
         </div>
       </div>
@@ -2696,7 +2698,7 @@
       setTimeout(() => window.print(), 150);
     }
 
-    presetRoster.addEventListener('change', loadRoster);
+    presetRoster.addEventListener('change', () => { loadRoster(); missionPassport?.loadMissionRecord({ silent: true }); });
     nameList.addEventListener('input', () => {
       updateCount();
       syncRewardStudentList();
@@ -2847,7 +2849,10 @@
     loadRoster();
     (() => {
       const requestedStudent = new URLSearchParams(window.location.search).get('student');
-      if (!requestedStudent) return;
+      if (!requestedStudent) {
+        missionPassport?.loadMissionRecord({ silent: true });
+        return;
+      }
       if (!getNames().includes(requestedStudent) && (rosters.all || []).includes(requestedStudent)) {
         const gradeKey = findGradeByName(requestedStudent);
         presetRoster.value = rosterGradeKeys.includes(gradeKey) ? gradeKey : 'all';

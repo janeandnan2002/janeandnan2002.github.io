@@ -75,7 +75,7 @@ function findStaticStudentByName(name) {
   return null;
 }
 
-function readLocalCerts() {
+function readStoredLocalCerts() {
   const primaryKey = profileStorageKey(CERT_STORAGE_KEY);
   let primary = [];
   try {
@@ -90,9 +90,33 @@ function readLocalCerts() {
   return [];
 }
 
+function readLocalCerts() {
+  const stored = readStoredLocalCerts();
+  const primaryKey = profileStorageKey(CERT_STORAGE_KEY);
+  const seeds = (primaryKey === CERT_STORAGE_KEY && Array.isArray(getStaticData().seedAttempts))
+    ? getStaticData().seedAttempts
+    : [];
+  if (!seeds.length) {
+    return [...stored].sort((a, b) => Date.parse(b.date || 0) - Date.parse(a.date || 0));
+  }
+  const seenIds = new Set();
+  const seenKeys = new Set();
+  const merged = [];
+  for (const item of [...stored, ...seeds]) {
+    if (!item) continue;
+    const id = item.id ? String(item.id) : '';
+    const composite = `${item.studentName || ''}|${item.bookId ?? ''}|${item.date || ''}`;
+    if ((id && seenIds.has(id)) || seenKeys.has(composite)) continue;
+    if (id) seenIds.add(id);
+    seenKeys.add(composite);
+    merged.push(item);
+  }
+  return merged.sort((a, b) => Date.parse(b.date || 0) - Date.parse(a.date || 0));
+}
+
 function writeLocalCert(record) {
   const primaryKey = profileStorageKey(CERT_STORAGE_KEY);
-  const current = readLocalCerts().filter(item => !(record.id && item.id === record.id));
+  const current = readStoredLocalCerts().filter(item => !(record.id && item.id === record.id));
   const next = [record, ...current].slice(0, 1000);
   try {
     localStorage.setItem(primaryKey, JSON.stringify(next));

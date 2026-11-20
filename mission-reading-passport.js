@@ -100,7 +100,7 @@
       localStorage.setItem(getProfileStorageKey(THEMES_CONFIG_KEY), JSON.stringify(list));
     }
 
-    function readBlackbearCerts() {
+    function readStoredBlackbearCerts() {
       const primaryKey = getProfileStorageKey(CERT_STORAGE_KEY);
       let primary = [];
       try {
@@ -115,9 +115,33 @@
       return [];
     }
 
+    function readBlackbearCerts() {
+      const stored = readStoredBlackbearCerts();
+      const primaryKey = getProfileStorageKey(CERT_STORAGE_KEY);
+      const seeds = (primaryKey === CERT_STORAGE_KEY && Array.isArray(global.DONGWEI_BLACKBEAR_DATA?.seedAttempts))
+        ? global.DONGWEI_BLACKBEAR_DATA.seedAttempts
+        : [];
+      if (!seeds.length) {
+        return [...stored].sort((a, b) => Date.parse(b.date || 0) - Date.parse(a.date || 0));
+      }
+      const seenIds = new Set();
+      const seenKeys = new Set();
+      const merged = [];
+      for (const item of [...stored, ...seeds]) {
+        if (!item) continue;
+        const id = item.id ? String(item.id) : '';
+        const composite = `${item.studentName || ''}|${item.bookId ?? ''}|${item.date || ''}`;
+        if ((id && seenIds.has(id)) || seenKeys.has(composite)) continue;
+        if (id) seenIds.add(id);
+        seenKeys.add(composite);
+        merged.push(item);
+      }
+      return merged.sort((a, b) => Date.parse(b.date || 0) - Date.parse(a.date || 0));
+    }
+
     function writeBlackbearCert(entry) {
       const primaryKey = getProfileStorageKey(CERT_STORAGE_KEY);
-      const current = readBlackbearCerts();
+      const current = readStoredBlackbearCerts();
       const filtered = current.filter(item =>
         !(item.studentName === entry.studentName && String(item.bookId) === String(entry.bookId) && item.source === entry.source)
       );
@@ -605,6 +629,237 @@
       if ($('missionRewardMinutes')) $('missionRewardMinutes').textContent = `${data.remainingMinutes} 分`;
     }
 
+    function toPassportCert(item) {
+      const scoreNum = Number(item.score);
+      const passed = Boolean(item.passed || (Number.isFinite(scoreNum) && scoreNum >= 8));
+      const comp = passed ? (scoreNum >= 9 ? 'full' : 'good') : 'retry';
+      return {
+        id: item.id || `bb-${item.bookId}`,
+        theme: '小黑啤玩臺灣',
+        bookId: String(item.bookId || ''),
+        title: item.bookTitle || shortBookTitle(item.bookId),
+        method: item.source === 'passport_manual' ? '教師人工認證' : '小黑啤線上測驗',
+        score: Number.isFinite(scoreNum) ? `${scoreNum}/${item.total || 10}` : (item.score ? String(item.score) : ''),
+        comprehension: comp,
+        passed,
+        points: passed ? 5 : 0,
+        readingSkillSummary: item.readingSkillSummary || '',
+        source: item.source || 'blackbear_quiz',
+        date: item.date || new Date().toISOString()
+      };
+    }
+
+    function seedInitialMissionDataFromBlackbear() {
+      const certs = readBlackbearCerts();
+      if (!certs.length) return false;
+      const defaultWeek = '第 1 週';
+      const studentNames = [...new Set(certs.map(c => String(c?.studentName || '').trim()).filter(Boolean))];
+      let mutatedAny = false;
+
+      for (const studentName of studentNames) {
+        const grade = findGradeByName(studentName);
+        const key = `${grade}:${studentName}:${defaultWeek}`;
+        const stats = getStudentBlackbearStats(studentName);
+        const bestList = [...stats.byBook.values()];
+        if (!bestList.length) continue;
+
+        const alreadyOtherWeeksBooks = new Set();
+        for (const rec of Object.values(missionData)) {
+          if (!rec || rec.student !== studentName || rec.key === key) continue;
+          for (const c of normalizeRecordCerts(rec)) {
+            if (c.bookId) alreadyOtherWeeksBooks.add(String(c.bookId));
+          }
+        }
+
+        const existing = missionData[key];
+        const mergedCerts = existing ? normalizeRecordCerts(existing).slice() : [];
+        let changed = false;
+
+        for (const item of bestList) {
+          const bookKey = String(item.bookId || '');
+          if (!bookKey || alreadyOtherWeeksBooks.has(bookKey)) continue;
+          const nextCert = toPassportCert(item);
+          const idx = mergedCerts.findIndex(c => String(c.bookId || '') === bookKey);
+          if (idx < 0) {
+            mergedCerts.push(nextCert);
+            changed = true;
+          } else {
+            const cur = mergedCerts[idx];
+            if (cur.source !== 'passport_manual' && (cur.score !== nextCert.score || Boolean(cur.passed) !== Boolean(nextCert.passed))) {
+              mergedCerts[idx] = { ...cur, ...nextCert };
+              changed = true;
+            }
+          }
+        }
+
+        if (!changed) continue;
+        mutatedAny = true;
+        const taskPoints = Number(existing?.taskPoints || 0);
+        const readingPoints = mergedCerts.reduce((sum, c) => sum + (c.passed ? Number(c.points ?? 5) : 0), 0);
+        const totalPoints = taskPoints + readingPoints;
+        const rewardMinutes = Math.floor(totalPoints / 10) * 30;
+        const usedMinutes = Number(existing?.usedMinutes || 0);
+        const primaryCert = mergedCerts[0];
+        const latestDate = mergedCerts.reduce((max, c) => {
+          const ts = Date.parse(c.date || 0);
+          return (!Number.isNaN(ts) && (!max || ts > Date.parse(max))) ? c.date : max;
+        }, '') || existing?.updatedAt || new Date().toISOString();
+
+        missionData[key] = {
+          ...(existing || {}),
+          key,
+          student: studentName,
+          week: existing?.week || defaultWeek,
+          tasks: existing?.tasks || {},
+          certifications: mergedCerts,
+          reading: existing?.reading?.title ? existing.reading : {
+            title: primaryCert?.title || '',
+            q1: primaryCert?.q1 || '',
+            q2: primaryCert?.q2 || '',
+            q3: primaryCert?.q3 || '',
+            certified: mergedCerts.some(c => c.passed)
+          },
+          taskPoints,
+          readingPoints,
+          totalPoints,
+          rewardMinutes,
+          usedMinutes,
+          remainingMinutes: Math.max(0, rewardMinutes - usedMinutes),
+          note: existing?.note || '',
+          appliedPoints: Number(existing?.appliedPoints || 0),
+          updatedAt: latestDate
+        };
+      }
+      return mutatedAny;
+    }
+
+    function parseCsvRows(text) {
+      const clean = String(text || '').replace(/^\uFEFF/, '');
+      const rows = [];
+      let row = [];
+      let cell = '';
+      let inQuotes = false;
+      for (let i = 0; i < clean.length; i++) {
+        const ch = clean[i];
+        if (inQuotes) {
+          if (ch === '"' && clean[i + 1] === '"') {
+            cell += '"';
+            i++;
+          } else if (ch === '"') {
+            inQuotes = false;
+          } else {
+            cell += ch;
+          }
+        } else if (ch === '"') {
+          inQuotes = true;
+        } else if (ch === ',') {
+          row.push(cell.trim());
+          cell = '';
+        } else if (ch === '\r' || ch === '\n') {
+          if (ch === '\r' && clean[i + 1] === '\n') i++;
+          row.push(cell.trim());
+          if (row.some(Boolean)) rows.push(row);
+          row = [];
+          cell = '';
+        } else {
+          cell += ch;
+        }
+      }
+      row.push(cell.trim());
+      if (row.some(Boolean)) rows.push(row);
+      return rows;
+    }
+
+    function resolveImportedStudentName(rawName, className, seat) {
+      const cleaned = String(rawName || '').trim();
+      if (cleaned && !/^\d+\s*號$/.test(cleaned)) return cleaned;
+      const gradeMap = { '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '一': 1, '二': 2, '三': 3, '四': 4, '五': 5, '六': 6 };
+      const m = String(className || '').match(/([1-6一二三四五六])\s*年?/);
+      const seatNum = Number(seat);
+      if (m && seatNum >= 1) {
+        const gradeKey = `grade${gradeMap[m[1]]}`;
+        const rosterName = global.DONGWEI_BLACKBEAR_DATA?.defaultRosters?.[gradeKey]?.[seatNum - 1];
+        if (rosterName) return rosterName;
+      }
+      return '';
+    }
+
+    function normalizeImportedDate(raw) {
+      const text = String(raw || '').trim();
+      if (!text) return new Date().toISOString();
+      const sqlUtc = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(\.\d+)?$/.test(text) ? `${text.replace(' ', 'T')}Z` : text;
+      const parsed = Date.parse(sqlUtc);
+      return Number.isNaN(parsed) ? new Date().toISOString() : new Date(parsed).toISOString();
+    }
+
+    function importCertificationsFromText(rawText) {
+      const trimmed = String(rawText || '').replace(/^\uFEFF/, '').trim();
+      if (!trimmed) return 0;
+      let items = [];
+      if (trimmed.startsWith('[') || trimmed.startsWith('{')) {
+        const parsed = JSON.parse(trimmed);
+        items = Array.isArray(parsed) ? parsed : (parsed.attempts || parsed.certifications || []);
+      } else {
+        const rows = parseCsvRows(trimmed);
+        if (rows.length < 2) return 0;
+        const headers = rows[0].map(h => h.trim());
+        items = rows.slice(1).map(cols => {
+          const obj = {};
+          headers.forEach((h, i) => { obj[h] = cols[i] ?? ''; });
+          return obj;
+        });
+      }
+
+      const books = getBlackbearBooks();
+      let imported = 0;
+      for (let i = 0; i < items.length; i++) {
+        const r = items[i] || {};
+        const className = r.className || r['班級'] || '';
+        const seat = r.seat || r['座號'] || '';
+        const studentName = resolveImportedStudentName(r.studentName || r['姓名'] || r.student, className, seat);
+        if (!studentName) continue;
+
+        const rawBookId = String(r.bookId || r['書號'] || '').trim();
+        const rawBookTitle = String(r.bookTitle || r['書名'] || r.title || '').trim();
+        const matchedBook = books.find(b => rawBookId && String(b.id) === rawBookId)
+          || books.find(b => rawBookTitle && (b.title === rawBookTitle || shortBookTitle(b.title) === shortBookTitle(rawBookTitle)));
+        const bookId = matchedBook ? String(matchedBook.id) : (rawBookId || rawBookTitle);
+        const bookTitle = matchedBook ? matchedBook.title : (rawBookTitle || bookId);
+        if (!bookId) continue;
+
+        const scoreRaw = String(r.score ?? r['答對題數'] ?? r['得分'] ?? '').trim();
+        const scoreMatch = scoreRaw.match(/(\d+)/);
+        const score = scoreMatch ? Number(scoreMatch[1]) : 0;
+        const passedFlag = String(r.passed ?? r['通過'] ?? '').trim().toLowerCase();
+        const passed = passedFlag
+          ? (passedFlag === 'true' || passedFlag === '是' || passedFlag === '1' || passedFlag.includes('通過'))
+          : score >= 8;
+        const date = normalizeImportedDate(r.date || r.submitted_at || r['時間'] || r['日期']);
+
+        writeBlackbearCert({
+          id: r.id || `import-${studentName}-${bookId}-${Date.now()}-${i}`,
+          studentName,
+          className,
+          seat: seat ? Number(seat) : undefined,
+          bookId,
+          bookTitle,
+          score,
+          total: Number(r.total || 10),
+          passed,
+          date,
+          source: r.source || 'blackbear_quiz'
+        });
+        imported++;
+      }
+      if (imported > 0) {
+        seedInitialMissionDataFromBlackbear();
+        renderBlackbearBannerAndBooks();
+        if (currentStudentName()) loadMissionRecord({ silent: true });
+        renderMissionRecords();
+      }
+      return imported;
+    }
+
     function syncBlackbearRecordsForStudent(silent = false) {
       const name = currentStudentName();
       if (!name) {
@@ -620,23 +875,9 @@
 
       let importedCount = 0;
       for (const item of allUnique) {
-        const comp = item.passed ? (Number(item.score) >= 9 ? 'full' : 'good') : 'retry';
         const alreadyInList = currentCerts.some(c => String(c.bookId) === String(item.bookId));
         if (!alreadyInList) importedCount++;
-        addOrUpdateCert({
-          id: item.id || `bb-${item.bookId}`,
-          theme: '小黑啤玩臺灣',
-          bookId: String(item.bookId),
-          title: item.bookTitle || shortBookTitle(item.bookId),
-          method: item.source === 'passport_manual' ? '教師人工認證' : '小黑啤線上測驗',
-          score: `${item.score}/${item.total || 10}`,
-          comprehension: comp,
-          passed: Boolean(item.passed),
-          points: item.passed ? 5 : 0,
-          readingSkillSummary: item.readingSkillSummary || '',
-          source: item.source || 'blackbear_quiz',
-          date: item.date || new Date().toISOString()
-        });
+        addOrUpdateCert(toPassportCert(item));
       }
 
       if (!silent) {
@@ -686,7 +927,7 @@
       showToast('任務閱讀存摺已儲存並完成同步');
     }
 
-    function loadMissionRecord() {
+    function loadMissionRecord(options = {}) {
       const name = currentStudentName();
       const week = $('missionWeek')?.value.trim() || '未命名週次';
       const key = `${findGradeByName(name)}:${name}:${week}`;
@@ -699,7 +940,7 @@
       }
       fillMissionForm(record);
       if ($('missionStatus')) $('missionStatus').textContent = `已讀取：${record.student}｜${record.week}`;
-      showToast('已讀取任務閱讀紀錄');
+      if (!options?.silent) showToast('已讀取任務閱讀紀錄');
     }
 
     function clearMissionRecord() {
@@ -932,44 +1173,71 @@
     });
 
     $('missionExportCsvButton')?.addEventListener('click', exportMissionCsv);
-    $('missionStudent')?.addEventListener('change', loadMissionRecord);
+    $('missionImportCertButton')?.addEventListener('click', () => {
+      $('missionImportCertFile')?.click?.();
+    });
+    $('missionImportCertFile')?.addEventListener('change', (e) => {
+      const file = e?.target?.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const count = importCertificationsFromText(String(reader.result || ''));
+          showToast(count > 0 ? `已匯入 ${count} 筆小黑啤認證紀錄並同步至存摺` : '檔案中沒有可匯入的認證紀錄');
+        } catch (err) {
+          showToast(`匯入失敗：${err?.message || '格式錯誤'}`);
+        } finally {
+          if (e.target) e.target.value = '';
+        }
+      };
+      reader.readAsText(file, 'utf-8');
+    });
+    $('missionStudent')?.addEventListener('change', () => loadMissionRecord());
     $('missionWeek')?.addEventListener('input', updateMissionSummary);
     $('readingTitle')?.addEventListener('input', updateMissionSummary);
     $('readingScore')?.addEventListener('input', updateMissionSummary);
     $('rewardMinutesUsed')?.addEventListener('input', updateMissionSummary);
     $('missionSaveButton')?.addEventListener('click', saveMissionRecord);
-    $('missionLoadButton')?.addEventListener('click', loadMissionRecord);
+    $('missionLoadButton')?.addEventListener('click', () => loadMissionRecord());
     $('missionClearButton')?.addEventListener('click', clearMissionRecord);
     $('missionSearch')?.addEventListener('input', renderMissionRecords);
     $('missionThemeFilter')?.addEventListener('change', renderMissionRecords);
 
     // Refresh when returning from /blackbear/ tab or storage update
     const refreshLiveBlackbear = () => {
+      seedInitialMissionDataFromBlackbear();
       renderBlackbearBannerAndBooks();
       renderMissionRecords();
     };
     window.addEventListener('storage', refreshLiveBlackbear);
     window.addEventListener('focus', refreshLiveBlackbear);
 
-    // Initial render
+    // Initial seed & render
+    seedInitialMissionDataFromBlackbear();
     renderThemeSelects();
     renderMissionTaskGrid();
-    renderBlackbearBannerAndBooks();
-    renderCertList();
-    updateMissionSummary();
+    if (currentStudentName()) {
+      loadMissionRecord({ silent: true });
+    } else {
+      renderBlackbearBannerAndBooks();
+      renderCertList();
+      updateMissionSummary();
+    }
+    renderMissionRecords();
 
     return {
       renderMissionTaskGrid: () => renderMissionTaskGrid(),
       updateMissionSummary,
       renderMissionRecords,
-      loadMissionRecord,
+      loadMissionRecord: (opts) => loadMissionRecord(opts),
+      importCertificationsFromText,
       refreshBlackbear: refreshLiveBlackbear,
       selectStudentAndLoad(studentName) {
         if (studentName && getNames().includes(studentName) && $('missionStudent')) {
           $('missionStudent').value = studentName;
         }
         renderBlackbearBannerAndBooks();
-        loadMissionRecord();
+        loadMissionRecord({ silent: true });
       }
     };
   }
